@@ -6,17 +6,16 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 21:38:19 by hexa              #+#    #+#             */
-/*   Updated: 2020/05/03 00:33:04 by hexa             ###   ########.fr       */
+/*   Updated: 2020/05/03 21:38:27 by hexa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_HPP
 # define LIST_HPP
 
-# include "iterator.hpp"
-
-//# include <memory>
 # include <iostream>
+
+# include "iterator.hpp"
 
 namespace	ft
 {
@@ -31,6 +30,9 @@ namespace	ft
 			typedef typename allocator_type::const_reference const_reference;
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
+			typedef ft::bidirectionnal_iterator_tag<T> iterator;
+			typedef ft::bidirectionnal_iterator_tag<const T> const_iterator;
+
 			typedef std::ptrdiff_t difference_type;
 			typedef size_t size_type;
 
@@ -118,6 +120,19 @@ namespace	ft
 			void reverse();
 
 //			template <class T, class Alloc>
+			bool operator== (const list<T,Alloc>& rhs);
+//			template <class T, class Alloc>
+			bool operator!= (const list<T,Alloc>& rhs);
+//			template <class T, class Alloc>
+			bool operator<  (const list<T,Alloc>& rhs);
+//			template <class T, class Alloc>
+			bool operator<= (const list<T,Alloc>& rhs);
+//			template <class T, class Alloc>
+			bool operator>  (const list<T,Alloc>& rhs);
+//			template <class T, class Alloc>
+			bool operator>= (const list<T,Alloc>& rhs);
+/*
+//			template <class T, class Alloc>
 			bool operator== (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
 //			template <class T, class Alloc>
 			bool operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
@@ -128,7 +143,7 @@ namespace	ft
 //			template <class T, class Alloc>
 			bool operator>  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
 //			template <class T, class Alloc>
-			bool operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+			bool operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);*/
 
 //			template <class T, class Alloc>
 			void swap (list<T,Alloc>& x, list<T,Alloc>& y);
