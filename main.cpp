@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 21:39:13 by hexa              #+#    #+#             */
-/*   Updated: 2020/05/03 18:42:02 by hexa             ###   ########.fr       */
+/*   Updated: 2020/05/04 20:14:37 by hexa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,7 @@ main(void)
 {
 	ft::list<int>	toto;
 
-	(void)toto;
+	std::cout << "empty() " << toto.empty() << std::endl;
+	std::cout << "size() " << toto.size() << std::endl;
+	std::cout << "max_size() " << toto.max_size() << std::endl;
 }

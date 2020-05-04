@@ -1,11 +1,10 @@
-SRC			=	main \
-				list
+SRC			=	main
 
 SRCS		= $(addsuffix .cpp, ${SRC})
 
 OBJS		= ${SRCS:.cpp=.o}
 
-NAME		= cato9tails
+NAME		= list
 
 CC			= clang++
 RM			= rm -f
