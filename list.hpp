@@ -37,8 +37,18 @@ namespace	ft
 		struct _List_node : public __detail::_List_node_base
 		{
 			_Tp _M_data;
-			_Tp*			 _M_valptr()			 { return std::__addressof(_M_data); }
-			_Tp const* _M_valptr() const { return std::__addressof(_M_data); }
+
+			_Tp*
+			_M_valptr()
+			{
+				return std::addressof(_M_data);
+			}
+
+			const _Tp*
+			_M_valptr() const
+			{
+				return std::addressof(_M_data);
+			}
 		};
 
 	template<typename _Tp>
@@ -220,10 +230,133 @@ namespace	ft
 			return __x._M_node != __y._M_node;
 		}
 
+	template<typename _Tp, typename _Alloc>
+		class _List_base
+		{
+		protected:
+			typedef typename __gnu_cxx::__alloc_traits<_Alloc>::template
+	rebind<_Tp>::other				_Tp_alloc_type;
+			typedef __gnu_cxx::__alloc_traits<_Tp_alloc_type>	_Tp_alloc_traits;
+			typedef typename _Tp_alloc_traits::template
+	rebind<_List_node<_Tp> >::other _Node_alloc_type;
+			typedef __gnu_cxx::__alloc_traits<_Node_alloc_type> _Node_alloc_traits;
+			static size_t	_S_distance(const __detail::_List_node_base* __first,
+										const __detail::_List_node_base* __last)
+			{
+				size_t __n = 0;
+				while (__first != __last)
+					{
+						__first = __first->_M_next;
+						++__n;
+					}
+				return __n;
+			}
+
+			struct _List_impl
+			{
+				__detail::_List_node_base _M_node;
+			};
+
+			_List_impl _M_impl;
+
+			size_t
+			_M_get_size() const
+			{
+				return (0);
+			}
+
+			void
+			_M_set_size(size_t)
+			{}
+
+			void
+			_M_inc_size(size_t)
+			{}
+
+			void
+			_M_dec_size(size_t)
+			{}
+
+			size_t
+			_M_distance(const void*, const void*) const
+			{
+				return (0);
+			}
+
+			size_t _M_node_count() const
+			{
+				return (_S_distance(_M_impl._M_node._M_next,
+						 std::addressof(_M_impl._M_node)));
+			}
+
+			typename _Node_alloc_traits::pointer
+			_M_get_node()
+			{
+				return _Node_alloc_traits::allocate(_M_impl, 1);
+			}
+
+			void
+			_M_put_node(typename _Node_alloc_traits::pointer __p) _GLIBCXX_NOEXCEPT
+			{
+				_Node_alloc_traits::deallocate(_M_impl, __p, 1);
+			}
+
+		public:
+			typedef _Alloc allocator_type;
+
+			_Node_alloc_type&
+			_M_get_Node_allocator()
+			{
+				return _M_impl;
+			}
+
+			const _Node_alloc_type&
+			_M_get_Node_allocator() const
+			{
+				return _M_impl;
+			}
+
+			_List_base()
+			: _M_impl()
+			{
+				_M_init();
+			}
+
+			_List_base(const _Node_alloc_type& __a)
+			: _M_impl(__a)
+			{
+				_M_init();
+			}
+
+			~_List_base()
+			{
+				_M_clear();
+			}
+
+			void
+			_M_clear() {}
+
+			void
+			_M_init()
+			{
+				this->_M_impl._M_node._M_next = &this->_M_impl._M_node;
+				this->_M_impl._M_node._M_prev = &this->_M_impl._M_node;
+				_M_set_size(0);
+			}
+		};
+
 //	template <class T, class Alloc>
 	template <typename T, typename Alloc = std::allocator<T>>
-	class	list
+	class	list : protected _List_base<T, Alloc>
 	{
+		private:
+			typedef typename Alloc::value_type			_Alloc_value_type;
+			typedef _List_base<T, Alloc>				_Base;
+			typedef typename _Base::_Tp_alloc_type		_Tp_alloc_type;
+			typedef typename _Base::_Tp_alloc_traits	_Tp_alloc_traits;
+			typedef typename _Base::_Node_alloc_type	_Node_alloc_type;
+			typedef typename _Base::_Node_alloc_traits	_Node_alloc_traits;
+
 		public:
 			typedef T											value_type;
 			typedef std::allocator<value_type>					allocator_type;
@@ -236,8 +369,35 @@ namespace	ft
 			typedef ft::reverse_iterator<iterator>				reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
-			typedef std::ptrdiff_t difference_type;
-			typedef size_t size_type;
+			typedef typename allocator_type::difference_type	difference_type;
+			typedef typename allocator_type::size_type			size_type;
+
+		protected:
+			typedef _List_node<T>		_Node;
+
+			using _Base::_M_impl;
+			using _Base::_M_put_node;
+			using _Base::_M_get_node;
+			using _Base::_M_get_Node_allocator;
+
+			_Node*
+			_M_create_node(const value_type& __x)
+			{
+				_Node* __p = this->_M_get_node();
+				try
+				{
+					_Tp_alloc_type __alloc(_M_get_Node_allocator());
+					__alloc.construct(__p->_M_valptr(), __x);
+				}
+				catch(std::exception& e)
+				{
+					_M_put_node(__p);
+					throw;
+				}
+				return __p;
+			}
+
+		public:
 
 			explicit list (const allocator_type& alloc = allocator_type());
 			explicit list (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
@@ -379,18 +539,16 @@ namespace	ft
 
 
 	template <typename T, typename Alloc>
-	list<T, Alloc>::list(const allocator_type& alloc)
-		: _allocator(alloc), _arr(NULL), _size(0), _capacity(0)
+	list<T, Alloc>::list(const allocator_type& __a)
+	: _Base(_Node_alloc_type(__a))
 	{}
 
 	template <typename T, typename Alloc>
 	list<T, Alloc>::list(size_type n, const value_type& val, const allocator_type& alloc)
-		: _allocator(alloc), _size(n), _capacity(n)
+	: _Base(_Node_alloc_type(alloc))
 	{
-		_arr = _allocator.allocate(n);
-		for (size_type i = 0; i < n; i++) {
-			_allocator.construct(_arr + i, val);
-		}
+		for (; n; --n)
+			push_back(val);
 	}
 
 	template <typename T, typename Alloc>
@@ -451,28 +609,28 @@ namespace	ft
 	typename list<T, Alloc>::iterator
 	list<T, Alloc>::begin (void)
 	{
-		return (iterator(_arr));
+		return (iterator(this->_M_impl._M_node._M_next));
 	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::const_iterator
 	list<T, Alloc>::begin(void) const
 	{
-		return (const_iterator(_arr));
+		return (const_iterator(this->_M_impl._M_node._M_next));
 	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::iterator
 	list<T, Alloc>::end (void)
 	{
-		return (iterator(_arr + _size));
+		return (iterator(&this->_M_impl._M_node));
 	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::const_iterator
 	list<T, Alloc>::end(void) const
 	{
-		return (const_iterator(_arr + _size));
+		return (const_iterator(&this->_M_impl._M_node));
 	}
 
 	template <typename T, typename Alloc>
