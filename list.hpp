@@ -677,7 +677,7 @@ namespace	ft
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::const_iterator
-	list<T, Alloc>::begin(void) const
+	list<T, Alloc>::begin (void) const
 	{
 		return (const_iterator(this->_M_impl._M_node._M_next));
 	}
@@ -691,7 +691,7 @@ namespace	ft
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::const_iterator
-	list<T, Alloc>::end(void) const
+	list<T, Alloc>::end (void) const
 	{
 		return (const_iterator(&this->_M_impl._M_node));
 	}
@@ -705,7 +705,7 @@ namespace	ft
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::const_reverse_iterator
-	list<T, Alloc>::rbegin(void) const
+	list<T, Alloc>::rbegin (void) const
 	{
 		return (const_reverse_iterator(this->end()));
 	}
@@ -719,49 +719,49 @@ namespace	ft
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::const_reverse_iterator
-	list<T, Alloc>::rend(void) const
+	list<T, Alloc>::rend (void) const
 	{
 		return (const_reverse_iterator(this->start()));
 	}
 
 	template <typename T, typename Alloc>
 	bool
-	list<T, Alloc>::empty(void) const
+	list<T, Alloc>::empty (void) const
 	{
 		return (this->_M_impl._M_node._M_next == &this->_M_impl._M_node);
 	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::size_type
-	list<T, Alloc>::size(void) const
+	list<T, Alloc>::size (void) const
 	{
 		return (this->_M_node_count());
 	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::size_type
-	list<T, Alloc>::max_size(void) const
+	list<T, Alloc>::max_size (void) const
 	{
 		return (_Node_alloc_traits::max_size(_M_get_Node_allocator()));
 	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::reference
-	list<T, Alloc>::front(void)
+	list<T, Alloc>::front (void)
 	{
 		return (*begin());
 	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::const_reference
-	list<T, Alloc>::front(void) const
+	list<T, Alloc>::front (void) const
 	{
 		return (*begin());
 	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::reference
-	list<T, Alloc>::back(void)
+	list<T, Alloc>::back (void)
 	{
 		iterator __tmp = end();
 		--__tmp;
@@ -770,7 +770,7 @@ namespace	ft
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::const_reference
-	list<T, Alloc>::back(void) const
+	list<T, Alloc>::back (void) const
 	{
 		iterator __tmp = end();
 		--__tmp;
