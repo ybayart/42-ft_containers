@@ -2,7 +2,7 @@
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
 
-# include <memory>
+# include "utils.hpp"
 
 namespace	ft
 {
@@ -191,11 +191,11 @@ namespace	ft
 				return (*(--__tmp));
 			}
 
-			// pointer
-			// operator->	(void) const
-			// {
-			// 	return (std::addressof(operator*()));
-			// }
+			pointer
+			operator->	(void) const
+			{
+				return (std::__addressof(operator*()));
+			}
 
 			reverse_iterator&
 			operator++	(void)

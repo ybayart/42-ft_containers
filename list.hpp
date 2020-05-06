@@ -2,9 +2,7 @@
 #ifndef LIST_HPP
 # define LIST_HPP
 
-# include <iostream>
-
-# include "iterator.hpp"
+# include "utils.hpp"
 
 namespace	ft
 {
@@ -16,20 +14,84 @@ namespace	ft
 			_List_node_base*	_M_prev;
 
 			static void
-			swap(_List_node_base& __x, _List_node_base& __y);
+			swap(_List_node_base& __x, _List_node_base& __y)
+			{
+				if (__x._M_next != &__x)
+				{
+					if (__y._M_next != &__y)
+						{
+							ft::swap(__x._M_next,__y._M_next);
+							ft::swap(__x._M_prev,__y._M_prev);
+							__x._M_next->_M_prev = __x._M_prev->_M_next = &__x;
+							__y._M_next->_M_prev = __y._M_prev->_M_next = &__y;
+						}
+					else
+						{
+							__y._M_next = __x._M_next;
+							__y._M_prev = __x._M_prev;
+							__y._M_next->_M_prev = __y._M_prev->_M_next = &__y;
+							__x._M_next = __x._M_prev = &__x;
+						}
+				}
+				else if ( __y._M_next != &__y )
+				{
+					__x._M_next = __y._M_next;
+					__x._M_prev = __y._M_prev;
+					__x._M_next->_M_prev = __x._M_prev->_M_next = &__x;
+					__y._M_next = __y._M_prev = &__y;
+				}
+			}
 
 			void
-			_M_transfer(const _List_node_base* __first,
-						const _List_node_base* __last);
+			_M_transfer(_List_node_base* const __first,
+						_List_node_base* const __last)
+			{
+				if (this != __last)
+				{
+					// Remove [first, last) from its old position.
+					__last->_M_prev->_M_next	= this;
+					__first->_M_prev->_M_next = __last;
+					this->_M_prev->_M_next		= __first;
+
+					// Splice [first, last) into its new position.
+					_List_node_base* const __tmp = this->_M_prev;
+					this->_M_prev								= __last->_M_prev;
+					__last->_M_prev							= __first->_M_prev;
+					__first->_M_prev						 = __tmp;
+				}
+			}
 
 			void
-			_M_reverse(void);
+			_M_reverse(void)
+			{
+				_List_node_base* __tmp = this;
+				do
+				{
+					std::swap(__tmp->_M_next, __tmp->_M_prev);
+
+					// Old next node is now prev.
+					__tmp = __tmp->_M_prev;
+				}
+				while (__tmp != this);
+			}
 
 			void
-			_M_hook(const _List_node_base* __position);
+			_M_hook(_List_node_base* const __position)
+			{
+				this->_M_next = __position;
+				this->_M_prev = __position->_M_prev;
+				__position->_M_prev->_M_next = this;
+				__position->_M_prev = this;
+			}
 
 			void
-			_M_unhook(void);
+			_M_unhook(void)
+			{
+				_List_node_base* const __next_node = this->_M_next;
+				_List_node_base* const __prev_node = this->_M_prev;
+				__prev_node->_M_next = __next_node;
+				__next_node->_M_prev = __prev_node;
+			}
 		};
 	}
 
@@ -37,6 +99,18 @@ namespace	ft
 		struct _List_node : public __detail::_List_node_base
 		{
 			_Tp		_M_data;
+
+			_Tp*
+			_M_valptr(void)
+			{
+				return std::__addressof(_M_data);
+			}
+
+			_Tp const*
+			_M_valptr(void) const
+			{
+				return std::__addressof(_M_data);
+			}
 		};
 
 	template<typename _Tp>
@@ -69,13 +143,13 @@ namespace	ft
 			reference
 			operator*	(void) const
 			{
-				return ((static_cast<_Node*>(_M_node)->_M_data));
+				return (*static_cast<_Node*>(_M_node)->_M_valptr());
 			}
 
 			pointer
 			operator->	(void) const
 			{
-				return (static_cast<_Node*>(_M_node)->_M_data);
+				return (static_cast<_Node*>(_M_node)->_M_valptr());
 			}
 
 			_Self&
@@ -227,6 +301,19 @@ namespace	ft
 					rebind<_List_node<_Tp> >::other					_Node_alloc_type;
 				typedef __gnu_cxx::__alloc_traits<_Node_alloc_type> _Node_alloc_traits;
 
+				static size_t
+				_S_distance(const __detail::_List_node_base* __first,
+				const __detail::_List_node_base* __last)
+				{
+					size_t __n = 0;
+					while (__first != __last)
+					{
+						__first = __first->_M_next;
+						++__n;
+					}
+					return (__n);
+				}
+
 				__detail::_List_node_base _M_node;
 
 				struct _List_impl
@@ -244,11 +331,11 @@ namespace	ft
 				};
 
 				_List_impl	_M_impl;
-
-				const _Node_alloc_type&
-				_M_get_Node_allocator(void) const
+				
+				size_t _M_node_count() const
 				{
-					return (_M_impl);
+					return _S_distance(_M_impl._M_node._M_next,
+					std::__addressof(_M_impl._M_node));
 				}
 
 				typename _Node_alloc_traits::pointer
@@ -261,6 +348,18 @@ namespace	ft
 				_M_put_node(typename _Node_alloc_traits::pointer __p)
 				{
 					_Node_alloc_traits::deallocate(_M_impl, __p, 1);
+				}
+
+				_Node_alloc_type&
+				_M_get_Node_allocator(void)
+				{
+					return (_M_impl);
+				}
+
+				const _Node_alloc_type&
+				_M_get_Node_allocator(void) const
+				{
+					return (_M_impl);
 				}
 
 			public:
@@ -327,7 +426,7 @@ namespace	ft
 
 			explicit list (const allocator_type& alloc = allocator_type());
 			explicit list (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
-			template <class InputIterator>
+			template <typename InputIterator>
 			list (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 			list (const list& x);
 
@@ -440,7 +539,7 @@ namespace	ft
 				try
 				{
 					_Tp_alloc_type __alloc(_M_get_Node_allocator());
-					__alloc.construct(__p->_M_data, __x);
+					__alloc.construct(__p->_M_valptr(), __x);
 				}
 				catch(std::exception& e)
 				{
@@ -450,7 +549,50 @@ namespace	ft
 				return (__p);
 			}
 
-			
+			void
+			_M_insert(iterator __position, const value_type& __x)
+			{
+				_Node* __tmp = _M_create_node(__x);
+				__tmp->_M_hook(__position._M_node);
+			}
+
+			void
+			_M_erase(iterator __position) _GLIBCXX_NOEXCEPT
+			{
+				__position._M_node->_M_unhook();
+				_Node* __n = static_cast<_Node*>(__position._M_node);
+				_Tp_alloc_type(_M_get_Node_allocator()).destroy(__n->_M_valptr());
+				_M_put_node(__n);
+			}
+
+			void
+			_M_init(size_type n, const value_type& val, std::__true_type)
+			{
+				for (; n; --n)
+					push_back(val);
+			}
+
+			template <typename InputIterator>
+			void
+			_M_init(InputIterator first, InputIterator last, std::__false_type)
+			{
+				for (;first != last;++first)
+					push_back(*first);
+			}
+
+			void
+			_M_fill(size_type n, const value_type& val)
+			{
+				iterator	it;
+
+				it = begin();
+				for (; it != end() && n > 0; ++it, --n)
+					*it = val;
+				if (n > 0)
+					insert(end(), n, val);
+				else
+					erase(it, end());
+			}
 	};
 
 	template <class T, class Alloc>
@@ -493,25 +635,38 @@ namespace	ft
 	template <typename T, typename Alloc>
 	list<T, Alloc>::list (size_type n, const value_type& val, const allocator_type& alloc)
 	: _Base(alloc)
-	{}
+	{
+		_M_init(n, val, std::__true_type());
+	}
 
 	template <typename T, typename Alloc>
 	template <typename InputIterator>
 	list<T, Alloc>::list (InputIterator first, InputIterator last, const allocator_type& alloc)
-	{}
+	: _Base(_Node_alloc_type(alloc))
+	{
+		typedef typename std::__is_integer<InputIterator>::__type _Integral;
+		_M_init(first, last, _Integral());
+	}
 
 	template <typename T, typename Alloc>
-	list<T, Alloc>::list (const list& other)
-	{}
+	list<T, Alloc>::list (const list& src)
+	: _Base(_Node_alloc_traits::
+		_S_select_on_copy(src._M_get_Node_allocator()))
+	{
+		_M_init(src.begin(), src.end(), std::__false_type());
+	}
 
 	template <typename T, typename Alloc>
 	list<T, Alloc>::~list (void)
 	{}
 
-	// template <typename T, typename Alloc>
-	// list<T, Alloc>&
-	// list<T, Alloc>::operator=	(const list& src)
-	// {}
+	template <typename T, typename Alloc>
+	list<T, Alloc>&
+	list<T, Alloc>::operator=	(const list& rhs)
+	{
+		if (this != std::__addressof(rhs))
+			_M_init(rhs.begin(), rhs.end(), std::__false_type());
+	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::iterator
@@ -520,20 +675,26 @@ namespace	ft
 		return (iterator(this->_M_impl._M_node._M_next));
 	}
 
-	// template <typename T, typename Alloc>
-	// typename list<T, Alloc>::const_iterator
-	// list<T, Alloc>::begin(void) const
-	// {}
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::const_iterator
+	list<T, Alloc>::begin(void) const
+	{
+		return (const_iterator(this->_M_impl._M_node._M_next));
+	}
 
-	// template <typename T, typename Alloc>
-	// typename list<T, Alloc>::iterator
-	// list<T, Alloc>::end (void)
-	// {}
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::iterator
+	list<T, Alloc>::end (void)
+	{
+		return (iterator(&this->_M_impl._M_node));
+	}
 
-	// template <typename T, typename Alloc>
-	// typename list<T, Alloc>::const_iterator
-	// list<T, Alloc>::end(void) const
-	// {}
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::const_iterator
+	list<T, Alloc>::end(void) const
+	{
+		return (const_iterator(&this->_M_impl._M_node));
+	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::reverse_iterator
@@ -563,20 +724,101 @@ namespace	ft
 		return (const_reverse_iterator(this->start()));
 	}
 
-	// template <typename T, typename Alloc>
-	// bool
-	// list<T, Alloc>::empty(void) const
-	// {}
+	template <typename T, typename Alloc>
+	bool
+	list<T, Alloc>::empty(void) const
+	{
+		return (this->_M_impl._M_node._M_next == &this->_M_impl._M_node);
+	}
 
-	// template <typename T, typename Alloc>
-	// typename list<T, Alloc>::size_type
-	// list<T, Alloc>::size(void) const
-	// {}
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::size_type
+	list<T, Alloc>::size(void) const
+	{
+		return (this->_M_node_count());
+	}
 
-	// template <typename T, typename Alloc>
-	// typename list<T, Alloc>::size_type
-	// list<T, Alloc>::max_size(void) const
-	// {}
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::size_type
+	list<T, Alloc>::max_size(void) const
+	{
+		return (_Node_alloc_traits::max_size(_M_get_Node_allocator()));
+	}
+
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::reference
+	list<T, Alloc>::front(void)
+	{
+		return (*begin());
+	}
+
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::const_reference
+	list<T, Alloc>::front(void) const
+	{
+		return (*begin());
+	}
+
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::reference
+	list<T, Alloc>::back(void)
+	{
+		iterator __tmp = end();
+		--__tmp;
+		return *__tmp;
+	}
+
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::const_reference
+	list<T, Alloc>::back(void) const
+	{
+		iterator __tmp = end();
+		--__tmp;
+		return *__tmp;
+	}
+
+	template <typename T, typename Alloc>
+	template <class InputIterator>
+	void
+	list<T, Alloc>::assign (InputIterator first, InputIterator last)
+	{
+		_M_init(first, last, std::__false_type());
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::assign (size_type n, const value_type& val)
+	{
+		_M_fill(n, val);
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::push_front (const value_type& val)
+	{
+		this->_M_insert(begin(), val);
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::pop_front (void)
+	{
+		this->_M_erase(begin());
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::push_back (const value_type& val)
+	{
+		this->_M_insert(end(), val);
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::pop_back (void)
+	{	
+		this->_M_erase(iterator(this->_M_impl._M_node._M_prev));
+	}
 }
 
 #endif
