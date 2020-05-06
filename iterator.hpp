@@ -12,7 +12,7 @@ namespace	ft
 	struct bidirectional_iterator_tag : public forward_iterator_tag {};
 	struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
-	template<typename _Category, typename _Tp, typename _Distance = ptrdiff_t,
+	template<typename _Category, typename _Tp, typename _Distance = __gnu_cxx::ptrdiff_t,
 					 typename _Pointer = _Tp*, typename _Reference = _Tp&>
 		struct iterator
 		{
@@ -38,7 +38,7 @@ namespace	ft
 		{
 			typedef random_access_iterator_tag	iterator_category;
 			typedef _Tp							value_type;
-			typedef ptrdiff_t					difference_type;
+			typedef __gnu_cxx::ptrdiff_t					difference_type;
 			typedef _Tp*						pointer;
 			typedef _Tp&						reference;
 		};
@@ -48,7 +48,7 @@ namespace	ft
 		{
 			typedef random_access_iterator_tag	iterator_category;
 			typedef _Tp							value_type;
-			typedef ptrdiff_t					difference_type;
+			typedef __gnu_cxx::ptrdiff_t					difference_type;
 			typedef const _Tp*					pointer;
 			typedef const _Tp&					reference;
 		};
@@ -156,13 +156,13 @@ namespace	ft
 	template<typename _Iterator>
 		class reverse_iterator
 		: public iterator<typename iterator_traits<_Iterator>::iterator_category,
-					typename iterator_traits<_Iterator>::value_type,
-					typename iterator_traits<_Iterator>::difference_type,
-					typename iterator_traits<_Iterator>::pointer,
-					typename iterator_traits<_Iterator>::reference>
+						typename iterator_traits<_Iterator>::value_type,
+						typename iterator_traits<_Iterator>::difference_type,
+						typename iterator_traits<_Iterator>::pointer,
+						typename iterator_traits<_Iterator>::reference>
 		{
 		protected:
-			_Iterator current;
+			_Iterator		current;
 
 			typedef iterator_traits<_Iterator>		__traits_type;
 
@@ -191,11 +191,11 @@ namespace	ft
 				return (*(--__tmp));
 			}
 
-			pointer
-			operator->	(void) const
-			{
-				return (std::addressof(operator*()));
-			}
+			// pointer
+			// operator->	(void) const
+			// {
+			// 	return (std::addressof(operator*()));
+			// }
 
 			reverse_iterator&
 			operator++	(void)
