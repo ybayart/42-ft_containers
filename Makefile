@@ -1,6 +1,12 @@
 SRC			=	main
 
+INC			=	utils \
+				iterator \
+				list
+
 SRCS		= $(addsuffix .cpp, ${SRC})
+
+INCS		= $(addsuffix .hpp, ${INC})
 
 OBJS		= ${SRCS:.cpp=.o}
 

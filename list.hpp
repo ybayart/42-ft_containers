@@ -48,31 +48,28 @@ namespace	ft
 			{
 				if (this != __last)
 				{
-					// Remove [first, last) from its old position.
-					__last->_M_prev->_M_next	= this;
+					__last->_M_prev->_M_next = this;
 					__first->_M_prev->_M_next = __last;
-					this->_M_prev->_M_next		= __first;
+					this->_M_prev->_M_next = __first;
 
-					// Splice [first, last) into its new position.
 					_List_node_base* const __tmp = this->_M_prev;
-					this->_M_prev								= __last->_M_prev;
-					__last->_M_prev							= __first->_M_prev;
-					__first->_M_prev						 = __tmp;
+					this->_M_prev = __last->_M_prev;
+					__last->_M_prev = __first->_M_prev;
+					__first->_M_prev = __tmp;
 				}
 			}
 
 			void
 			_M_reverse(void)
 			{
-				_List_node_base* __tmp = this;
+				_List_node_base*	__tmp;
+
+				__tmp = this;
 				do
 				{
-					std::swap(__tmp->_M_next, __tmp->_M_prev);
-
-					// Old next node is now prev.
+					ft::swap(__tmp->_M_next, __tmp->_M_prev);
 					__tmp = __tmp->_M_prev;
-				}
-				while (__tmp != this);
+				}	while (__tmp != this);
 			}
 
 			void
@@ -119,7 +116,7 @@ namespace	ft
 			typedef _List_iterator<_Tp>				_Self;
 			typedef _List_node<_Tp>					_Node;
 
-			typedef __gnu_cxx::ptrdiff_t						difference_type;
+			typedef __gnu_cxx::ptrdiff_t			difference_type;
 			typedef ft::bidirectional_iterator_tag	iterator_category;
 			typedef _Tp								value_type;
 			typedef _Tp*							pointer;
@@ -206,15 +203,17 @@ namespace	ft
 			typedef const _List_node<_Tp>			_Node;
 			typedef _List_iterator<_Tp>				iterator;
 
-			typedef __gnu_cxx::ptrdiff_t						difference_type;
-			typedef std::bidirectional_iterator_tag	iterator_category;
+			typedef __gnu_cxx::ptrdiff_t			difference_type;
+			typedef ft::bidirectional_iterator_tag	iterator_category;
 			typedef _Tp								value_type;
 			typedef const _Tp*						pointer;
 			typedef const _Tp&						reference;
 
 			const __detail::_List_node_base*	_M_node;
 
-			_List_const_iterator() : _M_node() {}
+			_List_const_iterator()
+			: _M_node()
+			{}
 
 			explicit
 			_List_const_iterator(const __detail::_List_node_base* __x)
@@ -369,19 +368,17 @@ namespace	ft
 					_M_init();
 				}
 
-				_List_base(const _Node_alloc_type& __a) _GLIBCXX_NOEXCEPT
+				_List_base(const _Node_alloc_type& __a)
 				: _M_impl(__a)
 				{
 					_M_init();
 				}
 
 				~_List_base(void)
-				{
-					// clear();
-				}
+				{}
 
 				void
-				_M_init() _GLIBCXX_NOEXCEPT
+				_M_init()
 				{
 					this->_M_impl._M_node._M_next = &this->_M_impl._M_node;
 					this->_M_impl._M_node._M_prev = &this->_M_impl._M_node;
@@ -507,8 +504,6 @@ namespace	ft
 
 			void reverse(void);
 
-			void swap (list<T,Alloc>& x, list<T,Alloc>& y);
-
 		private:
 			typedef _List_base<T, Alloc>				_Base;
 			typedef typename _Base::_Tp_alloc_type		_Tp_alloc_type;
@@ -517,8 +512,6 @@ namespace	ft
 			typedef typename _Base::_Node_alloc_traits	_Node_alloc_traits;
 
 		protected:
-			// Note that pointers-to-_Node's can be ctor-converted to
-			// iterator types.
 			typedef _List_node<T>				 _Node;
 
 			using _Base::_M_impl;
@@ -526,43 +519,37 @@ namespace	ft
 			using _Base::_M_get_node;
 			using _Base::_M_get_Node_allocator;
 
-			/**
-			 *	@param	__args	An instance of user data.
-			 *
-			 *	Allocates space for a new node and constructs a copy of
-			 *	@a __args in it.
-			 */
 			_Node*
-			_M_create_node(const value_type& __x)
+			_M_create_node(const value_type& x)
 			{
-				_Node* __p = this->_M_get_node();
+				_Node* p = this->_M_get_node();
 				try
 				{
-					_Tp_alloc_type __alloc(_M_get_Node_allocator());
-					__alloc.construct(__p->_M_valptr(), __x);
+					_Tp_alloc_type tmpalloc(_M_get_Node_allocator());
+					tmpalloc.construct(p->_M_valptr(), x);
 				}
 				catch(std::exception& e)
 				{
-					_M_put_node(__p);
+					_M_put_node(p);
 					throw;
 				}
-				return (__p);
+				return (p);
 			}
 
 			void
-			_M_insert(iterator __position, const value_type& __x)
+			_M_insert(iterator position, const value_type& x)
 			{
-				_Node* __tmp = _M_create_node(__x);
-				__tmp->_M_hook(__position._M_node);
+				_Node* tmp = _M_create_node(x);
+				tmp->_M_hook(position._M_node);
 			}
 
 			void
-			_M_erase(iterator __position) _GLIBCXX_NOEXCEPT
+			_M_erase(iterator position)
 			{
-				__position._M_node->_M_unhook();
-				_Node* __n = static_cast<_Node*>(__position._M_node);
-				_Tp_alloc_type(_M_get_Node_allocator()).destroy(__n->_M_valptr());
-				_M_put_node(__n);
+				position._M_node->_M_unhook();
+				_Node* n = static_cast<_Node*>(position._M_node);
+				_Tp_alloc_type(_M_get_Node_allocator()).destroy(n->_M_valptr());
+				_M_put_node(n);
 			}
 
 			void
@@ -593,38 +580,13 @@ namespace	ft
 				else
 					erase(it, end());
 			}
+
+			void
+			_M_transfer(iterator position, iterator first, iterator last)
+			{
+				position._M_node->_M_transfer(first._M_node, last._M_node);
+			}
 	};
-
-	template <class T, class Alloc>
-	inline bool
-	operator== (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-	template <class T, class Alloc>
-	inline bool
-	operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-	template <class T, class Alloc>
-	inline bool
-	operator<	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-	template <class T, class Alloc>
-	inline bool
-	operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-	template <class T, class Alloc>
-	inline bool
-	operator>	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-	template <class T, class Alloc>
-	inline bool
-	operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-	template<class T, class Alloc>
-	inline void
-	swap(list<T, Alloc>& x, list<T, Alloc>& y)
-	{
-		x.swap(y);
-	}
 
 
 	template <typename T, typename Alloc>
@@ -658,7 +620,9 @@ namespace	ft
 
 	template <typename T, typename Alloc>
 	list<T, Alloc>::~list (void)
-	{}
+	{
+		erase(begin(), end());
+	}
 
 	template <typename T, typename Alloc>
 	list<T, Alloc>&
@@ -763,26 +727,18 @@ namespace	ft
 	typename list<T, Alloc>::reference
 	list<T, Alloc>::back (void)
 	{
-		iterator __tmp = end();
-		--__tmp;
-		return *__tmp;
+		iterator tmp = end();
+		--tmp;
+		return (*tmp);
 	}
 
 	template <typename T, typename Alloc>
 	typename list<T, Alloc>::const_reference
 	list<T, Alloc>::back (void) const
 	{
-		iterator __tmp = end();
-		--__tmp;
-		return *__tmp;
-	}
-
-	template <typename T, typename Alloc>
-	template <class InputIterator>
-	void
-	list<T, Alloc>::assign (InputIterator first, InputIterator last)
-	{
-		_M_init(first, last, std::__false_type());
+		iterator tmp = end();
+		--tmp;
+		return (*tmp);
 	}
 
 	template <typename T, typename Alloc>
@@ -790,6 +746,15 @@ namespace	ft
 	list<T, Alloc>::assign (size_type n, const value_type& val)
 	{
 		_M_fill(n, val);
+	}
+
+	template <typename T, typename Alloc>
+	template <class InputIterator>
+	void
+	list<T, Alloc>::assign (InputIterator first, InputIterator last)
+	{
+		typedef typename std::__is_integer<InputIterator>::__type _Integral;
+		_M_init(first, last, _Integral());
 	}
 
 	template <typename T, typename Alloc>
@@ -818,6 +783,415 @@ namespace	ft
 	list<T, Alloc>::pop_back (void)
 	{	
 		this->_M_erase(iterator(this->_M_impl._M_node._M_prev));
+	}
+
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::iterator
+	list<T, Alloc>::insert (iterator position, const value_type& val)
+	{
+		this->_M_insert(position, val);
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::insert (iterator position, size_type n, const value_type& val)
+	{
+		list<T>		tmp(n, val);
+
+		splice(position, tmp);
+	}
+
+	template <typename T, typename Alloc>
+	template <class InputIterator>
+	void
+	list<T, Alloc>::insert (iterator position, InputIterator first, InputIterator last)
+	{
+		list<T>		tmp(first, last);
+
+		splice(position, tmp);
+	}
+
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::iterator
+	list<T, Alloc>::erase (iterator position)
+	{
+		iterator	tmp;
+
+		tmp = iterator(position._M_node->_M_next);
+		_M_erase(position._M_const_cast());
+		return (tmp);
+	}
+
+	template <typename T, typename Alloc>
+	typename list<T, Alloc>::iterator
+	list<T, Alloc>::erase (iterator first, iterator last)
+	{
+		while (first != last)
+			first = erase(first);
+		return (last._M_const_cast());
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::swap (list& x)
+	{
+		__detail::_List_node_base::swap(this->_M_impl._M_node,
+					x._M_impl._M_node);
+		_Node_alloc_traits::_S_on_swap(this->_M_get_Node_allocator(),
+					x._M_get_Node_allocator());
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::resize (size_type n, value_type val)
+	{
+		size_type	len;
+
+		len = size();
+		if (len > n)
+		{
+			for (;len > n;len--)
+				pop_back();
+		}
+		else if (len < n)
+		{
+			list	tmp(n - len, val);
+
+			splice(end(), tmp);
+		}
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::clear(void)
+	{
+		erase(begin(), end());
+		_Base::_M_init();
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::splice (iterator position, list& x)
+	{
+		if (x.empty() == 0)
+		{
+			this->_M_transfer(position._M_const_cast(),
+				x.begin(), x.end());
+		}
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::splice (iterator position, list& x, iterator i)
+	{
+		iterator j;
+
+		(void)x;
+		j = i._M_const_cast();
+		++j;
+		if (position == i || position == j)
+			return;
+		this->_M_transfer(position._M_const_cast(),
+				i._M_const_cast(), j);
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::splice (iterator position, list& x, iterator first, iterator last)
+	{
+		(void)x;
+		if (first != last)
+			this->_M_transfer(position._M_const_cast(),
+								first._M_const_cast(),
+								last._M_const_cast());
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::remove (const value_type& val)
+	{
+		iterator	it;
+
+		it = begin();
+		while (it != end())
+		{
+			if (*it == val)
+				it = erase(it);
+			else
+				it++;
+		}
+	}
+
+	template <typename T, typename Alloc>
+	template <class Predicate>
+	void
+	list<T, Alloc>::remove_if (Predicate pred)
+	{
+		iterator	it;
+
+		it = begin();
+		while (it != end())
+		{
+			if (pred(*it))
+				it = erase(it);
+			else
+				it++;
+		}
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::unique (void)
+	{
+		iterator	it1;
+		iterator	it2;
+
+		it1 = begin();
+		it2 = begin();
+		it2++;
+		while (it2 != end())
+		{
+			if (*it1 == *it2)
+				it2 = erase(it2);
+			else
+			{
+				it1++;
+				it2++;
+			}
+		}
+	}
+
+	template <typename T, typename Alloc>
+	template <class BinaryPredicate>
+	void
+	list<T, Alloc>::unique (BinaryPredicate binary_pred)
+	{
+		iterator	it1;
+		iterator	it2;
+
+		it1 = begin();
+		it2 = begin();
+		it2++;
+		while (it2 != end())
+		{
+			if (binary_pred(*it2, *it1))
+				it2 = erase(it2);
+			else
+			{
+				it1++;
+				it2++;
+			}
+		}
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::merge (list& x)
+	{
+		if (this != std::__addressof(x))
+		{
+			iterator	first1;
+			iterator	last1;
+			iterator	first2;
+			iterator	last2;
+			iterator	next;
+
+			first1 = begin();
+			last1 = end();
+			first2 = x.begin();
+			last2 = x.end();
+			try {
+				while (first1 != last1 && first2 != last2)
+					if (*first2 < *first1)
+					{
+						next = first2;
+						_M_transfer(first1, first2, ++next);
+						first2 = next;
+					}
+					else
+						++first1;
+				if (first2 != last2)
+					_M_transfer(last1, first2, last2);
+			}
+			catch(std::exception& e)
+			{
+				throw;
+			}
+		}
+	}
+
+	template <typename T, typename Alloc>
+	template <class Compare>
+	void
+	list<T, Alloc>::merge (list& x, Compare comp)
+	{
+		if (this != std::__addressof(x))
+		{
+			iterator	first1;
+			iterator	last1;
+			iterator	first2;
+			iterator	last2;
+			iterator	next;
+
+			first1 = begin();
+			last1 = end();
+			first2 = x.begin();
+			last2 = x.end();
+			try {
+				while (first1 != last1 && first2 != last2)
+					if (comp(*first2, *first1))
+					{
+						next = first2;
+						_M_transfer(first1, first2, ++next);
+						first2 = next;
+					}
+					else
+						++first1;
+				if (first2 != last2)
+					_M_transfer(last1, first2, last2);
+			}
+			catch(std::exception& e)
+			{
+				throw;
+			}
+		}
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::sort (void)
+	{
+		if (this->_M_impl._M_node._M_next != &this->_M_impl._M_node
+		&& this->_M_impl._M_node._M_next->_M_next != &this->_M_impl._M_node)
+		{
+			list	carry;
+			list	tmp[64];
+			list*	fill = tmp;
+			list*	counter;
+			try
+			{
+				do
+				{
+					carry.splice(carry.begin(), *this, begin());
+					for(counter = tmp;
+						counter != fill && !counter->empty();
+						++counter)
+					{
+						counter->merge(carry);
+						carry.swap(*counter);
+					}
+					carry.swap(*counter);
+					if (counter == fill)
+						++fill;
+				}	while ( !empty() );
+				for (counter = tmp + 1; counter != fill; ++counter)
+					counter->merge(*(counter - 1));
+				swap(*(fill - 1));
+			}
+			catch(std::exception& e)
+			{
+				this->splice(this->end(), carry);
+				for (size_t i = 0; i < sizeof(tmp)/sizeof(tmp[0]); ++i)
+					this->splice(this->end(), tmp[i]);
+				throw;
+			}
+		}
+	}
+
+	template <typename T, typename Alloc>
+	template <class Compare>
+	void
+	list<T, Alloc>::sort (Compare comp)
+	{
+		if (this->_M_impl._M_node._M_next != &this->_M_impl._M_node
+		&& this->_M_impl._M_node._M_next->_M_next != &this->_M_impl._M_node)
+		{
+			list	carry;
+			list	tmp[64];
+			list*	fill = tmp;
+			list*	counter;
+			try
+			{
+				do
+				{
+					carry.splice(carry.begin(), *this, begin());
+					for(counter = tmp;
+						counter != fill && !counter->empty();
+						++counter)
+					{
+						counter->merge(carry, comp);
+						carry.swap(*counter);
+					}
+					carry.swap(*counter);
+					if (counter == fill)
+						++fill;
+				}	while (!empty());
+				for (counter = tmp + 1; counter != fill; ++counter)
+					counter->merge(*(counter - 1), comp);
+				swap(*(fill - 1));
+			}
+			catch(std::exception& e)
+			{
+				this->splice(this->end(), carry);
+				for (size_t i = 0; i < sizeof(tmp)/sizeof(tmp[0]); ++i)
+					this->splice(this->end(), tmp[i]);
+				throw;
+			}
+		}
+	}
+
+	template <typename T, typename Alloc>
+	void
+	list<T, Alloc>::reverse (void)
+	{
+		this->_M_impl._M_node._M_reverse();
+	}
+
+
+	template <class T, class Alloc>
+	inline bool
+	operator== (const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return (false);
+		typedef typename list<T, Alloc>::const_iterator const_iterator;
+		const_iterator	it1 = lhs.begin();
+		const_iterator	it2 = rhs.begin();
+		const_iterator	end1 = lhs.end();
+		const_iterator	end2 = rhs.end();
+		while (it1 != end1 && it2 != end2 && *it1 == *it2)
+		{
+			it1++;
+			it2++;
+		}
+		return (*it1 == *it2);
+	}
+
+	template <class T, class Alloc>
+	inline bool
+	operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+	template <class T, class Alloc>
+	inline bool
+	operator<	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+	template <class T, class Alloc>
+	inline bool
+	operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+	template <class T, class Alloc>
+	inline bool
+	operator>	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+	template <class T, class Alloc>
+	inline bool
+	operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+	template<class T, class Alloc>
+	inline void
+	swap(list<T, Alloc>& x, list<T, Alloc>& y)
+	{
+		x.swap(y);
 	}
 }
 
