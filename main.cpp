@@ -130,12 +130,21 @@ main(void)
 	tata.reverse();
 	print_it(tata);
 
-	// std::cout << "---15" << std::endl;
-	// toto.push_front(8888);
-	// toto.push_front(8888);
-	// print_it(tata);
-	// print_it(toto);
-	// it = toto.begin();
-	// it++;
-	// std::cout << "Test: " << (toto == tata) << std::endl;
+	std::cout << "---15" << std::endl;
+	toto.push_front(8888);
+	toto.push_front(8888);
+	std::cout << "tata" << std::endl;
+	print_it(tata);
+	std::cout << "toto" << std::endl;
+	print_it(toto);
+	it = toto.begin();
+	it++;
+	std::cout << "toto == tata: " << (toto == tata) << " != " << (toto != tata) << std::endl;
+	std::cout << "toto == toto: " << (toto == toto) << " != " << (toto != toto) << std::endl;
+	std::cout << "tata == tata: " << (tata == tata) << " != " << (tata != tata) << std::endl;
+
+	std::cout << "toto < tata: " << (toto < tata) << std::endl;
+	std::cout << "toto > tata: " << (toto > toto) << std::endl;
+	std::cout << "toto <= toto: " << (toto <= toto) << std::endl;
+	std::cout << "toto >= toto: " << (toto >= toto) << std::endl;
 }

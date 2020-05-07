@@ -116,7 +116,7 @@ namespace	ft
 			typedef _List_iterator<_Tp>				_Self;
 			typedef _List_node<_Tp>					_Node;
 
-			typedef __gnu_cxx::ptrdiff_t			difference_type;
+			typedef ptrdiff_t						difference_type;
 			typedef ft::bidirectional_iterator_tag	iterator_category;
 			typedef _Tp								value_type;
 			typedef _Tp*							pointer;
@@ -203,7 +203,7 @@ namespace	ft
 			typedef const _List_node<_Tp>			_Node;
 			typedef _List_iterator<_Tp>				iterator;
 
-			typedef __gnu_cxx::ptrdiff_t			difference_type;
+			typedef ptrdiff_t						difference_type;
 			typedef ft::bidirectional_iterator_tag	iterator_category;
 			typedef _Tp								value_type;
 			typedef const _Tp*						pointer;
@@ -401,7 +401,6 @@ namespace	ft
 			return (__x._M_node != __y._M_node);
 		}
 
-//	template <class T, class Alloc>
 	template <typename T, typename Alloc = std::allocator<T> >
 	class	list : public _List_base<T, Alloc>
 	{
@@ -413,7 +412,7 @@ namespace	ft
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
 			typedef ft::_List_iterator<T>						iterator;
-			typedef ft::_List_const_iterator<const T>			const_iterator;
+			typedef ft::_List_const_iterator<T>					const_iterator;
 			typedef ft::reverse_iterator<iterator>				reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
@@ -1155,11 +1154,12 @@ namespace	ft
 		if (lhs.size() != rhs.size())
 			return (false);
 		typedef typename list<T, Alloc>::const_iterator const_iterator;
-		const_iterator	it1 = lhs.begin();
-		const_iterator	it2 = rhs.begin();
-		const_iterator	end1 = lhs.end();
-		const_iterator	end2 = rhs.end();
-		while (it1 != end1 && it2 != end2 && *it1 == *it2)
+		const_iterator	it1;
+		const_iterator	it2;
+
+		it1 = lhs.begin();
+		it2 = rhs.begin();
+		while (*it1 == *it2 && it1 != lhs.end())
 		{
 			it1++;
 			it2++;
@@ -1169,23 +1169,52 @@ namespace	ft
 
 	template <class T, class Alloc>
 	inline bool
-	operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+	{
+		return (!(lhs == rhs));
+	}
 
 	template <class T, class Alloc>
 	inline bool
-	operator<	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	operator<	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+	{
+		typedef typename list<T, Alloc>::const_iterator const_iterator;
+		const_iterator	it1;
+		const_iterator	it2;
+
+		it1 = lhs.begin();
+		it2 = rhs.begin();
+		while (it1 != lhs.end())
+		{
+			if (it2 == rhs.end() || *it2 < *it1)
+				return (false);
+			else if (*it1 < *it2)
+				return (true);
+			++it1; ++it2;
+		}
+		return (it2 != rhs.end());
+	}
 
 	template <class T, class Alloc>
 	inline bool
-	operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+	{
+		return (!(rhs < lhs));
+	}
 
 	template <class T, class Alloc>
 	inline bool
-	operator>	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	operator>	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+	{
+		return (rhs < lhs);
+	}
 
 	template <class T, class Alloc>
 	inline bool
-	operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+	{
+		return (!(lhs < rhs));
+	}
 
 	template<class T, class Alloc>
 	inline void
