@@ -2,7 +2,8 @@ SRC			=	main
 
 INC			=	utils \
 				iterator \
-				list
+				list \
+				vector
 
 SRCS		= $(addsuffix .cpp, ${SRC})
 

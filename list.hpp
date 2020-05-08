@@ -406,7 +406,7 @@ namespace	ft
 	{
 		public:
 			typedef T											value_type;
-			typedef std::allocator<value_type>					allocator_type;
+			typedef Alloc										allocator_type;
 			typedef typename allocator_type::reference			reference;
 			typedef typename allocator_type::const_reference	const_reference;
 			typedef typename allocator_type::pointer			pointer;
@@ -1149,17 +1149,23 @@ namespace	ft
 
 	template <class T, class Alloc>
 	inline bool
-	operator== (const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
+	operator==	(const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
 	{
 		if (lhs.size() != rhs.size())
 			return (false);
 		typedef typename list<T, Alloc>::const_iterator const_iterator;
 		const_iterator	it1;
 		const_iterator	it2;
+		const_iterator	end1;
+		const_iterator	end2;
 
 		it1 = lhs.begin();
 		it2 = rhs.begin();
-		while (*it1 == *it2 && it1 != lhs.end())
+		end1 = lhs.end();
+		end2 = rhs.end();
+		if (it1 == it2 && end1 == end2)
+			return (true);
+		while (it1 != end1 && it2 != end2 && *it1 == *it2)
 		{
 			it1++;
 			it2++;
@@ -1169,7 +1175,7 @@ namespace	ft
 
 	template <class T, class Alloc>
 	inline bool
-	operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+	operator!=	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
 	{
 		return (!(lhs == rhs));
 	}
@@ -1190,14 +1196,15 @@ namespace	ft
 				return (false);
 			else if (*it1 < *it2)
 				return (true);
-			++it1; ++it2;
+			++it1;
+			++it2;
 		}
 		return (it2 != rhs.end());
 	}
 
 	template <class T, class Alloc>
 	inline bool
-	operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+	operator<=	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
 	{
 		return (!(rhs < lhs));
 	}
@@ -1211,7 +1218,7 @@ namespace	ft
 
 	template <class T, class Alloc>
 	inline bool
-	operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+	operator>=	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
 	{
 		return (!(lhs < rhs));
 	}
