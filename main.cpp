@@ -18,11 +18,12 @@ remove_666(int val)
 	return (val != 666);
 }
 
+template <typename T>
 void
-print_it(ft::list<int>& toto)
+print_it(T& toto)
 {
-	ft::list<int>::iterator it;
-	ft::list<int>::reverse_iterator itr;
+	typename T::iterator it;
+	typename T::reverse_iterator itr;
 
 	it = toto.begin();
 	itr = toto.rbegin();
@@ -146,4 +147,8 @@ main(void)
 	std::cout << "toto > tata: " << (toto > toto) << std::endl;
 	std::cout << "toto <= toto: " << (toto <= toto) << std::endl;
 	std::cout << "toto >= toto: " << (toto >= toto) << std::endl;
+
+
+
+	ft::vector<int>		vect;
 }

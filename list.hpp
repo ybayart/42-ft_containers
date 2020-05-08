@@ -603,7 +603,7 @@ namespace	ft
 	template <typename T, typename Alloc>
 	template <typename InputIterator>
 	list<T, Alloc>::list (InputIterator first, InputIterator last, const allocator_type& alloc)
-	: _Base(_Node_alloc_type(alloc))
+	: _Base(alloc)
 	{
 		typedef typename std::__is_integer<InputIterator>::__type _Integral;
 		_M_init(first, last, _Integral());
@@ -611,8 +611,7 @@ namespace	ft
 
 	template <typename T, typename Alloc>
 	list<T, Alloc>::list (const list& src)
-	: _Base(_Node_alloc_traits::
-		_S_select_on_copy(src._M_get_Node_allocator()))
+	: _Base()
 	{
 		_M_init(src.begin(), src.end(), std::__false_type());
 	}

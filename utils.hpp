@@ -33,6 +33,7 @@ namespace ft
 
 # include "iterator.hpp"
 # include "list.hpp"
+# include "vector.hpp"
 
 
 #endif
