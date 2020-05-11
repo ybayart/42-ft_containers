@@ -100,13 +100,13 @@ namespace	ft
 			_Tp*
 			_M_valptr(void)
 			{
-				return std::__addressof(_M_data);
+				return (&_M_data);
 			}
 
 			_Tp const*
 			_M_valptr(void) const
 			{
-				return std::__addressof(_M_data);
+				return (&_M_data);
 			}
 		};
 
@@ -333,8 +333,8 @@ namespace	ft
 				
 				size_t _M_node_count() const
 				{
-					return _S_distance(_M_impl._M_node._M_next,
-					std::__addressof(_M_impl._M_node));
+					return (_S_distance(_M_impl._M_node._M_next,
+							&(_M_impl._M_node)));
 				}
 
 				typename _Node_alloc_traits::pointer
@@ -626,7 +626,7 @@ namespace	ft
 	list<T, Alloc>&
 	list<T, Alloc>::operator=	(const list& rhs)
 	{
-		if (this != std::__addressof(rhs))
+		if (this != &(rhs))
 			_M_init(rhs.begin(), rhs.end(), std::__false_type());
 	}
 
@@ -986,7 +986,7 @@ namespace	ft
 	void
 	list<T, Alloc>::merge (list& x)
 	{
-		if (this != std::__addressof(x))
+		if (this != &(x))
 		{
 			iterator	first1;
 			iterator	last1;
@@ -1023,7 +1023,7 @@ namespace	ft
 	void
 	list<T, Alloc>::merge (list& x, Compare comp)
 	{
-		if (this != std::__addressof(x))
+		if (this != &(x))
 		{
 			iterator	first1;
 			iterator	last1;

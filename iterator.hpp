@@ -38,7 +38,7 @@ namespace	ft
 		{
 			typedef random_access_iterator_tag	iterator_category;
 			typedef _Tp							value_type;
-			typedef __gnu_cxx::ptrdiff_t					difference_type;
+			typedef ptrdiff_t					difference_type;
 			typedef _Tp*						pointer;
 			typedef _Tp&						reference;
 		};
@@ -48,7 +48,7 @@ namespace	ft
 		{
 			typedef random_access_iterator_tag	iterator_category;
 			typedef _Tp							value_type;
-			typedef __gnu_cxx::ptrdiff_t					difference_type;
+			typedef ptrdiff_t					difference_type;
 			typedef const _Tp*					pointer;
 			typedef const _Tp&					reference;
 		};
@@ -194,7 +194,7 @@ namespace	ft
 			pointer
 			operator->	(void) const
 			{
-				return (std::__addressof(operator*()));
+				return (&(operator*()));
 			}
 
 			reverse_iterator&

@@ -9,7 +9,8 @@ namespace	ft
 		struct _Vector_base
 		{
 			private:
-				typedef typename _Alloc::pointer	pointer;
+				typedef _Alloc								allocator_type;
+				typedef typename allocator_type::pointer	pointer;
 
 				struct _Vector_impl
 				: public _Alloc
@@ -19,11 +20,11 @@ namespace	ft
 					pointer _M_end_of_storage;
 
 					_Vector_impl (void)
-					: _Alloc(), _M_start(), _M_finish(), _M_end_of_storage()
+					: allocator_type(), _M_start(), _M_finish(), _M_end_of_storage()
 					{}
 
 					_Vector_impl(_Alloc const& a)
-					: _Alloc(a), _M_start(), _M_finish(), _M_end_of_storage()
+					: allocator_type(a), _M_start(), _M_finish(), _M_end_of_storage()
 					{}
 
 					void
@@ -36,7 +37,23 @@ namespace	ft
 				};
 
 			public:
-				typedef _Alloc		allocator_type;
+				allocator_type&
+				_M_get_Tp_allocator (void)
+				{
+					return (*static_cast<allocator_type*>(&this->_M_impl));
+				}
+
+				const allocator_type&
+				_M_get_Tp_allocator (void) const
+				{
+					return (*static_cast<const allocator_type*>(&this->_M_impl));
+				}
+
+				allocator_type
+				get_allocator (void) const
+				{
+					return (allocator_type(_M_get_Tp_allocator()));
+				}
 
 				_Vector_base (void)
 				: _M_impl()
@@ -70,17 +87,23 @@ namespace	ft
 				pointer
 				_M_allocate (size_t n)
 				{
+					allocator_type	alloc;
+					
+					alloc = _M_get_Tp_allocator();
 					if (n == 0)
 						return (pointer());
 					else
-						return (allocator_type.allocate(_M_impl, n));
+						return (alloc.allocate(_M_impl, n));
 				}
 
 				void
 				_M_deallocate (pointer p, size_t n)
 				{
+					allocator_type	alloc;
+					
+					alloc = _M_get_Tp_allocator();
 					if (p)
-						allocator_type.deallocate(_M_impl, p, n);
+						alloc.deallocate(p, n);
 				}
 
 			private:
@@ -105,7 +128,7 @@ namespace	ft
 				typedef	Alloc										allocator_type;
 				typedef typename allocator_type::reference			reference;
 				typedef typename allocator_type::const_reference	const_reference;
-				typedef typename _Base::pointer						pointer;
+				typedef typename allocator_type::pointer			pointer;
 				typedef typename allocator_type::const_pointer		const_pointer;
 				typedef normal_iterator<pointer, vector>			iterator;
 				typedef normal_iterator<const_pointer, vector>		const_iterator;
@@ -186,6 +209,9 @@ namespace	ft
 				using _Base::_M_allocate;
 				using _Base::_M_deallocate;
 				using _Base::_M_impl;
+
+			private:
+				allocator_type	_alloc;
 		};
 	
 	template <typename T, typename Alloc>
@@ -211,14 +237,25 @@ namespace	ft
 		}
 	}
 
-	// template <typename T, typename Alloc>
-	// template <class InputIterator>
-	// vector<T, Alloc>::vector (InputIterator first, InputIterator last, const allocator_type& alloc)
-	// {}
+	template <typename T, typename Alloc>
+	template <class InputIterator>
+	vector<T, Alloc>::vector (InputIterator first, InputIterator last, const allocator_type& alloc)
+	{
+		std::cout << "toto" << std::endl;
+		(void)first;
+		(void)last;
+		(void)alloc;
+	}
 
-	// template <typename T, typename Alloc>
-	// vector<T, Alloc>::vector (const vector& x)
-	// {}
+	template <typename T, typename Alloc>
+	vector<T, Alloc>::vector (const vector& x)
+	{
+		(void)x;
+	}
+
+	template <typename T, typename Alloc>
+	vector<T, Alloc>::~vector(void)
+	{}
 
 
 	template <class T, class Alloc>
