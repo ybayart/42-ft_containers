@@ -226,7 +226,7 @@ namespace	ft
 				void
 				_M_dispatch(InputIterator first, InputIterator last, false_type)
 				{
-					typedef typename std::iterator_traits<InputIterator>::iterator_category IterCategory;
+					typedef typename ft::iterator_traits<InputIterator>::iterator_category IterCategory;
 					_M_init_range(first, last, IterCategory());
 				}
 
