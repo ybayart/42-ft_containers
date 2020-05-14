@@ -12,7 +12,7 @@ namespace	ft
 	struct bidirectional_iterator_tag : public forward_iterator_tag {};
 	struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
-	template<typename _Category, typename _Tp, typename _Distance = __gnu_cxx::ptrdiff_t,
+	template<typename _Category, typename _Tp, typename _Distance = ptrdiff_t,
 					 typename _Pointer = _Tp*, typename _Reference = _Tp&>
 		struct iterator
 		{
@@ -57,7 +57,7 @@ namespace	ft
 		typename iterator_traits<_Iter>::iterator_category
 		__iterator_category(const _Iter&)
 		{
-			return (typename iterator_traits<_Iter>::iterator_category());
+			return (typename ft::iterator_traits<_Iter>::iterator_category());
 		}
 
 	template<typename _Iterator, bool _HasBase>
@@ -83,11 +83,11 @@ namespace	ft
 
 
 	template<typename _InputIterator>
-		typename iterator_traits<_InputIterator>::difference_type
+		typename ft::iterator_traits<_InputIterator>::difference_type
 		__distance(_InputIterator __first, _InputIterator __last,
 							 input_iterator_tag)
 		{
-			typename iterator_traits<_InputIterator>::difference_type __n = 0;
+			typename ft::iterator_traits<_InputIterator>::difference_type __n = 0;
 			while (__first != __last)
 			{
 				++__first;
@@ -97,7 +97,7 @@ namespace	ft
 		}
 
 	template<typename _RandomAccessIterator>
-		typename iterator_traits<_RandomAccessIterator>::difference_type
+		typename ft::iterator_traits<_RandomAccessIterator>::difference_type
 		__distance(_RandomAccessIterator __first, _RandomAccessIterator __last,
 							 random_access_iterator_tag)
 		{
@@ -106,7 +106,7 @@ namespace	ft
 
 	template<typename _InputIterator>
 		inline
-		typename iterator_traits<_InputIterator>::difference_type
+		typename ft::iterator_traits<_InputIterator>::difference_type
 		distance(_InputIterator __first, _InputIterator __last)
 		{
 			return (ft::__distance(__first, __last,
@@ -146,7 +146,7 @@ namespace	ft
 		inline void
 		advance(_InputIterator& __i, _Distance __n)
 		{
-			typename iterator_traits<_InputIterator>::difference_type __d = __n;
+			typename ft::iterator_traits<_InputIterator>::difference_type __d = __n;
 			ft::__advance(__i, __d, ft::__iterator_category(__i));
 		}
 
@@ -155,16 +155,16 @@ namespace	ft
 
 	template<typename _Iterator>
 		class reverse_iterator
-		: public iterator<typename iterator_traits<_Iterator>::iterator_category,
-						typename iterator_traits<_Iterator>::value_type,
-						typename iterator_traits<_Iterator>::difference_type,
-						typename iterator_traits<_Iterator>::pointer,
-						typename iterator_traits<_Iterator>::reference>
+		: public iterator<typename ft::iterator_traits<_Iterator>::iterator_category,
+						typename ft::iterator_traits<_Iterator>::value_type,
+						typename ft::iterator_traits<_Iterator>::difference_type,
+						typename ft::iterator_traits<_Iterator>::pointer,
+						typename ft::iterator_traits<_Iterator>::reference>
 		{
 		protected:
 			_Iterator		current;
 
-			typedef iterator_traits<_Iterator>		__traits_type;
+			typedef ft::iterator_traits<_Iterator>		__traits_type;
 
 		public:
 			typedef _Iterator								iterator_type;
@@ -388,7 +388,7 @@ namespace	ft
 		protected:
 			_Iterator	_M_current;
 
-			typedef iterator_traits<_Iterator>	__traits_type;
+			typedef ft::iterator_traits<_Iterator>	__traits_type;
 
 		public:
 			typedef _Iterator									iterator_type;
@@ -407,12 +407,12 @@ namespace	ft
 			: _M_current(__i)
 			{}
 
-			template<typename _Iter>
-				normal_iterator(const normal_iterator<_Iter,
-				typename __gnu_cxx::__enable_if<
-					(std::__are_same<_Iter, typename _Container::pointer>::__value),
-					_Container>::__type>& __i)
-				: _M_current(__i.base()) { }
+//			template<typename _Iter>
+//				normal_iterator(const normal_iterator<_Iter,
+//				typename __gnu_cxx::__enable_if<
+//					(std::__are_same<_Iter, typename _Container::pointer>::__value),
+//					_Container>::__type>& __i)
+//				: _M_current(__i.base()) { }
 
 			reference
 			operator*	(void) const
