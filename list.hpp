@@ -551,19 +551,19 @@ namespace	ft
 				_M_put_node(n);
 			}
 
-			void
-			_M_init(size_type n, const value_type& val, std::__true_type)
-			{
-				for (; n; --n)
-					push_back(val);
-			}
-
 			template <typename InputIterator>
 			void
-			_M_init(InputIterator first, InputIterator last, std::__false_type)
+			_M_init(InputIterator first, InputIterator last, false_type)
 			{
 				for (;first != last;++first)
 					push_back(*first);
+			}
+
+			void
+			_M_init(size_type n, const value_type& val, true_type)
+			{
+				for (; n; --n)
+					push_back(val);
 			}
 
 			void
@@ -597,7 +597,7 @@ namespace	ft
 	list<T, Alloc>::list (size_type n, const value_type& val, const allocator_type& alloc)
 	: _Base(alloc)
 	{
-		_M_init(n, val, std::__true_type());
+		_M_init(n, val, true_type());
 	}
 
 	template <typename T, typename Alloc>
@@ -605,15 +605,15 @@ namespace	ft
 	list<T, Alloc>::list (InputIterator first, InputIterator last, const allocator_type& alloc)
 	: _Base(alloc)
 	{
-		typedef typename std::__is_integer<InputIterator>::__type _Integral;
-		_M_init(first, last, _Integral());
+		typedef typename ft::is_integer<InputIterator>::type is_int;
+		_M_init(first, last, is_int());
 	}
 
 	template <typename T, typename Alloc>
 	list<T, Alloc>::list (const list& src)
 	: _Base()
 	{
-		_M_init(src.begin(), src.end(), std::__false_type());
+		_M_init(src.begin(), src.end(), false_type());
 	}
 
 	template <typename T, typename Alloc>
@@ -627,7 +627,7 @@ namespace	ft
 	list<T, Alloc>::operator=	(const list& rhs)
 	{
 		if (this != &(rhs))
-			_M_init(rhs.begin(), rhs.end(), std::__false_type());
+			_M_init(rhs.begin(), rhs.end(), false_type());
 	}
 
 	template <typename T, typename Alloc>
@@ -751,8 +751,8 @@ namespace	ft
 	void
 	list<T, Alloc>::assign (InputIterator first, InputIterator last)
 	{
-		typedef typename std::__is_integer<InputIterator>::__type _Integral;
-		_M_init(first, last, _Integral());
+		typedef typename ft::is_integer<InputIterator>::type is_int;
+		_M_init(first, last, is_int());
 	}
 
 	template <typename T, typename Alloc>
