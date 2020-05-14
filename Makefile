@@ -1,4 +1,6 @@
-SRC			=	main
+SRC			=	main \
+				main_list \
+				main_vector
 
 INC			=	utils \
 				iterator \
