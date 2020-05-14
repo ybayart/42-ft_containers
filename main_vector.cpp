@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 21:39:13 by hexa              #+#    #+#             */
-/*   Updated: 2020/05/14 20:20:04 by hexa             ###   ########.fr       */
+/*   Updated: 2020/05/14 22:44:57 by hexa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,20 @@ main_vector(void)
 
 	tata.resize(11, 666);
 	print_it(tata);
+
+	for (size_t i = 0;i < tata.size();i++)
+		std::cout << i << " -> " << tata[i] << " | " << tata.at(i) << std::endl;
+	try
+	{
+		tata.at(11);
+	}
+	catch (std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+
+	std::cout << "front: " << tata.front() << std::endl <<
+					"back: " << tata.back() << std::endl;
 
 //	tata.reserve(20);
 //	print_it(tata);

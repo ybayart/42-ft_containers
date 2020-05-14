@@ -215,7 +215,7 @@ namespace	ft
 				allocator_type	_alloc;
 
 				void
-				_M_dispatch(size_type n, const value_type& val, true_type)
+				_M_init_dispatch(size_type n, const value_type& val, true_type)
 				{
 					this->_M_impl._M_start = _M_allocate(n);
 					this->_M_impl._M_end_of_storage = this->_M_impl._M_start + n;
@@ -224,7 +224,7 @@ namespace	ft
 
 				template <typename InputIterator>
 				void
-				_M_dispatch(InputIterator first, InputIterator last, false_type)
+				_M_init_dispatch(InputIterator first, InputIterator last, false_type)
 				{
 					typedef typename ft::iterator_traits<InputIterator>::iterator_category IterCategory;
 					_M_init_range(first, last, IterCategory());
@@ -292,6 +292,49 @@ namespace	ft
 					}
 				}
 
+				void
+				_M_check_range(size_type n)
+				{
+					if (n >= size())
+						throw std::out_of_range("Index out of range");
+				}
+
+				void
+				_M_assign_dispatch(size_type n, value_type& val, true_type)
+				{
+					(void)n;
+					(void)val;
+					std::cout << "assign_fill" << std::endl;
+				}
+
+				template <typename InputIterator>
+				void
+				_M_assign_dispatch(InputIterator first, InputIterator last, false_type)
+				{
+					typedef typename ft::iterator_traits<InputIterator>::iterator_category IterCategory;
+					_M_assign_range(first, last, IterCategory());
+				}
+
+				void
+				_M_assign_fill(size_type n, value_type& val);
+
+				template <typename InputIterator>
+				void
+				_M_assign_range(InputIterator first, InputIterator last, ft::input_iterator_tag)
+				{
+					(void)first;
+					(void)last;
+					std::cout << "assign_range with input iterator" << std::endl;
+				}
+
+				template <typename InputIterator>
+				void
+				_M_assign_range(InputIterator first, InputIterator last, ft::forward_iterator_tag)
+				{
+					(void)first;
+					(void)last;
+					std::cout << "assign_range with forward iterator" << std::endl;
+				}
 		};
 	
 	template <typename T, typename Alloc>
@@ -312,7 +355,7 @@ namespace	ft
 	: _Base(alloc)
 	{
 		typedef typename ft::is_integer<InputIterator>::type is_int;
-		_M_dispatch(first, last, is_int());
+		_M_init_dispatch(first, last, is_int());
 	}
 
 	template <typename T, typename Alloc>
@@ -446,6 +489,8 @@ namespace	ft
 	void
 	vector<T, Alloc>::reserve(size_type n)
 	{
+		if (n > max_size())
+			throw std::length_error("Greater than maximum size");
 		if (n > capacity())
 		{
 			vector<T> tmp = *this;
@@ -456,6 +501,80 @@ namespace	ft
 			_M_cpy_range(tmp.begin(), tmp.end());
 			_M_deallocate(ptr, len);
 		}
+	}
+
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::reference
+	vector<T, Alloc>::operator[] (size_type n)
+	{
+		return (*(this->_M_impl._M_start + n));
+	}
+
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::const_reference
+	vector<T, Alloc>::operator[] (size_type n) const
+	{
+		return (*(this->_M_impl._M_start + n));
+	}
+
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::reference
+	vector<T, Alloc>::at (size_type n)
+	{
+		_M_check_range(n);
+		return (*(this->_M_impl._M_start + n));
+	}
+
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::const_reference
+	vector<T, Alloc>::at (size_type n) const
+	{
+		_M_check_range(n);
+		return (*(this->_M_impl._M_start + n));
+	}
+
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::reference
+	vector<T, Alloc>::front (void)
+	{
+		return (*begin());
+	}
+
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::const_reference
+	vector<T, Alloc>::front (void) const
+	{
+		return (*begin());
+	}
+
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::reference
+	vector<T, Alloc>::back (void)
+	{
+		return (*(end() - 1));
+	}
+
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::const_reference
+	vector<T, Alloc>::back(void) const
+	{
+		return (*(end() - 1));
+	}
+
+	template <typename T, typename Alloc>
+	template <class InputIterator>
+	void
+	vector<T, Alloc>::assign (InputIterator first, InputIterator last)
+	{
+		typedef typename ft::is_integer<InputIterator>::type is_int;
+		_M_assign_dispatch(first, last, is_int());
+	}
+
+	template <typename T, typename Alloc>
+	void
+	vector<T, Alloc>::assign (size_type n, const value_type& val)
+	{
+		_M_assign_fill(n, val);
 	}
 
 	template <class T, class Alloc>
