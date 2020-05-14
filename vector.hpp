@@ -449,11 +449,12 @@ namespace	ft
 		if (n > capacity())
 		{
 			vector<T> tmp = *this;
+			pointer ptr = this->_M_impl._M_start;
+			size_type len = this->_M_impl._M_end_of_storage - this->_M_impl._M_start;
 			this->_M_impl._M_start = _M_allocate(n);
 			this->_M_impl._M_end_of_storage = this->_M_impl._M_start + n;
 			_M_cpy_range(tmp.begin(), tmp.end());
-			std::cout << "addr: " << &tmp << std::endl;
-//			_M_deallocate(tmp._M_impl._M_start, tmp._M_impl._M_end_of_storage - tmp._M_impl._M_start);
+			_M_deallocate(ptr, len);
 		}
 	}
 
