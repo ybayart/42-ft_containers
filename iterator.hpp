@@ -54,7 +54,7 @@ namespace	ft
 		};
 
 	template<typename _Iter>
-		typename iterator_traits<_Iter>::iterator_category
+		typename ft::iterator_traits<_Iter>::iterator_category
 		__iterator_category(const _Iter&)
 		{
 			return (typename ft::iterator_traits<_Iter>::iterator_category());
