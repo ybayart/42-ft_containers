@@ -21,10 +21,13 @@ RM			= rm -f
 CFLAGS		= -Wall -Wextra -Werror -std=c++98
 
 .cpp.o:
-			${CC} ${CFLAGS} -c $< -o ${<:.cpp=.o}
+			${CC} ${CFLAGS} -D NAMESPACE=ft -c $< -o ${<:.cpp=.o}
 
 $(NAME):	${OBJS}
-			${CC} ${CFLAGS} -o ${NAME} ${OBJS}
+			${CC} ${CFLAGS} -o ${NAME} ${OBJS} -D NAMESPACE=ft
+
+std:		fclean
+			${CC} ${CFLAGS} -o ${NAME} ${SRCS} -D NAMESPACE=std
 
 all:		$(NAME)
 

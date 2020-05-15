@@ -6,11 +6,12 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 21:39:13 by hexa              #+#    #+#             */
-/*   Updated: 2020/05/14 18:54:30 by hexa             ###   ########.fr       */
+/*   Updated: 2020/05/15 17:14:45 by hexa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.hpp"
+#include <list>
 
 static bool
 remove_666(int val)
@@ -42,7 +43,7 @@ print_it(T& toto)
 void
 main_list(void)
 {
-	ft::list<int>	toto;
+	NAMESPACE::list<int>	toto;
 
 	std::cout << "   empty() " << toto.empty() << std::endl;
 	std::cout << "    size() " << toto.size() << std::endl;
@@ -64,7 +65,7 @@ main_list(void)
 	print_it(toto);
 
 	std::cout << "---3" << std::endl;
-	ft::list<int>::iterator it;
+	NAMESPACE::list<int>::iterator it;
 	it = toto.begin();
 	for (int i = 0;i < 4;i++)
 		it++;
@@ -76,7 +77,7 @@ main_list(void)
 	print_it(toto);
 
 	std::cout << "---5" << std::endl;
-	ft::list<int>	tata(5, 42);
+	NAMESPACE::list<int>	tata(5, 42);
 	toto.swap(tata);
 	print_it(toto);
 	print_it(tata);

@@ -407,13 +407,6 @@ namespace	ft
 			: _M_current(__i)
 			{}
 
-//			template<typename _Iter>
-//				normal_iterator(const normal_iterator<_Iter,
-//				typename __gnu_cxx::__enable_if<
-//					(std::__are_same<_Iter, typename _Container::pointer>::__value),
-//					_Container>::__type>& __i)
-//				: _M_current(__i.base()) { }
-
 			reference
 			operator*	(void) const
 			{
