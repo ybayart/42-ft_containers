@@ -13,7 +13,7 @@ INCS		= $(addsuffix .hpp, ${INC})
 
 OBJS		= ${SRCS:.cpp=.o}
 
-NAME		= list
+NAME		= containers
 
 CC			= clang++
 RM			= rm -f

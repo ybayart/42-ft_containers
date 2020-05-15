@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 21:39:13 by hexa              #+#    #+#             */
-/*   Updated: 2020/05/14 22:44:57 by hexa             ###   ########.fr       */
+/*   Updated: 2020/05/15 04:36:34 by hexa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,13 @@ main_vector(void)
 	}
 
 	std::cout << "front: " << tata.front() << std::endl <<
-					"back: " << tata.back() << std::endl;
+					"back: " << tata.back() << std::endl << std::endl;
 
-//	tata.reserve(20);
-//	print_it(tata);
+	toto.assign(5, 6);
+	print_it(toto);
+
+	toto.assign(15, 60);
+	print_it(toto);
 	
 /*	std::cout << "---1" << std::endl;
 	toto.push_back(1);

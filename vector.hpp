@@ -302,9 +302,8 @@ namespace	ft
 				void
 				_M_assign_dispatch(size_type n, value_type& val, true_type)
 				{
-					(void)n;
-					(void)val;
-					std::cout << "assign_fill" << std::endl;
+					reserve(n);
+					_M_init_fill(n, val);
 				}
 
 				template <typename InputIterator>
