@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 21:39:13 by hexa              #+#    #+#             */
-/*   Updated: 2020/05/15 17:13:16 by hexa             ###   ########.fr       */
+/*   Updated: 2020/05/17 16:09:26 by hexa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,38 @@ main_vector(void)
 
 	it = toto.begin();
 	it += 6;
-//	toto.insert(it, tata.begin(), tata.end());
+	toto.insert(it, tata.begin(), tata.end());
 	print_it(toto);
+
+	it = toto.begin();
+	it += 2;
+	std::cout << *(toto.erase(it)) << std::endl;
+	print_it(toto);
+
+	std::cout << *(toto.erase(toto.end() - 1)) << std::endl;
+	print_it(toto);
+
+	std::cout << *(toto.erase(toto.begin() + 10, toto.end() - 5)) << std::endl;
+	print_it(toto);
+
+	std::cout << *(toto.erase(toto.end() - 6, toto.end() - 1)) << std::endl;
+	print_it(toto);
+
+	toto.swap(tata);
+	print_it(toto);
+	print_it(tata);
+
+	std::cout << "toto == tata: " << (toto == tata) << " != " << (toto != tata) << std::endl;
+	std::cout << "toto == toto: " << (toto == toto) << " != " << (toto != toto) << std::endl;
+	std::cout << "tata == tata: " << (tata == tata) << " != " << (tata != tata) << std::endl;
+
+	std::cout << "toto < tata: " << (toto < tata) << std::endl;
+	std::cout << "toto > tata: " << (toto > toto) << std::endl;
+	std::cout << "toto <= toto: " << (toto <= toto) << std::endl;
+	std::cout << "toto >= toto: " << (toto >= toto) << std::endl;
+
+	toto.clear();
+	tata.clear();
+	print_it(toto);
+	print_it(tata);
 }

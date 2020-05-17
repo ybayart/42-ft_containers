@@ -30,9 +30,9 @@ namespace	ft
 					void
 					_M_swap_data (_Vector_impl& x)
 					{
-						std::swap(_M_start, x._M_start);
-						std::swap(_M_finish, x._M_finish);
-						std::swap(_M_end_of_storage, x._M_end_of_storage);
+						ft::swap(_M_start, x._M_start);
+						ft::swap(_M_finish, x._M_finish);
+						ft::swap(_M_end_of_storage, x._M_end_of_storage);
 					}
 				};
 
@@ -391,6 +391,7 @@ namespace	ft
 						this->_M_impl._M_finish += n;
 						for (size_type i = size() - 1;i - n >= pos;i--)
 							this->at(i) = this->at(i - n);
+						last--;
 						for (;n > 0;n--, last--)
 							_alloc.construct(this->_M_impl._M_start + pos + n - 1, *last);
 					}
@@ -677,24 +678,99 @@ namespace	ft
 		_M_insert_dispatch(position, first, last, is_int());
 	}
 
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::iterator
+	vector<T, Alloc>::erase (iterator position)
+	{
+		if (position == end())
+			pop_back();
+		else
+		{
+			size_type pos = position.base() - this->_M_impl._M_start;
+			for (pointer cur = this->_M_impl._M_start + pos + 1;cur != this->_M_impl._M_finish;cur++)
+				*(cur - 1) = *(cur);
+			this->_M_impl._M_finish--;
+		}
+		return (position);
+	}
+
+	template <typename T, typename Alloc>
+	typename vector<T, Alloc>::iterator
+	vector<T, Alloc>::erase (iterator first, iterator last)
+	{
+		if (first != last)
+		{
+			iterator	tmp = first;
+			for (;first != last;last--)
+				erase(last - 1);
+			first = tmp;
+		}
+		return (first);
+	}
+
+	template <typename T, typename Alloc>
+	void
+	vector<T, Alloc>::swap (vector& x)
+	{
+		this->_M_impl._M_swap_data(x._M_impl);
+	}
+
+	template <typename T, typename Alloc>
+	void
+	vector<T, Alloc>::clear (void)
+	{
+		erase(begin(), end());
+	}
+
 
 	template <class T, class Alloc>
-		bool operator==	(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	bool
+	operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		return (ft::itcmp(lhs, rhs));
+	}
 
 	template <class T, class Alloc>
-		bool operator!=	(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	bool
+	operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		return (!(lhs == rhs));
+	}
 
 	template <class T, class Alloc>
-		bool operator<	(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	bool
+	operator< (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		return (ft::itinf(lhs, rhs));
+	}
 
 	template <class T, class Alloc>
-		bool operator<=	(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	bool
+	operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		return (!(rhs < lhs));
+	}
 
 	template <class T, class Alloc>
-		bool operator>	(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	bool
+	operator> (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		return (rhs < lhs);
+	}
 
 	template <class T, class Alloc>
-		bool operator>=	(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	bool
+	operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		return (!(lhs < rhs));
+	}
+
+	template <class T, class Alloc>
+	inline void
+	swap(vector<T, Alloc>& x, vector<T, Alloc>& y)
+	{
+		x.swap(y);
+	}
 }
 
 #endif

@@ -1150,26 +1150,7 @@ namespace	ft
 	inline bool
 	operator==	(const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
 	{
-		if (lhs.size() != rhs.size())
-			return (false);
-		typedef typename list<T, Alloc>::const_iterator const_iterator;
-		const_iterator	it1;
-		const_iterator	it2;
-		const_iterator	end1;
-		const_iterator	end2;
-
-		it1 = lhs.begin();
-		it2 = rhs.begin();
-		end1 = lhs.end();
-		end2 = rhs.end();
-		if (it1 == it2 && end1 == end2)
-			return (true);
-		while (it1 != end1 && it2 != end2 && *it1 == *it2)
-		{
-			it1++;
-			it2++;
-		}
-		return (*it1 == *it2);
+		return (ft::itcmp(lhs, rhs));
 	}
 
 	template <class T, class Alloc>
@@ -1183,22 +1164,7 @@ namespace	ft
 	inline bool
 	operator<	(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
 	{
-		typedef typename list<T, Alloc>::const_iterator const_iterator;
-		const_iterator	it1;
-		const_iterator	it2;
-
-		it1 = lhs.begin();
-		it2 = rhs.begin();
-		while (it1 != lhs.end())
-		{
-			if (it2 == rhs.end() || *it2 < *it1)
-				return (false);
-			else if (*it1 < *it2)
-				return (true);
-			++it1;
-			++it2;
-		}
-		return (it2 != rhs.end());
+		return (ft::itinf(lhs, rhs));
 	}
 
 	template <class T, class Alloc>
