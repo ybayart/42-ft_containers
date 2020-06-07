@@ -293,18 +293,12 @@ namespace	ft
 		class _List_base
 		{
 			protected:
-				typedef _Alloc									_Tp_alloc_type;
-				typedef std::allocator_traits<_Tp_alloc_type>	_Tp_alloc_traits;
+				typedef typename _Alloc::template
+					rebind<_Tp>::other									_Tp_alloc_type;
+				typedef _Tp_alloc_type			 						_Tp_alloc_traits;
 				typedef typename _Tp_alloc_traits::template
-					rebind<_List_node<_Tp> >::other					_Node_alloc_type;
-				typedef __gnu_cxx::__alloc_traits<_Node_alloc_type> _Node_alloc_traits;
-
-//				typedef typename __gnu_cxx::__alloc_traits<_Alloc>::template
-//					rebind<_Tp>::other								_Tp_alloc_type;
-//				typedef __gnu_cxx::__alloc_traits<_Tp_alloc_type>	_Tp_alloc_traits;
-//				typedef typename _Tp_alloc_traits::template
-//					rebind<_List_node<_Tp> >::other					_Node_alloc_type;
-//				typedef __gnu_cxx::__alloc_traits<_Node_alloc_type> _Node_alloc_traits;
+					rebind<_List_node<_Tp> >::other						_Node_alloc_type;
+				typedef _Node_alloc_type								_Node_alloc_traits;
 
 				static size_t
 				_S_distance(const __detail::_List_node_base* __first,
@@ -346,13 +340,13 @@ namespace	ft
 				typename _Node_alloc_traits::pointer
 				_M_get_node(void)
 				{
-					return (_Node_alloc_traits::allocate(_M_impl, 1));
+					return (_Node_alloc_traits().allocate(1));
 				}
 
 				void
 				_M_put_node(typename _Node_alloc_traits::pointer __p)
 				{
-					_Node_alloc_traits::deallocate(_M_impl, __p, 1);
+					_Node_alloc_traits().deallocate(__p, 1);
 				}
 
 				_Node_alloc_type&
@@ -710,7 +704,7 @@ namespace	ft
 	typename list<T, Alloc>::size_type
 	list<T, Alloc>::max_size (void) const
 	{
-		return (_Node_alloc_traits::max_size(_M_get_Node_allocator()));
+		return (_M_get_Node_allocator().max_size());
 	}
 
 	template <typename T, typename Alloc>
@@ -841,8 +835,6 @@ namespace	ft
 	{
 		__detail::_List_node_base::swap(this->_M_impl._M_node,
 					x._M_impl._M_node);
-		_Node_alloc_traits::_S_on_swap(this->_M_get_Node_allocator(),
-					x._M_get_Node_allocator());
 	}
 
 	template <typename T, typename Alloc>
