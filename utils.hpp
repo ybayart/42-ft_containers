@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/06 15:44:02 by hexa              #+#    #+#             */
-/*   Updated: 2020/05/17 16:12:05 by hexa             ###   ########.fr       */
+/*   Updated: 2020/06/19 20:32:05 by yanyan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,8 +175,11 @@ namespace ft
 }
 
 # include "iterator.hpp"
+# include "pair.hpp"
+# include "binary_tree.hpp"
 # include "list.hpp"
 # include "vector.hpp"
+# include "map.hpp"
 
 
 #endif

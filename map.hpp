@@ -9,8 +9,8 @@ namespace ft
 	<
 		class Key,
 		class T,
-		class Compare = less<Key>,
-		class Alloc = allocator<pair<const Key,T> >
+		class Compare = std::less<Key>,
+		class Alloc = std::allocator<pair<const Key, T> >
 	>
 	class map
 	{
