@@ -547,5 +547,144 @@ namespace ft
 				{
 					return (_bin_tree_node_base::_S_max(x));
 				}
+
+			public:
+				typedef	_bin_tree_iterator<value_type>			iterator;
+				typedef _bin_tree_const_iterator<value_type>	const_iterator;
+				typedef	ft::reverse_iterator<iterator>			reverse_iterator;
+				typedef	ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+
+				pair<_base_ptr, _base_ptr>
+				_M_get_insert_unique_pos(const key_type& k);
+				// {
+				// 	typedef pair<_base_ptr, _base_ptr> _res;
+				// 	_link_type x = _M_begin();
+				// 	_base_ptr y = _M_end();
+				// 	bool comp = true;
+				// 	while (x != 0)
+				// 	{
+				// 		y = x;
+				// 		comp = _M_impl._M_key_compare(k, _S_key(x));
+				// 		x = comp ? _S_left(x) : _S_right(x);
+				// 	}
+				// 	iterator j = iterator(y);
+				// 	if (comp)
+				// 	{
+				// 		if (j == begin())
+				// 			return (_res(x, y));
+				// 		else
+				// 			--j;
+				// 	}
+				// 	if (_M_impl._M_key_compare(_S_key(j._M_node), k))
+				// 		return _res(x, y);
+				// 	return (_res(j._M_node, 0));
+				// }
+
+				pair<_base_ptr, _base_ptr>
+				_M_get_insert_equal_pos(const key_type& k);
+				// {
+				// 	typedef pair<_base_ptr, _base_ptr> _res;
+				// 	_link_type x = _M_begin();
+				// 	_base_ptr y = _M_end();
+				// 	while (x != 0)
+				// 	{
+				// 		y = x;
+				// 		x = _M_impl._M_key_compare(k, _S_key(x)) ?
+				// 		_S_left(x) : _S_right(x);
+				// 	}
+				// 	return (_res(x, y));
+				// }
+
+				pair<_base_ptr, _base_ptr>
+				_M_get_insert_hint_unique_pos(const_iterator pos,
+											const key_type& k);
+				{
+					iterator itpos = pos._M_const_cast();
+					typedef pair<_base_ptr, _base_ptr>	_res;
+					if (itpos._M_node == _M_end())
+					{
+						if (size() > 0 && _M_impl._M_key_compare(_S_key(_M_rightmost()), k))
+							return (_res(0, _M_rightmost()));
+						else
+							return (_M_get_insert_unique_pos(k));
+					}
+					else if (_M_impl._M_key_compare(k, _S_key(itpos._M_node)))
+					{
+						iterator before = itpos;
+						if (pos._M_node == _M_leftmost())
+							return (_res(_M_leftmost(), _M_leftmost()));
+						else if (_M_impl._M_key_compare(_S_key((--before)._M_node), k))
+						{
+							if (_S_right(before._M_node) == 0)
+								return (_res(0, before._M_node));
+							else
+								return (_res(itpos._M_node, itpos._M_node));
+						}
+						else
+							return (_M_get_insert_unique_pos(k));
+					}
+					else if (_M_impl._M_key_compare(_S_key(itpos._M_node), k))
+					{
+						iterator after = itpos;
+						if (pos._M_node == _M_rightmost())
+							return (_res(0, _M_rightmost()));
+						else if (_M_impl._M_key_compare(k, _S_key((++after)._M_node)))
+						{
+							if (_S_right(itpos._M_node) == 0)
+								return (_res(0, itpos._M_node));
+							else
+								return (_res(after._M_node, after._M_node));
+						}
+						else
+							return _M_get_insert_unique_pos(k);
+					}
+					else
+						return (_res(itpos._M_node, 0));
+				}
+
+				pair<_base_ptr, _base_ptr>
+				_M_get_insert_hint_equal_pos(const_iterator pos,
+											const key_type& k);
+				{
+					iterator itpos = pos._M_const_cast();
+					typedef pair<_base_ptr, _base_ptr> _res;
+					if (pos._M_node == _M_end())
+					{
+						if (size() > 0 && !_M_impl._M_key_compare(k, _S_key(_M_rightmost())))
+							return (_res(0, _M_rightmost()));
+						else
+							return (_M_get_insert_equal_pos(k));
+					}
+					else if (!_M_impl._M_key_compare(_S_key(itpos._M_node), k))
+					{
+						iterator before = itpos;
+						if (itpos._M_node == _M_leftmost())
+							return (_res(_M_leftmost(), _M_leftmost()));
+						else if (!_M_impl._M_key_compare(k, _S_key((--before)._M_node)))
+						{
+							if (_S_right(before._M_node) == 0)
+								return (_res(0, before._M_node));
+							else
+								return (_res(itpos._M_node, itpos._M_node));
+						}
+						else
+							return (_M_get_insert_equal_pos(k));
+					}
+					else
+					{
+						iterator after = itpos;
+						if (itpos._M_node == _M_rightmost())
+							return (_res(0, _M_rightmost()));
+						else if (!_M_impl._M_key_compare(_S_key((++after)._M_node), k))
+						{
+							if (_S_right(itpos._M_node) == 0)
+								return (_res(0, itpos._M_node));
+							else
+								return (_res(after._M_node, after._M_node));
+						}
+						else
+							return (_res(0, 0));
+					}
+				}
 	};
 }
