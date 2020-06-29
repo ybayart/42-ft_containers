@@ -15,29 +15,65 @@ namespace ft
 	class map
 	{
 		public:
-			typedef Key											key_type;
-			typedef T											mapped_type;
-			typedef ft::pair<const Key, T>						value_type;
-			typedef Compare										key_compare;
-			typedef Alloc										allocator_type;
+			typedef Key												key_type;
+			typedef T												mapped_type;
+			typedef ft::pair<const Key, T>							value_type;
+			typedef Compare											key_compare;
+			typedef Alloc											allocator_type;
+			
+			class value_compare
+			: public std::binary_function<value_type, value_type, bool>
+			{
+				friend class map;
+				protected:
+					Compare comp;
+					value_compare (Compare c)
+					: comp(c)
+					{}
+				public:
+					typedef bool result_type;
+					typedef value_type first_argument_type;
+					typedef value_type second_argument_type;
+					bool operator() (const value_type& x, const value_type& y) const
+					{
+						return comp(x.first, y.first);
+					}
+			};
+
+		private:
+			typedef _bin_tree<Key, T, value_type, Compare, Alloc>	_tree_type;
+
+			_tree_type	_M_t;
+
+		public:
 			typedef typename allocator_type::reference			reference;
 			typedef typename allocator_type::const_reference	const_reference;
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
-			// typedef x										iterator;
-			// typedef const_x									const_iterator;
-			// typedef ft::reverse_iterator<iterator>			reverse_iterator;
-			// typedef ft::reverse_iterator<const_iterator>		iterator;
+			typedef typename _tree_type::iterator				iterator;
+			typedef typename _tree_type::const_iterator			const_iterator;
+			typedef typename _tree_type::reverse_iterator		reverse_iterator;
+			typedef typename _tree_type::reverse_iterator		const_reverse_iterator;
 			typedef ptrdiff_t									difference_type;
 			typedef size_t										size_type;
-			
+
 			explicit map (const key_compare& comp = key_compare(),
-						const allocator_type& alloc = allocator_type());
+						const allocator_type& alloc = allocator_type())
+			: _M_t(comp, alloc)
+			{}
+	
 			template <class InputIterator>
 				map (InputIterator first, InputIterator last,
 					const key_compare& comp = key_compare(),
-					const allocator_type& alloc = allocator_type());
-			map (const map& x);
+					const allocator_type& alloc = allocator_type())
+				: _M_t(comp, alloc)
+				{
+					_M_t._M_insert_unique(first, last);
+				}
+
+			map (const map& x)
+			: _M_t(x._M_t)
+			{}
 
 			~map (void);
 
@@ -93,5 +129,8 @@ namespace ft
 
 			pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
 			pair<iterator,iterator> equal_range (const key_type& k);
-	}
+	};
+
 }
+
+#endif

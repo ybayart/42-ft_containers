@@ -1,4 +1,5 @@
 
+#include "utils.hpp"
 
 namespace ft
 {
@@ -340,7 +341,7 @@ namespace ft
 				catch (std::exception& e)
 				{
 					_M_put_node(node);
-					throw ();
+					throw;
 				}
 			}
 
@@ -376,7 +377,7 @@ namespace ft
 			}
 
 			template <typename Key_compare>
-			struct _bin_tree_impl : pubic _node_allocator
+			struct _bin_tree_impl : public _node_allocator
 			{
 				Key_compare				_M_key_compare;
 				_bin_tree_node_base		_M_header;
@@ -554,50 +555,120 @@ namespace ft
 				typedef	ft::reverse_iterator<iterator>			reverse_iterator;
 				typedef	ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
-				pair<_base_ptr, _base_ptr>
-				_M_get_insert_unique_pos(const key_type& k);
-				// {
-				// 	typedef pair<_base_ptr, _base_ptr> _res;
-				// 	_link_type x = _M_begin();
-				// 	_base_ptr y = _M_end();
-				// 	bool comp = true;
-				// 	while (x != 0)
-				// 	{
-				// 		y = x;
-				// 		comp = _M_impl._M_key_compare(k, _S_key(x));
-				// 		x = comp ? _S_left(x) : _S_right(x);
-				// 	}
-				// 	iterator j = iterator(y);
-				// 	if (comp)
-				// 	{
-				// 		if (j == begin())
-				// 			return (_res(x, y));
-				// 		else
-				// 			--j;
-				// 	}
-				// 	if (_M_impl._M_key_compare(_S_key(j._M_node), k))
-				// 		return _res(x, y);
-				// 	return (_res(j._M_node, 0));
-				// }
+				iterator
+				begin (void)
+				{
+					return (iterator(this->_M_impl._M_header._M_left));
+				}
+
+				const_iterator
+				begin (void) const
+				{
+					return (const_iterator(this->_M_impl._M_header._M_left));
+				}
+
+				iterator
+				end (void)
+				{
+					return (iterator(&this->_M_impl._M_header));
+				}
+
+				const_iterator
+				end (void) const
+				{
+					return (const_iterator(&this->_M_impl._M_header));
+				}
+
+				reverse_iterator
+				rbegin (void)
+				{
+					return (reverse_iterator(end()));
+				}
+
+				const_reverse_iterator
+				rbegin (void) const
+				{
+					return (const_reverse_iterator(end()));
+				}
+
+				reverse_iterator
+				rend (void)
+				{
+					return (reverse_iterator(begin()));
+				}
+
+				const_reverse_iterator
+				rend (void) const
+				{
+					return (const_reverse_iterator(begin()));
+				}
+
+				bool
+				empty (void) const
+				{
+					return (_M_impl._M_node_count == 0);
+				}
+
+				size_type
+				size (void) const
+				{
+					return (_M_impl._M_node_count);
+				}
+
+				size_type
+				max_empty (void) const
+				{
+					return (Alloc().max_size());
+				}
+
+				template <typename NodeGen>
+				iterator
+				_M_insert_(_base_ptr, _base_ptr, const value_type&, NodeGen&);
 
 				pair<_base_ptr, _base_ptr>
-				_M_get_insert_equal_pos(const key_type& k);
-				// {
-				// 	typedef pair<_base_ptr, _base_ptr> _res;
-				// 	_link_type x = _M_begin();
-				// 	_base_ptr y = _M_end();
-				// 	while (x != 0)
-				// 	{
-				// 		y = x;
-				// 		x = _M_impl._M_key_compare(k, _S_key(x)) ?
-				// 		_S_left(x) : _S_right(x);
-				// 	}
-				// 	return (_res(x, y));
-				// }
+				_M_get_insert_unique_pos(const key_type& k)
+				{
+					typedef pair<_base_ptr, _base_ptr> _res;
+					_link_type x = _M_begin();
+					_base_ptr y = _M_end();
+					bool comp = true;
+					while (x != 0)
+					{
+						y = x;
+						comp = _M_impl._M_key_compare(k, _S_key(x));
+						x = comp ? _S_left(x) : _S_right(x);
+					}
+					iterator j = iterator(y);
+					if (comp)
+					{
+						if (j == begin())
+							return (_res(x, y));
+						else
+							--j;
+					}
+					if (_M_impl._M_key_compare(_S_key(j._M_node), k))
+						return _res(x, y);
+					return (_res(j._M_node, 0));
+				}
+
+				pair<_base_ptr, _base_ptr>
+				_M_get_insert_equal_pos(const key_type& k)
+				{
+					typedef pair<_base_ptr, _base_ptr> _res;
+					_link_type x = _M_begin();
+					_base_ptr y = _M_end();
+					while (x != 0)
+					{
+						y = x;
+						x = _M_impl._M_key_compare(k, _S_key(x)) ?
+						_S_left(x) : _S_right(x);
+					}
+					return (_res(x, y));
+				}
 
 				pair<_base_ptr, _base_ptr>
 				_M_get_insert_hint_unique_pos(const_iterator pos,
-											const key_type& k);
+											const key_type& k)
 				{
 					iterator itpos = pos._M_const_cast();
 					typedef pair<_base_ptr, _base_ptr>	_res;
@@ -644,7 +715,7 @@ namespace ft
 
 				pair<_base_ptr, _base_ptr>
 				_M_get_insert_hint_equal_pos(const_iterator pos,
-											const key_type& k);
+											const key_type& k)
 				{
 					iterator itpos = pos._M_const_cast();
 					typedef pair<_base_ptr, _base_ptr> _res;
@@ -686,5 +757,36 @@ namespace ft
 							return (_res(0, 0));
 					}
 				}
+
+				pair<typename _bin_tree<Key, T, KeyOfValue, Compare, Alloc>::iterator, bool>
+				_M_insert_unique (const T& v)
+				{
+					typedef pair<iterator, bool> Res;
+					pair<_base_ptr, _base_ptr> res = _M_get_insert_unique_pos(KeyOfValue()(v));
+
+					if (res.second)
+					{
+						_alloc_node	an(*this);
+						return (Res(_M_insert_(res.first, res.second, v, an, true)));
+					}
+					return (iterator(res.first), false);
+				}
 	};
+
+	template <typename Key, typename T, typename KeyOfValue,
+			typename Compare, typename Alloc>
+		template <typename NodeGem>
+			typename _bin_tree<Key, T, KeyOfValue, Compare, Alloc>::iterator
+			_bin_tree<Key, T, KeyOfValue, Compare, Alloc>::
+			_M_insert_(_base_ptr x, _base_ptr p,
+				 const T& v,
+				 NodeGem& node_gen)
+			{
+				bool insert_left = (x != 0 || p == _M_end()
+					|| _M_impl._M_key_compare(KeyOfValue()(v), _S_key(p)));
+				_link_type z = node_gen(v);
+				_bin_tree_insert_and_rebalance(insert_left, z, p, this->_M_impl._M_header);
+				++_M_impl._M_node_count;
+				return (iterator(z));
+			}
 }
