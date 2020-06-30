@@ -63,19 +63,20 @@ namespace ft
 			{}
 	
 			template <class InputIterator>
-				map (InputIterator first, InputIterator last,
-					const key_compare& comp = key_compare(),
-					const allocator_type& alloc = allocator_type())
-				: _M_t(comp, alloc)
-				{
-					_M_t._M_insert_unique(first, last);
-				}
+			map (InputIterator first, InputIterator last,
+				const key_compare& comp = key_compare(),
+				const allocator_type& alloc = allocator_type())
+			: _M_t(comp, alloc)
+			{
+				_M_t._M_insert_unique(first, last);
+			}
 
 			map (const map& x)
 			: _M_t(x._M_t)
 			{}
 
-			~map (void);
+			~map (void)
+			{}
 
 			map& operator=	(const map& x);
 

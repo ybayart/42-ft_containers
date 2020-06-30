@@ -1,11 +1,13 @@
 SRC			=	main \
 				main_list \
-				main_vector
+				main_vector \
+				main_map
 
 INC			=	utils \
 				iterator \
 				list \
-				vector
+				vector \
+				map
 
 SRCS		= $(addsuffix .cpp, ${SRC})
 

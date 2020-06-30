@@ -322,13 +322,13 @@ namespace ft
 			_link_type
 			_M_get_node (void)
 			{
-				return (_alloc_traits().allocate(1));
+				return (Alloc().allocate(1));
 			}
 
 			void
 			_M_put_node (_link_type p)
 			{
-				_alloc_traits().deallocate(p, 1);
+				Alloc().deallocate(p, 1);
 			}
 
 			void
@@ -549,11 +549,38 @@ namespace ft
 					return (_bin_tree_node_base::_S_max(x));
 				}
 
+				void
+				_M_erase(_link_type x);
+
 			public:
 				typedef	_bin_tree_iterator<value_type>			iterator;
 				typedef _bin_tree_const_iterator<value_type>	const_iterator;
 				typedef	ft::reverse_iterator<iterator>			reverse_iterator;
 				typedef	ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+
+				_bin_tree (void)
+				{}
+
+				_bin_tree (const Compare& comp, const allocator_type& a = allocator_type())
+				: _M_impl(comp, a)
+				{}
+
+				_bin_tree (const _bin_tree& x)
+				: _M_impl(x._M_impl._M_key_compare, x._M_get_Node_allocator())
+				{
+					if (x._M_root() != 0)
+					{
+						_M_root() = _M_copy(x._M_begin(), _M_end());
+						_M_leftmost() = _S_minimum(_M_root());
+						_M_rightmost() = _S_maximum(_M_root());
+						_M_impl._M_node_count = x._M_impl._M_node_count;
+					}
+				}
+
+				~_bin_tree (void)
+				{
+				//	_M_erase(_M_begin());
+				}
 
 				iterator
 				begin (void)
@@ -789,4 +816,19 @@ namespace ft
 				++_M_impl._M_node_count;
 				return (iterator(z));
 			}
+
+	template <typename Key, typename T, typename KeyOfValue,
+					 typename Compare, typename Alloc>
+		void
+		_bin_tree<Key, T, KeyOfValue, Compare, Alloc>::
+		_M_erase(_link_type x)
+		{
+			while (x != 0)
+			{
+				_M_erase(_S_right(x));
+				_link_type y = _S_left(x);
+				_M_drop_node(x);
+				x = y;
+			}
+		}
 }
