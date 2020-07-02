@@ -78,58 +78,158 @@ namespace ft
 			~map (void)
 			{}
 
-			map& operator=	(const map& x);
+			map& operator=	(const map& x)
+			{
+				_M_t = x._M_t;
+				return (*this);
+			}
 
-			iterator begin (void);
-			const_iterator begin (void) const;
+			iterator begin (void)
+			{
+				return (_M_t.begin());
+			}
+			const_iterator begin (void) const
+			{
+				return (_M_t.begin());
+			}
 
-			iterator end (void);
-			const_iterator end (void) const;
+			iterator end (void)
+			{
+				return (_M_t.end());
+			}
+			const_iterator end (void) const
+			{
+				return (_M_t.end());
+			}
 
-			reverse_iterator rbegin (void);
-			const_reverse_iterator rbegin (void) const;
+			reverse_iterator rbegin (void)
+			{
+				return (_M_t.rbegin());
+			}
+			const_reverse_iterator rbegin (void) const
+			{
+				return (_M_t.rbegin());
+			}
 
-			reverse_iterator rend (void);
-			const_reverse_iterator rend (void) const;
+			reverse_iterator rend (void)
+			{
+				return (_M_t.rend());
+			}
+			const_reverse_iterator rend (void) const
+			{
+				return (_M_t.rend());
+			}
 
-			bool empty (void) const;
+			bool empty (void) const
+			{
+				return (_M_t.empty());
+			}
 
-			size_type size (void) const;
+			size_type size (void) const
+			{
+				return (_M_t.size());
+			}
 
-			size_type max_size (void) const;
+			size_type max_size (void) const
+			{
+				return (_M_t.max_size());
+			}
 
-			mapped_type& operator[]	(const key_type& k);
+			mapped_type& operator[]	(const key_type& k)
+			{
+				iterator	it = lower_bound(k);
+				if (it == end() || key_comp()(k, (*it).first))
+					it = insert(it, value_type(k, mapped_type()));
+				return ((*it).second);
+			}
 
-			pair<iterator,bool> insert (const value_type& val);
-			iterator insert (iterator position, const value_type& val);
+			pair<iterator,bool> insert (const value_type& val)
+			{
+				return (_M_t._M_insert_unique(val));
+			}
+			iterator insert (iterator position, const value_type& val)
+			{
+				return (_M_t._M_insert_unique_(position, val));
+			}
 			template <class InputIterator>
-				void insert (InputIterator first, InputIterator last);
+			void insert (InputIterator first, InputIterator last)
+			{
+				_M_t._M_insert_unique(first, last);
+			}
 
-			void erase (iterator position);
-			size_type erase (const key_type& k);
-			void erase (iterator first, iterator last);
+			void erase (iterator position)
+			{
+				return (_M_t.erase(position));
+			}
+			size_type erase (const key_type& k)
+			{
+				return (_M_t.erase(k));
+			}
+			void erase (iterator first, iterator last)
+			{
+				return (_M_t.erase(first, last));
+			}
 
-			void swap (map& x);
+			void swap (map& x)
+			{
+				_M_t.swap(x._M_t);
+			}
 
-			void clear (void);
+			void clear (void)
+			{
+				_M_t.clear();
+			}
 
-			key_compare key_comp (void) const;
+			key_compare key_comp (void) const
+			{
+				return (_M_t.key_comp());
+			}
 
-			value_compare value_comp (void) const;
+			value_compare value_comp (void) const
+			{
+				return (value_compare(_M_t.key_comp()));
+			}
 
-			iterator find (const key_type& k);
-			const_iterator find (const key_type& k) const;
+			iterator find (const key_type& k)
+			{
+				return (_M_t.find(k));
+			}
+			const_iterator find (const key_type& k) const
+			{
+				return (_M_t.find(k));
+			}
 
-			size_type count (const key_type& k) const;
+			size_type count (const key_type& k) const
+			{
+				return (_M_t.find(k) == _M_t.end() ? 0 : 1);
+			}
 
-			iterator lower_bound (const key_type& k);
-			const_iterator lower_bound (const key_type& k) const;
+			iterator lower_bound (const key_type& k)
+			{
+				return (_M_t.lower_bound(k));
+			}
+			const_iterator lower_bound (const key_type& k) const
+			{
+				return (_M_t.lower_bound(k));
+			}
 
-			iterator upper_bound (const key_type& k);
-			const_iterator upper_bound (const key_type& k) const;
+			iterator upper_bound (const key_type& k)
+			{
+				return (_M_t.upper_bound(k));
+			}
+			const_iterator upper_bound (const key_type& k) const
+			{
+				return (_M_t.upper_bound(k));
+			}
 
-			pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
-			pair<iterator,iterator> equal_range (const key_type& k);
+			pair<iterator,iterator> equal_range (const key_type& k)
+			{
+				return (_M_t.equal_range(k));
+			}
+			pair<const_iterator,const_iterator> equal_range (const key_type& k) const
+			{
+				return (_M_t.equal_range(k));
+			}
 	};
 
 }
