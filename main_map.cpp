@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 21:39:13 by hexa              #+#    #+#             */
-/*   Updated: 2020/06/30 14:50:45 by yanyan           ###   ########.fr       */
+/*   Updated: 2020/07/02 15:39:22 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,13 @@ main_map(void)
 {
 	NAMESPACE::map<std::string, int>	toto;
 
-/*	std::cout << "   empty() " << toto.empty() << std::endl;
+	std::cout << "   empty() " << toto.empty() << std::endl;
 	std::cout << "    size() " << toto.size() << std::endl;
 	std::cout << "max_size() " << toto.max_size() << std::endl;
 	
 	std::cout << "---1" << std::endl;
-	toto.push_back(1);
+	toto.insert(ft::pair<std::string, int>("ecole", 42));
+/*	toto.push_back(1);
 	toto.push_back(4);
 	toto.push_back(2);
 	toto.push_back(3);

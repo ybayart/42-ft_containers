@@ -643,7 +643,7 @@ namespace ft
 				}
 
 				size_type
-				max_empty (void) const
+				max_size (void) const
 				{
 					return (Alloc().max_size());
 				}
@@ -798,6 +798,9 @@ namespace ft
 					}
 					return (iterator(res.first), false);
 				}
+
+				iterator
+					_M_insert_unique
 	};
 
 	template <typename Key, typename T, typename KeyOfValue,
