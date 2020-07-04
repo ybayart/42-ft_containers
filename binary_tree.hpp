@@ -798,9 +798,6 @@ namespace ft
 					}
 					return (iterator(res.first), false);
 				}
-
-				iterator
-					_M_insert_unique
 	};
 
 	template <typename Key, typename T, typename KeyOfValue,
