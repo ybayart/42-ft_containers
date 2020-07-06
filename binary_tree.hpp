@@ -69,209 +69,17 @@ namespace ft
 			}
 		};
 
-	static _bin_tree_node_base*
-	local_bin_tree_increment(_bin_tree_node_base* x) throw ()
-	{
-		if (x->_M_right != 0)
-		{
-			x = x->_M_right;
-			while (x->_M_left != 0)
-				x = x->_M_left;
-		}
-		else
-		{
-			_bin_tree_node_base* y = x->_M_parent;
-			while (x == y->_M_right)
-			{
-				x = y;
-				y = y->_M_parent;
-			}
-			if (x->_M_right != y)
-				x = y;
-		}
-		return (x);
-	}
-
 	_bin_tree_node_base*
-	_bin_tree_increment(_bin_tree_node_base* x) throw ()
-	{
-		return (local_bin_tree_increment(x));
-	}
+	_bin_tree_increment(_bin_tree_node_base* x) throw ();
 
 	const _bin_tree_node_base*
-	_bin_tree_increment(const _bin_tree_node_base* x) throw ()
-	{
-		return (local_bin_tree_increment(const_cast<_bin_tree_node_base*>(x)));
-	}
-
-	static _bin_tree_node_base*
-	local_bin_tree_decrement(_bin_tree_node_base* x) throw ()
-	{
-		if (x->_M_color == _S_red && x->_M_parent->_M_parent == x)
-			x = x->_M_right;
-		else if (x->_M_left != 0)
-		{
-			_bin_tree_node_base* y = x->_M_left;
-			while (y->_M_right != 0)
-				y = y->_M_right;
-			x = y;
-		}
-		else
-		{
-			_bin_tree_node_base* y = x->_M_parent;
-			while (x == y->_M_left)
-			{
-				x = y;
-				y = y->_M_parent;
-			}
-			x = y;
-		}
-		return x;
-	}
+	_bin_tree_increment(const _bin_tree_node_base* x) throw ();
 
 	_bin_tree_node_base*
-	_bin_tree_decrement(_bin_tree_node_base* x) throw ()
-	{
-		return local_bin_tree_decrement(x);
-	}
+	_bin_tree_decrement(_bin_tree_node_base* x) throw ();
 
 	const _bin_tree_node_base*
-	_bin_tree_decrement(const _bin_tree_node_base* x) throw ()
-	{
-		return local_bin_tree_decrement(const_cast<_bin_tree_node_base*>(x));
-	}
-
-	static void
-	local_bin_tree_rotate_left(_bin_tree_node_base* const x,
-								 _bin_tree_node_base*& root)
-	{
-		_bin_tree_node_base* const y = x->_M_right;
-
-		x->_M_right = y->_M_left;
-		if (y->_M_left !=0)
-			y->_M_left->_M_parent = x;
-		y->_M_parent = x->_M_parent;
-
-		if (x == root)
-			root = y;
-		else if (x == x->_M_parent->_M_left)
-			x->_M_parent->_M_left = y;
-		else
-			x->_M_parent->_M_right = y;
-		y->_M_left = x;
-		x->_M_parent = y;
-	}
-
-	static void
-	local_bin_tree_rotate_right(_bin_tree_node_base* const x,
-					 _bin_tree_node_base*& root)
-	{
-		_bin_tree_node_base* const y = x->_M_left;
-
-		x->_M_left = y->_M_right;
-		if (y->_M_right != 0)
-			y->_M_right->_M_parent = x;
-		y->_M_parent = x->_M_parent;
-
-		if (x == root)
-			root = y;
-		else if (x == x->_M_parent->_M_right)
-			x->_M_parent->_M_right = y;
-		else
-			x->_M_parent->_M_left = y;
-		y->_M_right = x;
-		x->_M_parent = y;
-	}
-
-	void
-	_bin_tree_insert_and_rebalance(const bool	insert_left,
-												_bin_tree_node_base* x,
-												_bin_tree_node_base* p,
-												_bin_tree_node_base& header) throw ()
-	{
-		_bin_tree_node_base *& root = header._M_parent;
-
-		// Initialize fields in new node to insert.
-		x->_M_parent = p;
-		x->_M_left = 0;
-		x->_M_right = 0;
-		x->_M_color = _S_red;
-
-		// Insert.
-		// Make new node child of parent and maintain root, leftmost and
-		// rightmost nodes.
-		// N.B. First node is always inserted left.
-		if (insert_left)
-		{
-			p->_M_left = x; // also makes leftmost = x when p == &header
-
-			if (p == &header)
-			{
-					header._M_parent = x;
-					header._M_right = x;
-			}
-			else if (p == header._M_left)
-				header._M_left = x; // maintain leftmost pointing to min node
-		}
-		else
-		{
-			p->_M_right = x;
-
-			if (p == header._M_right)
-				header._M_right = x; // maintain rightmost pointing to max node
-		}
-		// Rebalance.
-		while (x != root && x->_M_parent->_M_color == _S_red)
-		{
-			_bin_tree_node_base* const xpp = x->_M_parent->_M_parent;
-
-			if (x->_M_parent == xpp->_M_left)
-			{
-				_bin_tree_node_base* const y = xpp->_M_right;
-				if (y && y->_M_color == _S_red)
-				{
-					x->_M_parent->_M_color = _S_black;
-					y->_M_color = _S_black;
-					xpp->_M_color = _S_red;
-					x = xpp;
-				}
-				else
-				{
-					if (x == x->_M_parent->_M_right)
-					{
-						x = x->_M_parent;
-						local_bin_tree_rotate_left(x, root);
-					}
-					x->_M_parent->_M_color = _S_black;
-					xpp->_M_color = _S_red;
-					local_bin_tree_rotate_right(xpp, root);
-				}
-			}
-			else
-			{
-				_bin_tree_node_base* const y = xpp->_M_left;
-				if (y && y->_M_color == _S_red)
-				{
-					x->_M_parent->_M_color = _S_black;
-					y->_M_color = _S_black;
-					xpp->_M_color = _S_red;
-					x = xpp;
-				}
-				else
-				{
-					if (x == x->_M_parent->_M_left)
-					{
-						x = x->_M_parent;
-						local_bin_tree_rotate_right(x, root);
-					}
-					x->_M_parent->_M_color = _S_black;
-					xpp->_M_color = _S_red;
-					local_bin_tree_rotate_left(xpp, root);
-				}
-			}
-		}
-		root->_M_color = _S_black;
-	}
+	_bin_tree_decrement(const _bin_tree_node_base* x) throw ();
 
 	template<typename _Tp>
 		struct _bin_tree_iterator
@@ -454,10 +262,6 @@ namespace ft
 		{
 			return (x._M_node != y._M_node);
 		}
-
-	_bin_tree_node_base*
-	_bin_tree_rebalance_for_erase(_bin_tree_node_base* const z,
-						 _bin_tree_node_base& header) throw ();
 
 	template<typename _Key, typename _Val, typename _KeyOfValue,
 					 typename _Compare, typename _Alloc = std::allocator<_Val> >
@@ -1788,3 +1592,5 @@ namespace ft
 }
 
 #endif
+
+#include "tree.cc"
