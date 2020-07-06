@@ -96,13 +96,13 @@ namespace	ft
 			_Tp		_M_data;
 
 			_Tp*
-			_M_valptr(void)
+			_MValptr(void)
 			{
 				return (&_M_data);
 			}
 
 			_Tp const*
-			_M_valptr(void) const
+			_MValptr(void) const
 			{
 				return (&_M_data);
 			}
@@ -138,13 +138,13 @@ namespace	ft
 			reference
 			operator*	(void) const
 			{
-				return (*static_cast<_Node*>(_M_node)->_M_valptr());
+				return (*static_cast<_Node*>(_M_node)->_MValptr());
 			}
 
 			pointer
 			operator->	(void) const
 			{
-				return (static_cast<_Node*>(_M_node)->_M_valptr());
+				return (static_cast<_Node*>(_M_node)->_MValptr());
 			}
 
 			_Self&
@@ -231,13 +231,13 @@ namespace	ft
 			reference
 			operator*	(void) const
 			{
-				return (*(static_cast<_Node*>(_M_node)->_M_valptr()));
+				return (*(static_cast<_Node*>(_M_node)->_MValptr()));
 			}
 
 			pointer
 			operator->	(void) const
 			{
-				return (static_cast<_Node*>(_M_node)->_M_valptr());
+				return (static_cast<_Node*>(_M_node)->_MValptr());
 			}
 
 			_Self&
@@ -383,18 +383,18 @@ namespace	ft
 				}
 		};
 
-	template<typename _Val>
+	template<typename Val>
 		inline bool
-		operator==	(const _List_iterator<_Val>& __x,
-				 	const _List_const_iterator<_Val>& __y)
+		operator==	(const _List_iterator<Val>& __x,
+				 	const _List_const_iterator<Val>& __y)
 		{
 			return (__x._M_node == __y._M_node);
 		}
 
-	template<typename _Val>
+	template<typename Val>
 		inline bool
-		operator!=	(const _List_iterator<_Val>& __x,
-				 const _List_const_iterator<_Val>& __y)
+		operator!=	(const _List_iterator<Val>& __x,
+				 const _List_const_iterator<Val>& __y)
 		{
 			return (__x._M_node != __y._M_node);
 		}
@@ -523,7 +523,7 @@ namespace	ft
 				try
 				{
 					_Tp_alloc_type tmpalloc(_M_get_Node_allocator());
-					tmpalloc.construct(p->_M_valptr(), x);
+					tmpalloc.construct(p->_MValptr(), x);
 				}
 				catch(std::exception& e)
 				{
@@ -545,7 +545,7 @@ namespace	ft
 			{
 				position._M_node->_M_unhook();
 				_Node* n = static_cast<_Node*>(position._M_node);
-				_Tp_alloc_type(_M_get_Node_allocator()).destroy(n->_M_valptr());
+				_Tp_alloc_type(_M_get_Node_allocator()).destroy(n->_MValptr());
 				_M_put_node(n);
 			}
 

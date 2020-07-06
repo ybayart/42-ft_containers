@@ -18,22 +18,22 @@ namespace ft
 			typedef Key												key_type;
 			typedef T												mapped_type;
 			typedef ft::pair<const Key, T>							value_type;
-			typedef Compare											key_compare;
+			typedef Compare											keyCompare;
 			typedef Alloc											allocator_type;
 			
-			class value_compare
+			class valueCompare
 			: public std::binary_function<value_type, value_type, bool>
 			{
 				friend class map;
 				protected:
 					Compare comp;
-					value_compare (Compare c)
+					valueCompare (Compare c)
 					: comp(c)
 					{}
 				public:
 					typedef bool result_type;
-					typedef value_type first_argument_type;
-					typedef value_type second_argument_type;
+					typedef value_type firstArgument_type;
+					typedef value_type secondArgument_type;
 					bool operator() (const value_type& x, const value_type& y) const
 					{
 						return comp(x.first, y.first);
@@ -57,14 +57,14 @@ namespace ft
 			typedef ptrdiff_t									difference_type;
 			typedef size_t										size_type;
 
-			explicit map (const key_compare& comp = key_compare(),
+			explicit map (const keyCompare& comp = keyCompare(),
 						const allocator_type& alloc = allocator_type())
 			: _M_t(comp, alloc)
 			{}
 	
 			template <class InputIterator>
 			map (InputIterator first, InputIterator last,
-				const key_compare& comp = key_compare(),
+				const keyCompare& comp = keyCompare(),
 				const allocator_type& alloc = allocator_type())
 			: _M_t(comp, alloc)
 			{
@@ -180,14 +180,14 @@ namespace ft
 				_M_t.clear();
 			}
 
-			key_compare key_comp (void) const
+			keyCompare key_comp (void) const
 			{
 				return (_M_t.key_comp());
 			}
 
-			value_compare value_comp (void) const
+			valueCompare value_comp (void) const
 			{
-				return (value_compare(_M_t.key_comp()));
+				return (valueCompare(_M_t.key_comp()));
 			}
 
 			iterator find (const key_type& k)

@@ -53,18 +53,18 @@ namespace ft
 	{
 		typedef _bin_tree_node<T>*	_link_type;
 
-		T	_M_value_field;
+		T	_MValue_field;
 
 		T*
-		_M_valptr (void)
+		_MValptr (void)
 		{
-			return (&(_M_value_field));
+			return (&(_MValue_field));
 		}
 
 		const T*
-		_M_valptr (void) const
+		_MValptr (void) const
 		{
-			return (&(_M_value_field));
+			return (&(_MValue_field));
 		}
 	};
 
@@ -94,13 +94,13 @@ namespace ft
 		reference
 		operator*	(void) const
 		{
-			return (*(static_cast<_link_type>(_M_node)->_M_valptr()));
+			return (*(static_cast<_link_type>(_M_node)->_MValptr()));
 		}
 
 		pointer
 		operator->	(void) const
 		{
-			return (static_cast<_link_type> (_M_node)->_M_valptr());
+			return (static_cast<_link_type> (_M_node)->_MValptr());
 		}
 
 		_self&
@@ -186,12 +186,12 @@ namespace ft
 		reference
 		operator*	(void) const
 		{
-			return (*(static_cast<_link_type>(_M_node)->_M_valptr())); }
+			return (*(static_cast<_link_type>(_M_node)->_MValptr())); }
 
 		pointer
 		operator->	(void) const
 		{
-			return (static_cast<_link_type>(_M_node)->_M_valptr());
+			return (static_cast<_link_type>(_M_node)->_MValptr());
 		}
 
 		_self&
@@ -339,7 +339,7 @@ namespace ft
 			{
 				try
 				{
-					get_allocator().construct(node->_M_valptr(), x);
+					get_allocator().construct(node->_MValptr(), x);
 				}
 				catch (std::exception& e)
 				{
@@ -359,7 +359,7 @@ namespace ft
 			void
 			_M_destroy_node (_link_type p)
 			{
-				get_allocator().destroy(p->_M_valptr());
+				get_allocator().destroy(p->_MValptr());
 			}
 
 			void
@@ -373,27 +373,27 @@ namespace ft
 			_link_type
 			_M_clone_node (_const_link_type x, NodeGen& node_gen)
 			{
-				_link_type	tmp = node_gen(*(x)->_M_valptr());
+				_link_type	tmp = node_gen(*(x)->_MValptr());
 				tmp->_M_left = NULL;
 				tmp->_M_right = NULL;
 				return (tmp);
 			}
 
-			template <typename Key_compare>
+			template <typename KeyCompare>
 			struct _bin_tree_impl : public _node_allocator
 			{
-				Key_compare				_M_key_compare;
+				KeyCompare				_MKeyCompare;
 				_bin_tree_node_base		_M_header;
 				size_type				_M_node_count;
 
 				_bin_tree_impl (void)
-				: _node_allocator(), _M_key_compare(), _M_header(), _M_node_count(0)
+				: _node_allocator(), _MKeyCompare(), _M_header(), _M_node_count(0)
 				{
 					_M_initialize();
 				}
 
-				_bin_tree_impl(const Key_compare& cmp, const _node_allocator& a)
-				: _node_allocator(a), _M_key_compare(cmp), _M_header(), _M_node_count(0)
+				_bin_tree_impl(const KeyCompare& cmp, const _node_allocator& a)
+				: _node_allocator(a), _MKeyCompare(cmp), _M_header(), _M_node_count(0)
 				{
 					_M_initialize();
 				}
@@ -481,15 +481,15 @@ namespace ft
 				}
 
 				static const_reference
-				_S_value (_const_link_type x)
+				_SValue (_const_link_type x)
 				{
-					return (*(x->_M_valptr()));
+					return (*(x->_MValptr()));
 				}
 
 				static const Key&
-				_S_key (_const_link_type x)
+				_SKey (_const_link_type x)
 				{
-					return (KeyOfValue()(_S_value(x)));
+					return (KeyOfValue()(_SValue(x)));
 				}
 
 				static _link_type
@@ -517,15 +517,15 @@ namespace ft
 				}
 
 				static const_reference
-				_S_value(_const_base_ptr x)
+				_SValue(_const_base_ptr x)
 				{
-					return (*(static_cast<_const_link_type>(x)->_M_valptr()));
+					return (*(static_cast<_const_link_type>(x)->_MValptr()));
 				}
 
 				static const Key&
-				_S_key(_const_base_ptr x)
+				_SKey(_const_base_ptr x)
 				{
-					return (KeyOfValue()(_S_value(x)));
+					return (KeyOfValue()(_SValue(x)));
 				}
 
 				static _base_ptr
@@ -569,7 +569,7 @@ namespace ft
 				{}
 
 				_bin_tree (const _bin_tree& x)
-				: _M_impl(x._M_impl._M_key_compare, x._M_get_Node_allocator())
+				: _M_impl(x._M_impl._MKeyCompare, x._M_get_Node_allocator())
 				{
 					if (x._M_root() != 0)
 					{
@@ -665,7 +665,7 @@ namespace ft
 					while (x != 0)
 					{
 						y = x;
-						comp = _M_impl._M_key_compare(k, _S_key(x));
+						comp = _M_impl._MKeyCompare(k, _SKey(x));
 						x = comp ? _S_left(x) : _S_right(x);
 					}
 					iterator j = iterator(y);
@@ -676,7 +676,7 @@ namespace ft
 						else
 							--j;
 					}
-					if (_M_impl._M_key_compare(_S_key(j._M_node), k))
+					if (_M_impl._MKeyCompare(_SKey(j._M_node), k))
 						return _res(x, y);
 					return (_res(j._M_node, 0));
 				}
@@ -690,7 +690,7 @@ namespace ft
 					while (x != 0)
 					{
 						y = x;
-						x = _M_impl._M_key_compare(k, _S_key(x)) ?
+						x = _M_impl._MKeyCompare(k, _SKey(x)) ?
 						_S_left(x) : _S_right(x);
 					}
 					return (_res(x, y));
@@ -704,17 +704,17 @@ namespace ft
 					typedef pair<_base_ptr, _base_ptr>	_res;
 					if (itpos._M_node == _M_end())
 					{
-						if (size() > 0 && _M_impl._M_key_compare(_S_key(_M_rightmost()), k))
+						if (size() > 0 && _M_impl._MKeyCompare(_SKey(_M_rightmost()), k))
 							return (_res(0, _M_rightmost()));
 						else
 							return (_M_get_insert_unique_pos(k));
 					}
-					else if (_M_impl._M_key_compare(k, _S_key(itpos._M_node)))
+					else if (_M_impl._MKeyCompare(k, _SKey(itpos._M_node)))
 					{
 						iterator before = itpos;
 						if (pos._M_node == _M_leftmost())
 							return (_res(_M_leftmost(), _M_leftmost()));
-						else if (_M_impl._M_key_compare(_S_key((--before)._M_node), k))
+						else if (_M_impl._MKeyCompare(_SKey((--before)._M_node), k))
 						{
 							if (_S_right(before._M_node) == 0)
 								return (_res(0, before._M_node));
@@ -724,12 +724,12 @@ namespace ft
 						else
 							return (_M_get_insert_unique_pos(k));
 					}
-					else if (_M_impl._M_key_compare(_S_key(itpos._M_node), k))
+					else if (_M_impl._MKeyCompare(_SKey(itpos._M_node), k))
 					{
 						iterator after = itpos;
 						if (pos._M_node == _M_rightmost())
 							return (_res(0, _M_rightmost()));
-						else if (_M_impl._M_key_compare(k, _S_key((++after)._M_node)))
+						else if (_M_impl._MKeyCompare(k, _SKey((++after)._M_node)))
 						{
 							if (_S_right(itpos._M_node) == 0)
 								return (_res(0, itpos._M_node));
@@ -751,17 +751,17 @@ namespace ft
 					typedef pair<_base_ptr, _base_ptr> _res;
 					if (pos._M_node == _M_end())
 					{
-						if (size() > 0 && !_M_impl._M_key_compare(k, _S_key(_M_rightmost())))
+						if (size() > 0 && !_M_impl._MKeyCompare(k, _SKey(_M_rightmost())))
 							return (_res(0, _M_rightmost()));
 						else
 							return (_M_get_insert_equal_pos(k));
 					}
-					else if (!_M_impl._M_key_compare(_S_key(itpos._M_node), k))
+					else if (!_M_impl._MKeyCompare(_SKey(itpos._M_node), k))
 					{
 						iterator before = itpos;
 						if (itpos._M_node == _M_leftmost())
 							return (_res(_M_leftmost(), _M_leftmost()));
-						else if (!_M_impl._M_key_compare(k, _S_key((--before)._M_node)))
+						else if (!_M_impl._MKeyCompare(k, _SKey((--before)._M_node)))
 						{
 							if (_S_right(before._M_node) == 0)
 								return (_res(0, before._M_node));
@@ -776,7 +776,7 @@ namespace ft
 						iterator after = itpos;
 						if (itpos._M_node == _M_rightmost())
 							return (_res(0, _M_rightmost()));
-						else if (!_M_impl._M_key_compare(_S_key((++after)._M_node), k))
+						else if (!_M_impl._MKeyCompare(_SKey((++after)._M_node), k))
 						{
 							if (_S_right(itpos._M_node) == 0)
 								return (_res(0, itpos._M_node));
@@ -813,7 +813,7 @@ namespace ft
 				 NodeGem& node_gen)
 			{
 				bool insert_left = (x != 0 || p == _M_end()
-					|| _M_impl._M_key_compare(KeyOfValue()(v), _S_key(p)));
+					|| _M_impl._MKeyCompare(KeyOfValue()(v), _SKey(p)));
 				_link_type z = node_gen(v);
 				_bin_tree_insert_and_rebalance(insert_left, z, p, this->_M_impl._M_header);
 				++_M_impl._M_node_count;

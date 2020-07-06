@@ -49,23 +49,23 @@ namespace ft
 		}
 	};
 
-	template<typename _Val>
+	template<typename Val>
 		struct _bin_tree_node : public _bin_tree_node_base
 		{
-			typedef _bin_tree_node<_Val>* _Link_type;
+			typedef _bin_tree_node<Val>* _Link_type;
 
-			_Val _M_value_field;
+			Val _MValue_field;
 
-			_Val*
-			_M_valptr()
+			Val*
+			_MValptr()
 			{
-				return (&_M_value_field);
+				return (&_MValue_field);
 			}
 
-			const _Val*
-			_M_valptr() const
+			const Val*
+			_MValptr() const
 			{
-				return (&_M_value_field);
+				return (&_MValue_field);
 			}
 		};
 
@@ -105,13 +105,13 @@ namespace ft
 			reference
 			operator*() const
 			{
-				return (*static_cast<_Link_type>(_M_node)->_M_valptr());
+				return (*static_cast<_Link_type>(_M_node)->_MValptr());
 			}
 
 			pointer
 			operator->() const
 			{
-				return (static_cast<_Link_type> (_M_node)->_M_valptr());
+				return (static_cast<_Link_type> (_M_node)->_MValptr());
 			}
 
 			_Self&
@@ -194,13 +194,13 @@ namespace ft
 			reference
 			operator*() const
 			{
-				return (*static_cast<_Link_type>(_M_node)->_M_valptr());
+				return (*static_cast<_Link_type>(_M_node)->_MValptr());
 			}
 
 			pointer
 			operator->() const
 			{
-				return (static_cast<_Link_type>(_M_node)->_M_valptr()); }
+				return (static_cast<_Link_type>(_M_node)->_MValptr()); }
 
 			_Self&
 			operator++()
@@ -247,36 +247,36 @@ namespace ft
 			_Base_ptr _M_node;
 		};
 
-	template<typename _Val>
+	template<typename Val>
 		inline bool
-		operator==(const _bin_tree_iterator<_Val>& x,
-							 const _bin_tree_const_iterator<_Val>& y)
+		operator==(const _bin_tree_iterator<Val>& x,
+					const _bin_tree_const_iterator<Val>& y)
 		{
 			return (x._M_node == y._M_node);
 		}
 
-	template<typename _Val>
+	template<typename Val>
 		inline bool
-		operator!=(const _bin_tree_iterator<_Val>& x,
-							 const _bin_tree_const_iterator<_Val>& y)
+		operator!=(const _bin_tree_iterator<Val>& x,
+					const _bin_tree_const_iterator<Val>& y)
 		{
 			return (x._M_node != y._M_node);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc = std::allocator<_Val> >
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc = std::allocator<Val> >
 		class _bin_tree
 		{
 			typedef typename _Alloc::template
-				rebind<_bin_tree_node<_Val> >::other _Node_allocator;
+				rebind<_bin_tree_node<Val> >::other _Node_allocator;
 
 			typedef _Node_allocator _Alloc_traits;
 
 		protected:
 			typedef _bin_tree_node_base* 		_Base_ptr;
 			typedef const _bin_tree_node_base* 	_Const_Base_ptr;
-			typedef _bin_tree_node<_Val>* 		_Link_type;
-			typedef const _bin_tree_node<_Val>*	_Const_Link_type;
+			typedef _bin_tree_node<Val>* 		_Link_type;
+			typedef const _bin_tree_node<Val>*	_Const_Link_type;
 
 		private:
 			struct _Reuse_or_alloc_node
@@ -295,125 +295,127 @@ namespace ft
 						_M_nodes = 0;
 				}
 
-	~_Reuse_or_alloc_node()
-	{
-		_M_t._M_erase(static_cast<_Link_type>(_M_root));
-	}
-
-	template<typename _Arg>
-		_Link_type
-		operator()(const _Arg& arg)
-		{
-			_Link_type node = static_cast<_Link_type>(_M_extract());
-			if (node)
+				~_Reuse_or_alloc_node()
 				{
-					_M_t._M_destroy_node(node);
-					_M_t._M_construct_node(node, arg);
+					_M_t._M_erase(static_cast<_Link_type>(_M_root));
+				}
+
+				template<typename Arg>
+					_Link_type
+					operator()(const Arg& arg)
+					{
+						_Link_type node = static_cast<_Link_type>(_M_extract());
+						if (node)
+						{
+							_M_t._M_destroy_node(node);
+							_M_t._M_construct_node(node, arg);
+							return (node);
+						}
+						return (_M_t._M_create_node(arg));
+					}
+
+				private:
+				_Base_ptr
+				_M_extract (void)
+				{
+					if (!_M_nodes)
+						return _M_nodes;
+
+					_Base_ptr node = _M_nodes;
+					_M_nodes = _M_nodes->_M_parent;
+					if (_M_nodes)
+					{
+						if (_M_nodes->_M_right == node)
+						{
+							_M_nodes->_M_right = 0;
+
+							if (_M_nodes->_M_left)
+							{
+								_M_nodes = _M_nodes->_M_left;
+
+								while (_M_nodes->_M_right)
+									_M_nodes = _M_nodes->_M_right;
+
+								if (_M_nodes->_M_left)
+									_M_nodes = _M_nodes->_M_left;
+							}
+						}
+						else
+							_M_nodes->_M_left = 0;
+					}
+					else
+						_M_root = 0;
+
 					return node;
 				}
 
-			return _M_t._M_create_node(arg);
-		}
-
-			private:
-	_Base_ptr
-	_M_extract()
-	{
-		if (!_M_nodes)
-			return _M_nodes;
-
-		_Base_ptr node = _M_nodes;
-		_M_nodes = _M_nodes->_M_parent;
-		if (_M_nodes)
-			{
-				if (_M_nodes->_M_right == node)
-		{
-			_M_nodes->_M_right = 0;
-
-			if (_M_nodes->_M_left)
-				{
-					_M_nodes = _M_nodes->_M_left;
-
-					while (_M_nodes->_M_right)
-			_M_nodes = _M_nodes->_M_right;
-
-					if (_M_nodes->_M_left)
-			_M_nodes = _M_nodes->_M_left;
-				}
-		}
-				else // node is on the left.
-		_M_nodes->_M_left = 0;
-			}
-		else
-			_M_root = 0;
-
-		return node;
-	}
-
-	_Base_ptr _M_root;
-	_Base_ptr _M_nodes;
-	_bin_tree& _M_t;
+				_Base_ptr _M_root;
+				_Base_ptr _M_nodes;
+				_bin_tree& _M_t;
 			};
 
-			// Functor similar to the previous one but without any pool of nodes to
-			// recycle.
 			struct _Alloc_node
 			{
-	_Alloc_node(_bin_tree& t)
-		: _M_t(t) { }
+				_Alloc_node(_bin_tree& t)
+				: _M_t(t)
+				{}
 
-	template<typename _Arg>
-		_Link_type
-		operator()(const _Arg& arg) const
-		{ return _M_t._M_create_node(arg); }
+				template<typename Arg>
+					_Link_type
+					operator()(const Arg& arg) const
+					{
+						return (_M_t._M_create_node(arg));
+					}
 
-			private:
-	_bin_tree& _M_t;
+				private:
+				_bin_tree& _M_t;
 			};
 
-		public:
-			typedef _Key 				key_type;
-			typedef _Val 				value_type;
-			typedef value_type* 			pointer;
-			typedef const value_type* 		const_pointer;
-			typedef value_type& 			reference;
-			typedef const value_type& 		const_reference;
-			typedef size_t 				size_type;
-			typedef ptrdiff_t 			difference_type;
-			typedef _Alloc 				allocator_type;
+				public:
+					typedef Key 				key_type;
+					typedef Val 				value_type;
+					typedef value_type* 			pointer;
+					typedef const value_type* 		const_pointer;
+					typedef value_type& 			reference;
+					typedef const value_type& 		const_reference;
+					typedef size_t 				size_type;
+					typedef ptrdiff_t 			difference_type;
+					typedef _Alloc 				allocator_type;
 
-			_Node_allocator&
-			_M_get_Node_allocator()
-			{ return *static_cast<_Node_allocator*>(&this->_M_impl); }
-			
-			const _Node_allocator&
-			_M_get_Node_allocator() const
-			{ return *static_cast<const _Node_allocator*>(&this->_M_impl); }
+					_Node_allocator&
+					_M_get_Node_allocator()
+					{ return *static_cast<_Node_allocator*>(&this->_M_impl); }
+					
+					const _Node_allocator&
+					_M_get_Node_allocator() const
+					{ return *static_cast<const _Node_allocator*>(&this->_M_impl); }
 
-			allocator_type
-			get_allocator() const
-			{ return allocator_type(_M_get_Node_allocator()); }
+					allocator_type
+					get_allocator() const
+					{ return allocator_type(_M_get_Node_allocator()); }
 
-		protected:
-			_Link_type
-			_M_get_node()
-			{ return _M_get_Node_allocator().allocate(1); }
+				protected:
+					_Link_type
+					_M_get_node()
+					{ return _M_get_Node_allocator().allocate(1); }
 
-			void
-			_M_put_node(_Link_type p)
-			{ _M_get_Node_allocator().deallocate(p, 1); }
+					void
+					_M_put_node(_Link_type p)
+					{ _M_get_Node_allocator().deallocate(p, 1); }
 
-			void
-			_M_construct_node(_Link_type node, const value_type& x)
-			{
-	try
-		{ get_allocator().construct(node->_M_valptr(), x); }
-	catch(std::exception &e)
-		{
-			_M_put_node(node);
-			throw;
-		}
-			}
+					void
+					_M_construct_node(_Link_type node, const value_type& x)
+					{
+						try
+						{
+							get_allocator().construct(node->_MValptr(), x);
+						}
+						catch(std::exception &e)
+						{
+							_M_put_node(node);
+							throw;
+						}
+					}
 
 			_Link_type
 			_M_create_node(const value_type& x)
@@ -425,7 +427,7 @@ namespace ft
 
 			void
 			_M_destroy_node(_Link_type p)
-			{ get_allocator().destroy(p->_M_valptr()); }
+			{ get_allocator().destroy(p->_MValptr()); }
 
 			void
 			_M_drop_node(_Link_type p)
@@ -438,7 +440,7 @@ namespace ft
 	_Link_type
 	_M_clone_node(_Const_Link_type x, _NodeGen& node_gen)
 	{
-		_Link_type tmp = node_gen(*x->_M_valptr());
+		_Link_type tmp = node_gen(*x->_MValptr());
 		tmp->_M_color = x->_M_color;
 		tmp->_M_left = 0;
 		tmp->_M_right = 0;
@@ -447,20 +449,20 @@ namespace ft
 
 		protected:
 			// Unused _Is_pod_comparator is kept as it is part of mangled name.
-			template<typename _Key_compare>
+			template<typename KeyCompare>
 				struct _bin_tree_impl : public _Node_allocator
 				{
-		_Key_compare		_M_key_compare;
+		KeyCompare		_MKeyCompare;
 		_bin_tree_node_base 	_M_header;
 		size_type 		_M_node_count; // Keeps track of size of tree.
 
 		_bin_tree_impl()
-		: _Node_allocator(), _M_key_compare(), _M_header(),
+		: _Node_allocator(), _MKeyCompare(), _M_header(),
 			_M_node_count(0)
 		{ _M_initialize(); }
 
-		_bin_tree_impl(const _Key_compare& comp, const _Node_allocator& a)
-		: _Node_allocator(a), _M_key_compare(comp), _M_header(),
+		_bin_tree_impl(const KeyCompare& comp, const _Node_allocator& a)
+		: _Node_allocator(a), _MKeyCompare(comp), _M_header(),
 			_M_node_count(0)
 		{ _M_initialize(); }
 
@@ -484,7 +486,7 @@ namespace ft
 		}			
 	};
 
-			_bin_tree_impl<_Compare> _M_impl;
+			_bin_tree_impl<Compare> _M_impl;
 
 		protected:
 			_Base_ptr&
@@ -531,12 +533,12 @@ namespace ft
 			{ return &this->_M_impl._M_header; }
 
 			static const_reference
-			_S_value(_Const_Link_type x)
-			{ return *x->_M_valptr(); }
+			_SValue(_Const_Link_type x)
+			{ return *x->_MValptr(); }
 
-			static const _Key&
-			_S_key(_Const_Link_type x)
-			{ return _KeyOfValue()(_S_value(x)); }
+			static const Key&
+			_SKey(_Const_Link_type x)
+			{ return KeyOfValue()(_SValue(x)); }
 
 			static _Link_type
 			_S_left(_Base_ptr x)
@@ -555,12 +557,12 @@ namespace ft
 			{ return static_cast<_Const_Link_type>(x->_M_right); }
 
 			static const_reference
-			_S_value(_Const_Base_ptr x)
-			{ return *static_cast<_Const_Link_type>(x)->_M_valptr(); }
+			_SValue(_Const_Base_ptr x)
+			{ return *static_cast<_Const_Link_type>(x)->_MValptr(); }
 
-			static const _Key&
-			_S_key(_Const_Base_ptr x)
-			{ return _KeyOfValue()(_S_value(x)); }
+			static const Key&
+			_SKey(_Const_Base_ptr x)
+			{ return KeyOfValue()(_SValue(x)); }
 
 			static _Base_ptr
 			_S_minimum(_Base_ptr x)
@@ -629,30 +631,30 @@ namespace ft
 
 			iterator
 			_M_lower_bound(_Link_type x, _Base_ptr y,
-				 const _Key& k);
+				 const Key& k);
 
 			const_iterator
 			_M_lower_bound(_Const_Link_type x, _Const_Base_ptr y,
-				 const _Key& k) const;
+				 const Key& k) const;
 
 			iterator
 			_M_upper_bound(_Link_type x, _Base_ptr y,
-				 const _Key& k);
+				 const Key& k);
 
 			const_iterator
 			_M_upper_bound(_Const_Link_type x, _Const_Base_ptr y,
-				 const _Key& k) const;
+				 const Key& k) const;
 
 		public:
 			// allocation/deallocation
 			_bin_tree() { }
 
-			_bin_tree(const _Compare& comp,
+			_bin_tree(const Compare& comp,
 				 const allocator_type& a = allocator_type())
 			: _M_impl(comp, _Node_allocator(a)) { }
 
 			_bin_tree(const _bin_tree& x)
-			: _M_impl(x._M_impl._M_key_compare,
+			: _M_impl(x._M_impl._MKeyCompare,
 					_Alloc_traits::_S_select_on_copy(x._M_get_Node_allocator()))
 			{
 	if (x._M_root() != 0)
@@ -671,9 +673,9 @@ namespace ft
 			operator=(const _bin_tree& x);
 
 			// Accessors.
-			_Compare
+			Compare
 			key_comp() const
-			{ return _M_impl._M_key_compare; }
+			{ return _M_impl._MKeyCompare; }
 
 			iterator
 			begin()
@@ -833,74 +835,74 @@ namespace ft
 
 		};
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		inline bool
-		operator==(const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& x,
-				 const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& y)
+		operator==(const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& x,
+				 const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& y)
 		{
 			return x.size() == y.size()
 			 && std::equal(x.begin(), x.end(), y.begin());
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		inline bool
-		operator<(const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& x,
-				const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& y)
+		operator<(const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& x,
+				const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& y)
 		{
-			return std::lexicographical_compare(x.begin(), x.end(), 
+			return std::lexicographicalCompare(x.begin(), x.end(), 
 						y.begin(), y.end());
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		inline bool
-		operator!=(const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& x,
-				 const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& y)
+		operator!=(const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& x,
+				 const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& y)
 		{ return !(x == y); }
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		inline bool
-		operator>(const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& x,
-				const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& y)
+		operator>(const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& x,
+				const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& y)
 		{ return y < x; }
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		inline bool
-		operator<=(const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& x,
-				 const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& y)
+		operator<=(const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& x,
+				 const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& y)
 		{ return !(y < x); }
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		inline bool
-		operator>=(const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& x,
-				 const _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& y)
+		operator>=(const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& x,
+				 const _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& y)
 		{ return !(x < y); }
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		inline void
-		swap(_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& x,
-	 _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>& y)
+		swap(_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& x,
+	 _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>& y)
 		{ x.swap(y); }
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>&
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>&
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		operator=(const _bin_tree& x)
 		{
 			if (this != &x)
 	{
-		// Note that _Key may be a constant type.
+		// Note that Key may be a constant type.
 
 		_Reuse_or_alloc_node roan(*this);
 		_M_impl._M_reset();
-		_M_impl._M_key_compare = x._M_impl._M_key_compare;
+		_M_impl._MKeyCompare = x._M_impl._MKeyCompare;
 		if (x._M_root() != 0)
 			{
 				_M_root() = _M_copy(x._M_begin(), _M_end(), roan);
@@ -913,18 +915,18 @@ namespace ft
 			return *this;
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		template<typename _NodeGen>
-			typename _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator
-			_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+			typename _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::iterator
+			_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 			_M_insert_(_Base_ptr x, _Base_ptr p,
-		 const _Val& v,
+		 const Val& v,
 		 _NodeGen& node_gen)
 			{
 	bool insert_left = (x != 0 || p == _M_end()
-						|| _M_impl._M_key_compare(_KeyOfValue()(v),
-							_S_key(p)));
+						|| _M_impl._MKeyCompare(KeyOfValue()(v),
+							_SKey(p)));
 
 	_Link_type z = node_gen(v);
 
@@ -934,15 +936,15 @@ namespace ft
 	return iterator(z);
 			}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		_M_insert_lower(_Base_ptr p, const _Val& v)
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::iterator
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		_M_insert_lower(_Base_ptr p, const Val& v)
 		{
 			bool insert_left = (p == _M_end()
-					|| !_M_impl._M_key_compare(_S_key(p),
-									 _KeyOfValue()(v)));
+					|| !_M_impl._MKeyCompare(_SKey(p),
+									 KeyOfValue()(v)));
 
 			_Link_type z = _M_create_node(v);
 
@@ -952,28 +954,28 @@ namespace ft
 			return iterator(z);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		_M_insert_equal_lower(const _Val& v)
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::iterator
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		_M_insert_equal_lower(const Val& v)
 		{
 			_Link_type x = _M_begin();
 			_Base_ptr y = _M_end();
 			while (x != 0)
 	{
 		y = x;
-		x = !_M_impl._M_key_compare(_S_key(x), _KeyOfValue()(v)) ?
+		x = !_M_impl._MKeyCompare(_SKey(x), KeyOfValue()(v)) ?
 					_S_left(x) : _S_right(x);
 	}
 			return _M_insert_lower(y, v);
 		}
 
-	template<typename _Key, typename _Val, typename _KoV,
-		 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename _KoV,
+		 typename Compare, typename _Alloc>
 		template<typename _NodeGen>
-			typename _bin_tree<_Key, _Val, _KoV, _Compare, _Alloc>::_Link_type
-			_bin_tree<_Key, _Val, _KoV, _Compare, _Alloc>::
+			typename _bin_tree<Key, Val, _KoV, Compare, _Alloc>::_Link_type
+			_bin_tree<Key, Val, _KoV, Compare, _Alloc>::
 			_M_copy(_Const_Link_type x, _Base_ptr p, _NodeGen& node_gen)
 			{
 	// Structural copy. x and p must be non-null.
@@ -1006,10 +1008,10 @@ namespace ft
 	return top;
 			}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		void
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_erase(_Link_type x)
 		{
 			// Erase without rebalancing.
@@ -1022,86 +1024,86 @@ namespace ft
 	}
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue,
-					_Compare, _Alloc>::iterator
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue,
+					Compare, _Alloc>::iterator
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_lower_bound(_Link_type x, _Base_ptr y,
-			 const _Key& k)
+			 const Key& k)
 		{
 			while (x != 0)
-	if (!_M_impl._M_key_compare(_S_key(x), k))
+	if (!_M_impl._MKeyCompare(_SKey(x), k))
 		y = x, x = _S_left(x);
 	else
 		x = _S_right(x);
 			return iterator(y);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue,
-					_Compare, _Alloc>::const_iterator
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue,
+					Compare, _Alloc>::const_iterator
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_lower_bound(_Const_Link_type x, _Const_Base_ptr y,
-			 const _Key& k) const
+			 const Key& k) const
 		{
 			while (x != 0)
-	if (!_M_impl._M_key_compare(_S_key(x), k))
+	if (!_M_impl._MKeyCompare(_SKey(x), k))
 		y = x, x = _S_left(x);
 	else
 		x = _S_right(x);
 			return const_iterator(y);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue,
-					_Compare, _Alloc>::iterator
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue,
+					Compare, _Alloc>::iterator
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_upper_bound(_Link_type x, _Base_ptr y,
-			 const _Key& k)
+			 const Key& k)
 		{
 			while (x != 0)
-	if (_M_impl._M_key_compare(k, _S_key(x)))
+	if (_M_impl._MKeyCompare(k, _SKey(x)))
 		y = x, x = _S_left(x);
 	else
 		x = _S_right(x);
 			return iterator(y);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue,
-					_Compare, _Alloc>::const_iterator
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue,
+					Compare, _Alloc>::const_iterator
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_upper_bound(_Const_Link_type x, _Const_Base_ptr y,
-			 const _Key& k) const
+			 const Key& k) const
 		{
 			while (x != 0)
-	if (_M_impl._M_key_compare(k, _S_key(x)))
+	if (_M_impl._MKeyCompare(k, _SKey(x)))
 		y = x, x = _S_left(x);
 	else
 		x = _S_right(x);
 			return const_iterator(y);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		pair<typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::iterator,
-	 typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::iterator>
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		equal_range(const _Key& k)
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		pair<typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::iterator,
+	 typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::iterator>
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		equal_range(const Key& k)
 		{
 			_Link_type x = _M_begin();
 			_Base_ptr y = _M_end();
 			while (x != 0)
 	{
-		if (_M_impl._M_key_compare(_S_key(x), k))
+		if (_M_impl._MKeyCompare(_SKey(x), k))
 			x = _S_right(x);
-		else if (_M_impl._M_key_compare(k, _S_key(x)))
+		else if (_M_impl._MKeyCompare(k, _SKey(x)))
 			y = x, x = _S_left(x);
 		else
 			{
@@ -1118,22 +1120,22 @@ namespace ft
 							iterator(y));
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		pair<typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::const_iterator,
-	 typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::const_iterator>
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		equal_range(const _Key& k) const
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		pair<typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::const_iterator,
+	 typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::const_iterator>
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		equal_range(const Key& k) const
 		{
 			_Const_Link_type x = _M_begin();
 			_Const_Base_ptr y = _M_end();
 			while (x != 0)
 	{
-		if (_M_impl._M_key_compare(_S_key(x), k))
+		if (_M_impl._MKeyCompare(_SKey(x), k))
 			x = _S_right(x);
-		else if (_M_impl._M_key_compare(k, _S_key(x)))
+		else if (_M_impl._MKeyCompare(k, _SKey(x)))
 			y = x, x = _S_left(x);
 		else
 			{
@@ -1150,10 +1152,10 @@ namespace ft
 							const_iterator(y));
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		void
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		swap(_bin_tree& t)
 		{
 			if (_M_root() == 0)
@@ -1190,19 +1192,19 @@ namespace ft
 		std::swap(this->_M_impl._M_node_count, t._M_impl._M_node_count);
 	}
 			// No need to swap header's color as it does not change.
-			std::swap(this->_M_impl._M_key_compare, t._M_impl._M_key_compare);
+			std::swap(this->_M_impl._MKeyCompare, t._M_impl._MKeyCompare);
 
 			_Alloc_traits::_S_on_swap(_M_get_Node_allocator(),
 				t._M_get_Node_allocator());
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		pair<typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::_Base_ptr,
-	 typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::_Base_ptr>
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		pair<typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::_Base_ptr,
+	 typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::_Base_ptr>
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_get_insert_unique_pos(const key_type& k)
 		{
 			typedef pair<_Base_ptr, _Base_ptr> _Res;
@@ -1212,7 +1214,7 @@ namespace ft
 			while (x != 0)
 	{
 		y = x;
-		comp = _M_impl._M_key_compare(k, _S_key(x));
+		comp = _M_impl._MKeyCompare(k, _SKey(x));
 		x = comp ? _S_left(x) : _S_right(x);
 	}
 			iterator j = iterator(y);
@@ -1223,18 +1225,18 @@ namespace ft
 		else
 			--j;
 	}
-			if (_M_impl._M_key_compare(_S_key(j._M_node), k))
+			if (_M_impl._MKeyCompare(_SKey(j._M_node), k))
 	return _Res(x, y);
 			return _Res(j._M_node, 0);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		pair<typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::_Base_ptr,
-	 typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::_Base_ptr>
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		pair<typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::_Base_ptr,
+	 typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::_Base_ptr>
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_get_insert_equal_pos(const key_type& k)
 		{
 			typedef pair<_Base_ptr, _Base_ptr> _Res;
@@ -1243,22 +1245,22 @@ namespace ft
 			while (x != 0)
 	{
 		y = x;
-		x = _M_impl._M_key_compare(k, _S_key(x)) ?
+		x = _M_impl._MKeyCompare(k, _SKey(x)) ?
 					_S_left(x) : _S_right(x);
 	}
 			return _Res(x, y);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		pair<typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::iterator, bool>
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		_M_insert_unique(const _Val& v)
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		pair<typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::iterator, bool>
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		_M_insert_unique(const Val& v)
 		{
 			typedef pair<iterator, bool> _Res;
 			pair<_Base_ptr, _Base_ptr> res
-	= _M_get_insert_unique_pos(_KeyOfValue()(v));
+	= _M_get_insert_unique_pos(KeyOfValue()(v));
 
 			if (res.second)
 	{
@@ -1271,26 +1273,26 @@ namespace ft
 			return _Res(iterator(res.first), false);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		_M_insert_equal(const _Val& v)
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::iterator
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		_M_insert_equal(const Val& v)
 		{
 			pair<_Base_ptr, _Base_ptr> res
-	= _M_get_insert_equal_pos(_KeyOfValue()(v));
+	= _M_get_insert_equal_pos(KeyOfValue()(v));
 			_Alloc_node an(*this);
 			return _M_insert_(res.first, res.second,
 			v, an);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		pair<typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::_Base_ptr,
-				 typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::_Base_ptr>
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		pair<typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::_Base_ptr,
+				 typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::_Base_ptr>
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_get_insert_hint_unique_pos(const_iterator position,
 					const key_type& k)
 		{
@@ -1301,18 +1303,18 @@ namespace ft
 			if (pos._M_node == _M_end())
 	{
 		if (size() > 0
-				&& _M_impl._M_key_compare(_S_key(_M_rightmost()), k))
+				&& _M_impl._MKeyCompare(_SKey(_M_rightmost()), k))
 			return _Res(0, _M_rightmost());
 		else
 			return _M_get_insert_unique_pos(k);
 	}
-			else if (_M_impl._M_key_compare(k, _S_key(pos._M_node)))
+			else if (_M_impl._MKeyCompare(k, _SKey(pos._M_node)))
 	{
 		// First, try before...
 		iterator before = pos;
 		if (pos._M_node == _M_leftmost()) // begin()
 			return _Res(_M_leftmost(), _M_leftmost());
-		else if (_M_impl._M_key_compare(_S_key((--before)._M_node), k))
+		else if (_M_impl._MKeyCompare(_SKey((--before)._M_node), k))
 			{
 				if (_S_right(before._M_node) == 0)
 		return _Res(0, before._M_node);
@@ -1322,13 +1324,13 @@ namespace ft
 		else
 			return _M_get_insert_unique_pos(k);
 	}
-			else if (_M_impl._M_key_compare(_S_key(pos._M_node), k))
+			else if (_M_impl._MKeyCompare(_SKey(pos._M_node), k))
 	{
 		// ... then try after.
 		iterator after = pos;
 		if (pos._M_node == _M_rightmost())
 			return _Res(0, _M_rightmost());
-		else if (_M_impl._M_key_compare(k, _S_key((++after)._M_node)))
+		else if (_M_impl._MKeyCompare(k, _SKey((++after)._M_node)))
 			{
 				if (_S_right(pos._M_node) == 0)
 		return _Res(0, pos._M_node);
@@ -1343,17 +1345,17 @@ namespace ft
 	return _Res(pos._M_node, 0);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		template<typename _NodeGen>
-			typename _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator
-			_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+			typename _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::iterator
+			_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 			_M_insert_unique_(const_iterator position,
-			const _Val& v,
+			const Val& v,
 			_NodeGen& node_gen)
 		{
 			pair<_Base_ptr, _Base_ptr> res
-	= _M_get_insert_hint_unique_pos(position, _KeyOfValue()(v));
+	= _M_get_insert_hint_unique_pos(position, KeyOfValue()(v));
 
 			if (res.second)
 	return _M_insert_(res.first, res.second,
@@ -1362,13 +1364,13 @@ namespace ft
 			return iterator(res.first);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		pair<typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::_Base_ptr,
-				 typename _bin_tree<_Key, _Val, _KeyOfValue,
-				 _Compare, _Alloc>::_Base_ptr>
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		pair<typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::_Base_ptr,
+				 typename _bin_tree<Key, Val, KeyOfValue,
+				 Compare, _Alloc>::_Base_ptr>
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_get_insert_hint_equal_pos(const_iterator position, const key_type& k)
 		{
 			iterator pos = position._M_const_cast();
@@ -1378,18 +1380,18 @@ namespace ft
 			if (pos._M_node == _M_end())
 	{
 		if (size() > 0
-				&& !_M_impl._M_key_compare(k, _S_key(_M_rightmost())))
+				&& !_M_impl._MKeyCompare(k, _SKey(_M_rightmost())))
 			return _Res(0, _M_rightmost());
 		else
 			return _M_get_insert_equal_pos(k);
 	}
-			else if (!_M_impl._M_key_compare(_S_key(pos._M_node), k))
+			else if (!_M_impl._MKeyCompare(_SKey(pos._M_node), k))
 	{
 		// First, try before...
 		iterator before = pos;
 		if (pos._M_node == _M_leftmost()) // begin()
 			return _Res(_M_leftmost(), _M_leftmost());
-		else if (!_M_impl._M_key_compare(k, _S_key((--before)._M_node)))
+		else if (!_M_impl._MKeyCompare(k, _SKey((--before)._M_node)))
 			{
 				if (_S_right(before._M_node) == 0)
 		return _Res(0, before._M_node);
@@ -1405,7 +1407,7 @@ namespace ft
 		iterator after = pos;
 		if (pos._M_node == _M_rightmost())
 			return _Res(0, _M_rightmost());
-		else if (!_M_impl._M_key_compare(_S_key((++after)._M_node), k))
+		else if (!_M_impl._MKeyCompare(_SKey((++after)._M_node), k))
 			{
 				if (_S_right(pos._M_node) == 0)
 		return _Res(0, pos._M_node);
@@ -1417,17 +1419,17 @@ namespace ft
 	}
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		template<typename _NodeGen>
-			typename _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator
-			_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+			typename _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::iterator
+			_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 			_M_insert_equal_(const_iterator position,
-					 const _Val& v,
+					 const Val& v,
 					 _NodeGen& node_gen)
 			{
 	pair<_Base_ptr, _Base_ptr> res
-		= _M_get_insert_hint_equal_pos(position, _KeyOfValue()(v));
+		= _M_get_insert_hint_equal_pos(position, KeyOfValue()(v));
 
 	if (res.second)
 		return _M_insert_(res.first, res.second,
@@ -1437,11 +1439,11 @@ namespace ft
 	return _M_insert_equal_lower(v);
 			}
 
-	template<typename _Key, typename _Val, typename _KoV,
+	template<typename Key, typename Val, typename _KoV,
 					 typename _Cmp, typename _Alloc>
 		template<class _II>
 			void
-			_bin_tree<_Key, _Val, _KoV, _Cmp, _Alloc>::
+			_bin_tree<Key, Val, _KoV, _Cmp, _Alloc>::
 			_M_insert_unique(_II first, _II last)
 			{
 	_Alloc_node an(*this);
@@ -1449,11 +1451,11 @@ namespace ft
 		_M_insert_unique_(end(), *first, an);
 			}
 
-	template<typename _Key, typename _Val, typename _KoV,
+	template<typename Key, typename Val, typename _KoV,
 					 typename _Cmp, typename _Alloc>
 		template<class _II>
 			void
-			_bin_tree<_Key, _Val, _KoV, _Cmp, _Alloc>::
+			_bin_tree<Key, Val, _KoV, _Cmp, _Alloc>::
 			_M_insert_equal(_II first, _II last)
 			{
 	_Alloc_node an(*this);
@@ -1461,10 +1463,10 @@ namespace ft
 		_M_insert_equal_(end(), *first, an);
 			}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		void
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_erase_aux(const_iterator position)
 		{
 			_Link_type y =
@@ -1475,10 +1477,10 @@ namespace ft
 			--_M_impl._M_node_count;
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		void
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
 		_M_erase_aux(const_iterator first, const_iterator last)
 		{
 			if (first == begin() && last == end())
@@ -1488,11 +1490,11 @@ namespace ft
 		erase(first++);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::size_type
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		erase(const _Key& x)
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::size_type
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		erase(const Key& x)
 		{
 			pair<iterator, iterator> p = equal_range(x);
 			const size_type old_size = size();
@@ -1500,47 +1502,47 @@ namespace ft
 			return old_size - size();
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		void
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		erase(const _Key* first, const _Key* last)
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		erase(const Key* first, const Key* last)
 		{
 			while (first != last)
 	erase(*first++);
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue,
-					_Compare, _Alloc>::iterator
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		find(const _Key& k)
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue,
+					Compare, _Alloc>::iterator
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		find(const Key& k)
 		{
 			iterator j = _M_lower_bound(_M_begin(), _M_end(), k);
 			return (j == end()
-				|| _M_impl._M_key_compare(k,
-					_S_key(j._M_node))) ? end() : j;
+				|| _M_impl._MKeyCompare(k,
+					_SKey(j._M_node))) ? end() : j;
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue,
-					_Compare, _Alloc>::const_iterator
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		find(const _Key& k) const
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue,
+					Compare, _Alloc>::const_iterator
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		find(const Key& k) const
 		{
 			const_iterator j = _M_lower_bound(_M_begin(), _M_end(), k);
 			return (j == end()
-				|| _M_impl._M_key_compare(k, 
-					_S_key(j._M_node))) ? end() : j;
+				|| _M_impl._MKeyCompare(k, 
+					_SKey(j._M_node))) ? end() : j;
 		}
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
-		typename _bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::size_type
-		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
-		count(const _Key& k) const
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
+		typename _bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::size_type
+		_bin_tree<Key, Val, KeyOfValue, Compare, _Alloc>::
+		count(const Key& k) const
 		{
 			pair<const_iterator, const_iterator> p = equal_range(k);
 			const size_type n = std::distance(p.first, p.second);
@@ -1551,10 +1553,10 @@ namespace ft
 	_bin_tree_black_count(const _bin_tree_node_base* node,
 											 const _bin_tree_node_base* root) throw ();
 
-	template<typename _Key, typename _Val, typename _KeyOfValue,
-					 typename _Compare, typename _Alloc>
+	template<typename Key, typename Val, typename KeyOfValue,
+					 typename Compare, typename _Alloc>
 		bool
-		_bin_tree<_Key,_Val,_KeyOfValue,_Compare,_Alloc>::rb_verify() const
+		_bin_tree<Key,Val,KeyOfValue,Compare,_Alloc>::rb_verify() const
 		{
 			if (_M_impl._M_node_count == 0 || begin() == end())
 	return _M_impl._M_node_count == 0 && begin() == end()
@@ -1573,9 +1575,9 @@ namespace ft
 		|| (R && R->_M_color == _S_red))
 				return false;
 
-		if (L && _M_impl._M_key_compare(_S_key(x), _S_key(L)))
+		if (L && _M_impl._MKeyCompare(_SKey(x), _SKey(L)))
 			return false;
-		if (R && _M_impl._M_key_compare(_S_key(R), _S_key(x)))
+		if (R && _M_impl._MKeyCompare(_SKey(R), _SKey(x)))
 			return false;
 
 		if (!L && !R && _bin_tree_black_count(x, _M_root()) != len)

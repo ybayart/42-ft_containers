@@ -4,25 +4,25 @@
 
 namespace ft
 {
-	template <typename _Key, typename _Tp, typename _Compare = std::less<_Key>,
-						typename _Alloc = std::allocator<ft::pair<const _Key, _Tp> > >
+	template <typename Key, typename _Tp, typename Compare = std::less<Key>,
+						typename _Alloc = std::allocator<ft::pair<const Key, _Tp> > >
 		class map
 		{
 		public:
-			typedef _Key																					key_type;
+			typedef Key																					key_type;
 			typedef _Tp																					 mapped_type;
-			typedef ft::pair<const _Key, _Tp>										value_type;
-			typedef _Compare																			key_compare;
+			typedef ft::pair<const Key, _Tp>										value_type;
+			typedef Compare																			keyCompare;
 			typedef _Alloc																				allocator_type;
 
 		public:
-			class value_compare
+			class valueCompare
 			{
-	friend class map<_Key, _Tp, _Compare, _Alloc>;
+	friend class map<Key, _Tp, Compare, _Alloc>;
 			protected:
-	_Compare comp;
+	Compare comp;
 
-	value_compare(_Compare c)
+	valueCompare(Compare c)
 	: comp(c) { }
 
 			public:
@@ -36,7 +36,7 @@ namespace ft
 	rebind<value_type>::other _Pair_alloc_type;
 
 			typedef _bin_tree<key_type, value_type, _Select1st<value_type>,
-					 key_compare, _Pair_alloc_type> _Rep_type;
+					 keyCompare, _Pair_alloc_type> _Rep_type;
 
 			/// The actual tree structure.
 			_Rep_type _M_t;
@@ -72,7 +72,7 @@ namespace ft
 			 *	@param	a	An allocator object.
 			 */
 			explicit
-			map(const _Compare& comp,
+			map(const Compare& comp,
 		const allocator_type& a = allocator_type())
 			: _M_t(comp, _Pair_alloc_type(a)) { }
 
@@ -115,7 +115,7 @@ namespace ft
 			 */
 			template<typename _InputIterator>
 				map(_InputIterator first, _InputIterator last,
-			const _Compare& comp,
+			const Compare& comp,
 			const allocator_type& a = allocator_type())
 	: _M_t(comp, _Pair_alloc_type(a))
 				{ _M_t._M_insert_unique(first, last); }
@@ -427,7 +427,7 @@ namespace ft
 			 *	Returns the key comparison object out of which the %map was
 			 *	constructed.
 			 */
-			key_compare
+			keyCompare
 			key_comp() const
 			{ return _M_t.key_comp(); }
 
@@ -435,9 +435,9 @@ namespace ft
 			 *	Returns a value comparison object, built from the key comparison
 			 *	object out of which the %map was constructed.
 			 */
-			value_compare
+			valueCompare
 			value_comp() const
-			{ return value_compare(_M_t.key_comp()); }
+			{ return valueCompare(_M_t.key_comp()); }
 
 			// [23.3.1.3] map operations
 
@@ -621,10 +621,10 @@ namespace ft
 	 *	maps.	Maps are considered equivalent if their sizes are equal,
 	 *	and if corresponding elements compare equal.
 	*/
-	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	template<typename Key, typename _Tp, typename Compare, typename _Alloc>
 		inline bool
-		operator==(const map<_Key, _Tp, _Compare, _Alloc>& x,
-							 const map<_Key, _Tp, _Compare, _Alloc>& y)
+		operator==(const map<Key, _Tp, Compare, _Alloc>& x,
+							 const map<Key, _Tp, Compare, _Alloc>& y)
 		{ return x._M_t == y._M_t; }
 
 	/**
@@ -636,47 +636,47 @@ namespace ft
 	 *	This is a total ordering relation.	It is linear in the size of the
 	 *	maps.	The elements must be comparable with @c <.
 	 *
-	 *	See std::lexicographical_compare() for how the determination is made.
+	 *	See std::lexicographicalCompare() for how the determination is made.
 	*/
-	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	template<typename Key, typename _Tp, typename Compare, typename _Alloc>
 		inline bool
-		operator<(const map<_Key, _Tp, _Compare, _Alloc>& x,
-							const map<_Key, _Tp, _Compare, _Alloc>& y)
+		operator<(const map<Key, _Tp, Compare, _Alloc>& x,
+							const map<Key, _Tp, Compare, _Alloc>& y)
 		{ return x._M_t < y._M_t; }
 
 	/// Based on operator==
-	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	template<typename Key, typename _Tp, typename Compare, typename _Alloc>
 		inline bool
-		operator!=(const map<_Key, _Tp, _Compare, _Alloc>& x,
-							 const map<_Key, _Tp, _Compare, _Alloc>& y)
+		operator!=(const map<Key, _Tp, Compare, _Alloc>& x,
+							 const map<Key, _Tp, Compare, _Alloc>& y)
 		{ return !(x == y); }
 
 	/// Based on operator<
-	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	template<typename Key, typename _Tp, typename Compare, typename _Alloc>
 		inline bool
-		operator>(const map<_Key, _Tp, _Compare, _Alloc>& x,
-							const map<_Key, _Tp, _Compare, _Alloc>& y)
+		operator>(const map<Key, _Tp, Compare, _Alloc>& x,
+							const map<Key, _Tp, Compare, _Alloc>& y)
 		{ return y < x; }
 
 	/// Based on operator<
-	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	template<typename Key, typename _Tp, typename Compare, typename _Alloc>
 		inline bool
-		operator<=(const map<_Key, _Tp, _Compare, _Alloc>& x,
-							 const map<_Key, _Tp, _Compare, _Alloc>& y)
+		operator<=(const map<Key, _Tp, Compare, _Alloc>& x,
+							 const map<Key, _Tp, Compare, _Alloc>& y)
 		{ return !(y < x); }
 
 	/// Based on operator<
-	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	template<typename Key, typename _Tp, typename Compare, typename _Alloc>
 		inline bool
-		operator>=(const map<_Key, _Tp, _Compare, _Alloc>& x,
-							 const map<_Key, _Tp, _Compare, _Alloc>& y)
+		operator>=(const map<Key, _Tp, Compare, _Alloc>& x,
+							 const map<Key, _Tp, Compare, _Alloc>& y)
 		{ return !(x < y); }
 
 	/// See std::map::swap().
-	template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+	template<typename Key, typename _Tp, typename Compare, typename _Alloc>
 		inline void
-		swap(map<_Key, _Tp, _Compare, _Alloc>& x,
-	 map<_Key, _Tp, _Compare, _Alloc>& y)
+		swap(map<Key, _Tp, Compare, _Alloc>& x,
+	 map<Key, _Tp, Compare, _Alloc>& y)
 		{ x.swap(y); }
 
 } // namespace std
