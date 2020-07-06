@@ -2,8 +2,6 @@
 #ifndef LIST_HPP
 # define LIST_HPP
 
-# include "utils.hpp"
-
 namespace	ft
 {
 	namespace	__detail

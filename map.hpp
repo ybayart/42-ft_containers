@@ -1,8 +1,6 @@
 
-#ifndef _MAP_HPP
-# define _MAP_HPP
-
-# include "utils.hpp"
+#ifndef MAP_HPP
+# define MAP_HPP
 
 namespace ft
 {
@@ -37,7 +35,7 @@ namespace ft
 			typedef typename _Alloc::template
 	rebind<value_type>::other _Pair_alloc_type;
 
-			typedef _bin_tree<key_type, value_type, value_type,
+			typedef _bin_tree<key_type, value_type, _Select1st<value_type>,
 					 key_compare, _Pair_alloc_type> _Rep_type;
 
 			/// The actual tree structure.

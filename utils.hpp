@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/06 15:44:02 by hexa              #+#    #+#             */
-/*   Updated: 2020/07/04 20:18:18 by ybayart          ###   ########.fr       */
+/*   Updated: 2020/07/06 15:31:32 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,30 @@ namespace ft
 		}
 		return (it2 != rhs.end());
 	}
+
+	template <typename Arg, typename Result>
+		struct unary_function
+		{
+			typedef Arg		argument_type;
+			typedef Result	result_type;
+		};
+
+	template <typename P>
+		struct _Select1st
+		: public unary_function<P, typename P::first_type>
+		{
+			typename P::first_type&
+				operator()(P& x) const
+				{
+					return (x.first);
+				}
+
+			const typename P::first_type&
+				operator()(const P& x) const
+				{
+					return (x.first);
+				}
+		};
 
 	struct true_type {};
 	struct false_type {};
@@ -176,7 +200,7 @@ namespace ft
 
 # include "iterator.hpp"
 # include "pair.hpp"
-# include "stl_tree.hpp"
+# include "binary_tree.hpp"
 # include "list.hpp"
 # include "vector.hpp"
 # include "map.hpp"

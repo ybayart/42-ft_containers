@@ -2,8 +2,6 @@
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
 
-# include "utils.hpp"
-
 namespace	ft
 {
 	struct input_iterator_tag {};
