@@ -300,15 +300,13 @@ map_print_it(T& toto)
 	typename T::reverse_iterator itr;
 
 	it = toto.begin();
-//	itr = toto.rbegin();
-	for (;it != toto.end();it++)
-		std::cout << "  iterator " << it->first << "|" << it->second << std::endl;
+	itr = toto.rbegin();
+	for (;it != toto.end();it++, itr++)
+		std::cout << "  iterator " << it->first << "|" << it->second << " - " << itr->first << "|" << itr->second << std::endl;
 
 	std::cout << std::endl;
 	std::cout << "    size() " << toto.size() << std::endl;
 	std::cout << "   empty() " << toto.empty() << std::endl;
-//	if (toto.empty() == 0)
-//		std::cout << "  extrem() " << toto.front() << " >> " << toto.back() << std::endl;
 	std::cout << std::endl;
 	std::cout << std::endl;
 }
@@ -324,6 +322,12 @@ main_map(void)
 	
 	std::cout << "---1" << std::endl;
 	toto.insert(NAMESPACE::pair<std::string, int>("ecole", 42));
+	toto.insert(NAMESPACE::pair<std::string, int>("truc", 1));
+	toto.insert(NAMESPACE::pair<std::string, int>("trac", 66));
+	toto.insert(NAMESPACE::pair<std::string, int>("hexa", 666));
+	toto.insert(NAMESPACE::pair<std::string, int>("ssh", 22));
+	toto.insert(NAMESPACE::pair<std::string, int>("http", 80));
+	toto.insert(NAMESPACE::pair<std::string, int>("https", 443));
 	map_print_it(toto);
 /*	toto.push_back(1);
 	toto.push_back(4);
