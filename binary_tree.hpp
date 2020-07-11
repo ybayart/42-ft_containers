@@ -1421,14 +1421,10 @@ namespace ft
 			const _Val& v,
 			_NodeGen& node_gen)
 		{
-			pair<_Base_ptr, _Base_ptr> res
-	= _M_get_insert_hint_unique_pos(position, _KeyOfValue()(v));
-
+			pair<_Base_ptr, _Base_ptr> res = _M_get_insert_hint_unique_pos(position, _KeyOfValue()(v));
 			if (res.second)
-	return _M_insert_(res.first, res.second,
-				v,
-				node_gen);
-			return iterator(res.first);
+				return (_M_insert_(res.first, res.second, v, node_gen));
+			return (iterator(res.first));
 		}
 
 	template<typename _Key, typename _Val, typename _KeyOfValue,
@@ -1442,48 +1438,43 @@ namespace ft
 		{
 			iterator pos = position._M_const_cast();
 			typedef pair<_Base_ptr, _Base_ptr> _Res;
-
-			// end()
 			if (pos._M_node == _M_end())
-	{
-		if (size() > 0
-				&& !_M_impl._M_key_compare(k, _S_key(_M_rightmost())))
-			return _Res(0, _M_rightmost());
-		else
-			return _M_get_insert_equal_pos(k);
-	}
+			{
+				if (size() > 0 && !_M_impl._M_key_compare(k, _S_key(_M_rightmost())))
+					return (_Res(0, _M_rightmost()));
+				else
+					return (_M_get_insert_equal_pos(k));
+			}
 			else if (!_M_impl._M_key_compare(_S_key(pos._M_node), k))
-	{
-		// First, try before...
-		iterator before = pos;
-		if (pos._M_node == _M_leftmost()) // begin()
-			return _Res(_M_leftmost(), _M_leftmost());
-		else if (!_M_impl._M_key_compare(k, _S_key((--before)._M_node)))
 			{
-				if (_S_right(before._M_node) == 0)
-		return _Res(0, before._M_node);
+				iterator before = pos;
+				if (pos._M_node == _M_leftmost())
+					return (_Res(_M_leftmost(), _M_leftmost()));
+				else if (!_M_impl._M_key_compare(k, _S_key((--before)._M_node)))
+				{
+					if (_S_right(before._M_node) == 0)
+						return (_Res(0, before._M_node));
+					else
+						return (_Res(pos._M_node, pos._M_node));
+				}
 				else
-		return _Res(pos._M_node, pos._M_node);
+					return (_M_get_insert_equal_pos(k));
 			}
-		else
-			return _M_get_insert_equal_pos(k);
-	}
 			else
-	{
-		// ... then try after.	
-		iterator after = pos;
-		if (pos._M_node == _M_rightmost())
-			return _Res(0, _M_rightmost());
-		else if (!_M_impl._M_key_compare(_S_key((++after)._M_node), k))
 			{
-				if (_S_right(pos._M_node) == 0)
-		return _Res(0, pos._M_node);
+				iterator after = pos;
+				if (pos._M_node == _M_rightmost())
+					return (_Res(0, _M_rightmost()));
+				else if (!_M_impl._M_key_compare(_S_key((++after)._M_node), k))
+				{
+					if (_S_right(pos._M_node) == 0)
+						return (_Res(0, pos._M_node));
+					else
+						return (_Res(after._M_node, after._M_node));
+				}
 				else
-		return _Res(after._M_node, after._M_node);
+					return (_Res(0, 0));
 			}
-		else
-			return _Res(0, 0);
-	}
 		}
 
 	template<typename _Key, typename _Val, typename _KeyOfValue,
@@ -1495,15 +1486,10 @@ namespace ft
 					 const _Val& v,
 					 _NodeGen& node_gen)
 			{
-	pair<_Base_ptr, _Base_ptr> res
-		= _M_get_insert_hint_equal_pos(position, _KeyOfValue()(v));
-
-	if (res.second)
-		return _M_insert_(res.first, res.second,
-					v,
-					node_gen);
-
-	return _M_insert_equal_lower(v);
+				pair<_Base_ptr, _Base_ptr> res = _M_get_insert_hint_equal_pos(position, _KeyOfValue()(v));
+				if (res.second)
+					return (_M_insert_(res.first, res.second, v, node_gen));
+				return (_M_insert_equal_lower(v));
 			}
 
 	template<typename _Key, typename _Val, typename _KoV,
@@ -1513,9 +1499,9 @@ namespace ft
 			_bin_tree<_Key, _Val, _KoV, _Cmp, _Alloc>::
 			_M_insert_unique(_II first, _II last)
 			{
-	_Alloc_node an(*this);
-	for (; first != last; ++first)
-		_M_insert_unique_(end(), *first, an);
+				_Alloc_node an(*this);
+				for (; first != last; ++first)
+					_M_insert_unique_(end(), *first, an);
 			}
 
 	template<typename _Key, typename _Val, typename _KoV,
@@ -1525,9 +1511,9 @@ namespace ft
 			_bin_tree<_Key, _Val, _KoV, _Cmp, _Alloc>::
 			_M_insert_equal(_II first, _II last)
 			{
-	_Alloc_node an(*this);
-	for (; first != last; ++first)
-		_M_insert_equal_(end(), *first, an);
+				_Alloc_node an(*this);
+				for (; first != last; ++first)
+					_M_insert_equal_(end(), *first, an);
 			}
 
 	template<typename _Key, typename _Val, typename _KeyOfValue,
@@ -1536,10 +1522,9 @@ namespace ft
 		_bin_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
 		_M_erase_aux(const_iterator position)
 		{
-			_Link_type y =
-	static_cast<_Link_type>(_bin_tree_rebalance_for_erase
-				(const_cast<_Base_ptr>(position._M_node),
-				 this->_M_impl._M_header));
+			_Link_type y = static_cast<_Link_type>(_bin_tree_rebalance_for_erase
+							(const_cast<_Base_ptr>(position._M_node),
+				 				this->_M_impl._M_header));
 			_M_drop_node(y);
 			--_M_impl._M_node_count;
 		}
@@ -1551,10 +1536,10 @@ namespace ft
 		_M_erase_aux(const_iterator first, const_iterator last)
 		{
 			if (first == begin() && last == end())
-	clear();
+				clear();
 			else
-	while (first != last)
-		erase(first++);
+				while (first != last)
+					erase(first++);
 		}
 
 	template<typename _Key, typename _Val, typename _KeyOfValue,
@@ -1576,7 +1561,7 @@ namespace ft
 		erase(const _Key* first, const _Key* last)
 		{
 			while (first != last)
-	erase(*first++);
+				erase(*first++);
 		}
 
 	template<typename _Key, typename _Val, typename _KeyOfValue,
@@ -1587,9 +1572,9 @@ namespace ft
 		find(const _Key& k)
 		{
 			iterator j = _M_lower_bound(_M_begin(), _M_end(), k);
-			return (j == end()
+			return ((j == end()
 				|| _M_impl._M_key_compare(k,
-					_S_key(j._M_node))) ? end() : j;
+					_S_key(j._M_node))) ? end() : j);
 		}
 
 	template<typename _Key, typename _Val, typename _KeyOfValue,
@@ -1600,9 +1585,9 @@ namespace ft
 		find(const _Key& k) const
 		{
 			const_iterator j = _M_lower_bound(_M_begin(), _M_end(), k);
-			return (j == end()
+			return ((j == end()
 				|| _M_impl._M_key_compare(k, 
-					_S_key(j._M_node))) ? end() : j;
+					_S_key(j._M_node))) ? end() : j);
 		}
 
 	template<typename _Key, typename _Val, typename _KeyOfValue,
@@ -1613,7 +1598,7 @@ namespace ft
 		{
 			pair<const_iterator, const_iterator> p = equal_range(k);
 			const size_type n = ft::distance(p.first, p.second);
-			return n;
+			return (n);
 		}
 
 	unsigned int
@@ -1626,36 +1611,32 @@ namespace ft
 		_bin_tree<_Key,_Val,_KeyOfValue,_Compare,_Alloc>::rb_verify() const
 		{
 			if (_M_impl._M_node_count == 0 || begin() == end())
-	return _M_impl._M_node_count == 0 && begin() == end()
-				 && this->_M_impl._M_header._M_left == _M_end()
-				 && this->_M_impl._M_header._M_right == _M_end();
-
+				return (_M_impl._M_node_count == 0 && begin() == end()
+					 && this->_M_impl._M_header._M_left == _M_end()
+					 && this->_M_impl._M_header._M_right == _M_end());
 			unsigned int len = _bin_tree_black_count(_M_leftmost(), _M_root());
 			for (const_iterator it = begin(); it != end(); ++it)
-	{
-		_Const_Link_type x = static_cast<_Const_Link_type>(it._M_node);
-		_Const_Link_type L = _S_left(x);
-		_Const_Link_type R = _S_right(x);
+			{
+				_Const_Link_type x = static_cast<_Const_Link_type>(it._M_node);
+				_Const_Link_type L = _S_left(x);
+				_Const_Link_type R = _S_right(x);
+				if (x->_M_color == _S_red)
+					if ((L && L->_M_color == _S_red)
+						|| (R && R->_M_color == _S_red))
+						return (false);
+				if (L && _M_impl._M_key_compare(_S_key(x), _S_key(L)))
+					return (false);
+				if (R && _M_impl._M_key_compare(_S_key(R), _S_key(x)))
+					return (false);
 
-		if (x->_M_color == _S_red)
-			if ((L && L->_M_color == _S_red)
-		|| (R && R->_M_color == _S_red))
-				return false;
-
-		if (L && _M_impl._M_key_compare(_S_key(x), _S_key(L)))
-			return false;
-		if (R && _M_impl._M_key_compare(_S_key(R), _S_key(x)))
-			return false;
-
-		if (!L && !R && _bin_tree_black_count(x, _M_root()) != len)
-			return false;
-	}
-
+				if (!L && !R && _bin_tree_black_count(x, _M_root()) != len)
+					return (false);
+			}
 			if (_M_leftmost() != _bin_tree_node_base::_S_minimum(_M_root()))
-	return false;
+				return (false);
 			if (_M_rightmost() != _bin_tree_node_base::_S_maximum(_M_root()))
-	return false;
-			return true;
+				return (false);
+			return (true);
 		}
 
 }
