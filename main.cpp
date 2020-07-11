@@ -311,6 +311,16 @@ map_print_it(T& toto)
 	std::cout << std::endl;
 }
 
+template <typename T>
+static void
+map_print_op(T& toto)
+{
+	std::cout << " http: " << toto["http"] << std::endl;
+	std::cout << "https: " << toto["https"] << std::endl;
+	std::cout << "  ssh: " << toto["ssh"] << std::endl;
+	std::cout << "ecole: " << toto["ecole"] << std::endl;
+}
+
 void
 main_map(void)
 {
@@ -329,6 +339,10 @@ main_map(void)
 	toto.insert(NAMESPACE::pair<std::string, int>("http", 80));
 	toto.insert(NAMESPACE::pair<std::string, int>("https", 443));
 	map_print_it(toto);
+
+	std::cout << "---2" << std::endl;
+	toto.erase("ecole");
+	map_print_op(toto);
 /*	toto.push_back(1);
 	toto.push_back(4);
 	toto.push_back(2);
