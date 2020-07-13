@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list.hpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/13 17:43:24 by YanYan            #+#    #+#             */
+/*   Updated: 2020/07/13 17:43:25 by YanYan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef LIST_HPP
 # define LIST_HPP
 
 namespace	ft
 {
-	namespace	__detail
+	namespace	detail
 	{
 		struct _List_node_base
 		{
@@ -12,86 +23,86 @@ namespace	ft
 			_List_node_base*	_M_prev;
 
 			static void
-			swap(_List_node_base& __x, _List_node_base& __y)
+			swap(_List_node_base& x, _List_node_base& y)
 			{
-				if (__x._M_next != &__x)
+				if (x._M_next != &x)
 				{
-					if (__y._M_next != &__y)
+					if (y._M_next != &y)
 						{
-							ft::swap(__x._M_next,__y._M_next);
-							ft::swap(__x._M_prev,__y._M_prev);
-							__x._M_next->_M_prev = __x._M_prev->_M_next = &__x;
-							__y._M_next->_M_prev = __y._M_prev->_M_next = &__y;
+							ft::swap(x._M_next,y._M_next);
+							ft::swap(x._M_prev,y._M_prev);
+							x._M_next->_M_prev = x._M_prev->_M_next = &x;
+							y._M_next->_M_prev = y._M_prev->_M_next = &y;
 						}
 					else
 						{
-							__y._M_next = __x._M_next;
-							__y._M_prev = __x._M_prev;
-							__y._M_next->_M_prev = __y._M_prev->_M_next = &__y;
-							__x._M_next = __x._M_prev = &__x;
+							y._M_next = x._M_next;
+							y._M_prev = x._M_prev;
+							y._M_next->_M_prev = y._M_prev->_M_next = &y;
+							x._M_next = x._M_prev = &x;
 						}
 				}
-				else if ( __y._M_next != &__y )
+				else if ( y._M_next != &y )
 				{
-					__x._M_next = __y._M_next;
-					__x._M_prev = __y._M_prev;
-					__x._M_next->_M_prev = __x._M_prev->_M_next = &__x;
-					__y._M_next = __y._M_prev = &__y;
+					x._M_next = y._M_next;
+					x._M_prev = y._M_prev;
+					x._M_next->_M_prev = x._M_prev->_M_next = &x;
+					y._M_next = y._M_prev = &y;
 				}
 			}
 
 			void
-			_M_transfer(_List_node_base* const __first,
-						_List_node_base* const __last)
+			_M_transfer(_List_node_base* const first,
+						_List_node_base* const last)
 			{
-				if (this != __last)
+				if (this != last)
 				{
-					__last->_M_prev->_M_next = this;
-					__first->_M_prev->_M_next = __last;
-					this->_M_prev->_M_next = __first;
+					last->_M_prev->_M_next = this;
+					first->_M_prev->_M_next = last;
+					this->_M_prev->_M_next = first;
 
-					_List_node_base* const __tmp = this->_M_prev;
-					this->_M_prev = __last->_M_prev;
-					__last->_M_prev = __first->_M_prev;
-					__first->_M_prev = __tmp;
+					_List_node_base* const tmp = this->_M_prev;
+					this->_M_prev = last->_M_prev;
+					last->_M_prev = first->_M_prev;
+					first->_M_prev = tmp;
 				}
 			}
 
 			void
 			_M_reverse(void)
 			{
-				_List_node_base*	__tmp;
+				_List_node_base*	tmp;
 
-				__tmp = this;
+				tmp = this;
 				do
 				{
-					ft::swap(__tmp->_M_next, __tmp->_M_prev);
-					__tmp = __tmp->_M_prev;
-				}	while (__tmp != this);
+					ft::swap(tmp->_M_next, tmp->_M_prev);
+					tmp = tmp->_M_prev;
+				}	while (tmp != this);
 			}
 
 			void
-			_M_hook(_List_node_base* const __position)
+			_M_hook(_List_node_base* const position)
 			{
-				this->_M_next = __position;
-				this->_M_prev = __position->_M_prev;
-				__position->_M_prev->_M_next = this;
-				__position->_M_prev = this;
+				this->_M_next = position;
+				this->_M_prev = position->_M_prev;
+				position->_M_prev->_M_next = this;
+				position->_M_prev = this;
 			}
 
 			void
 			_M_unhook(void)
 			{
-				_List_node_base* const __next_node = this->_M_next;
-				_List_node_base* const __prev_node = this->_M_prev;
-				__prev_node->_M_next = __next_node;
-				__next_node->_M_prev = __prev_node;
+				_List_node_base* const next_node = this->_M_next;
+				_List_node_base* const prev_node = this->_M_prev;
+				prev_node->_M_next = next_node;
+				next_node->_M_prev = prev_node;
 			}
 		};
 	}
 
 	template <typename _Tp>
-		struct _List_node : public __detail::_List_node_base
+		struct _List_node : public detail::_List_node_base
 		{
 			_Tp		_M_data;
 
@@ -120,13 +131,13 @@ namespace	ft
 			typedef _Tp*							pointer;
 			typedef _Tp&							reference;
 
-			__detail::_List_node_base*	_M_node;
+			detail::_List_node_base*	_M_node;
 
 			_List_iterator() : _M_node() {}
 
 			explicit
-			_List_iterator(__detail::_List_node_base* __x)
-			: _M_node(__x)
+			_List_iterator(detail::_List_node_base* x)
+			: _M_node(x)
 			{}
 
 			_Self
@@ -157,11 +168,11 @@ namespace	ft
 			_Self
 			operator++	(int)
 			{
-				_Self	__tmp;
+				_Self	tmp;
 				
-				__tmp = *this;
+				tmp = *this;
 				_M_node = _M_node->_M_next;
-				return (__tmp);
+				return (tmp);
 			}
 
 			_Self&
@@ -174,23 +185,23 @@ namespace	ft
 			_Self
 			operator--	(int)
 			{
-				_Self	__tmp;
+				_Self	tmp;
 				
-				__tmp = *this;
+				tmp = *this;
 				_M_node = _M_node->_M_prev;
-				return (__tmp);
+				return (tmp);
 			}
 
 			bool
-			operator==	(const _Self& __x) const
+			operator==	(const _Self& x) const
 			{
-				return (_M_node == __x._M_node);
+				return (_M_node == x._M_node);
 			}
 
 			bool
-			operator!=	(const _Self& __x) const
+			operator!=	(const _Self& x) const
 			{
-				return (_M_node != __x._M_node);
+				return (_M_node != x._M_node);
 			}
 		};
 
@@ -207,25 +218,25 @@ namespace	ft
 			typedef const _Tp*						pointer;
 			typedef const _Tp&						reference;
 
-			const __detail::_List_node_base*	_M_node;
+			const detail::_List_node_base*	_M_node;
 
 			_List_const_iterator()
 			: _M_node()
 			{}
 
 			explicit
-			_List_const_iterator(const __detail::_List_node_base* __x)
-			: _M_node(__x)
+			_List_const_iterator(const detail::_List_node_base* x)
+			: _M_node(x)
 			{}
 
-			_List_const_iterator(const iterator& __x)
-			: _M_node(__x._M_node)
+			_List_const_iterator(const iterator& x)
+			: _M_node(x._M_node)
 			{}
 
 			iterator
 			_M_const_cast(void) const
 			{
-				return (iterator(const_cast<__detail::_List_node_base*>(_M_node)));
+				return (iterator(const_cast<detail::_List_node_base*>(_M_node)));
 			}
 
 			reference
@@ -250,11 +261,11 @@ namespace	ft
 			_Self
 			operator++	(int)
 			{
-				_Self	__tmp;
+				_Self	tmp;
 
-				__tmp = *this;
+				tmp = *this;
 				_M_node = _M_node->_M_next;
-				return (__tmp);
+				return (tmp);
 			}
 
 			_Self&
@@ -267,23 +278,23 @@ namespace	ft
 			_Self
 			operator--	(int)
 			{
-				_Self	__tmp;
+				_Self	tmp;
 				
-				__tmp = *this;
+				tmp = *this;
 				_M_node = _M_node->_M_prev;
-				return (__tmp);
+				return (tmp);
 			}
 
 			bool
-			operator==	(const _Self& __x) const
+			operator==	(const _Self& x) const
 			{
-				return (_M_node == __x._M_node);
+				return (_M_node == x._M_node);
 			}
 
 			bool
-			operator!=	(const _Self& __x) const
+			operator!=	(const _Self& x) const
 			{
-				return (_M_node != __x._M_node);
+				return (_M_node != x._M_node);
 			}
 		};
 
@@ -299,31 +310,31 @@ namespace	ft
 				typedef _Node_alloc_type								_Node_alloc_traits;
 
 				static size_t
-				_S_distance(const __detail::_List_node_base* __first,
-				const __detail::_List_node_base* __last)
+				_S_distance(const detail::_List_node_base* first,
+				const detail::_List_node_base* last)
 				{
-					size_t __n = 0;
-					while (__first != __last)
+					size_t n = 0;
+					while (first != last)
 					{
-						__first = __first->_M_next;
-						++__n;
+						first = first->_M_next;
+						++n;
 					}
-					return (__n);
+					return (n);
 				}
 
-				__detail::_List_node_base _M_node;
+				detail::_List_node_base _M_node;
 
 				struct _List_impl
 				: public _Node_alloc_type
 				{
-					__detail::_List_node_base _M_node;
+					detail::_List_node_base _M_node;
 
 					_List_impl(void)
 					: _Node_alloc_type(), _M_node()
 					{}
 
-					_List_impl(const _Node_alloc_type& __a)
-					: _Node_alloc_type(__a), _M_node()
+					_List_impl(const _Node_alloc_type& a)
+					: _Node_alloc_type(a), _M_node()
 					{}
 				};
 
@@ -342,9 +353,9 @@ namespace	ft
 				}
 
 				void
-				_M_put_node(typename _Node_alloc_traits::pointer __p)
+				_M_put_node(typename _Node_alloc_traits::pointer p)
 				{
-					_Node_alloc_traits().deallocate(__p, 1);
+					_Node_alloc_traits().deallocate(p, 1);
 				}
 
 				_Node_alloc_type&
@@ -366,8 +377,8 @@ namespace	ft
 					_M_init();
 				}
 
-				_List_base(const _Node_alloc_type& __a)
-				: _M_impl(__a)
+				_List_base(const _Node_alloc_type& a)
+				: _M_impl(a)
 				{
 					_M_init();
 				}
@@ -385,18 +396,18 @@ namespace	ft
 
 	template<typename Val>
 		inline bool
-		operator==	(const _List_iterator<Val>& __x,
-				 	const _List_const_iterator<Val>& __y)
+		operator==	(const _List_iterator<Val>& x,
+				 	const _List_const_iterator<Val>& y)
 		{
-			return (__x._M_node == __y._M_node);
+			return (x._M_node == y._M_node);
 		}
 
 	template<typename Val>
 		inline bool
-		operator!=	(const _List_iterator<Val>& __x,
-				 const _List_const_iterator<Val>& __y)
+		operator!=	(const _List_iterator<Val>& x,
+				 const _List_const_iterator<Val>& y)
 		{
-			return (__x._M_node != __y._M_node);
+			return (x._M_node != y._M_node);
 		}
 
 	template <typename T, typename Alloc = std::allocator<T> >
@@ -831,7 +842,7 @@ namespace	ft
 	void
 	list<T, Alloc>::swap (list& x)
 	{
-		__detail::_List_node_base::swap(this->_M_impl._M_node,
+		detail::_List_node_base::swap(this->_M_impl._M_node,
 					x._M_impl._M_node);
 	}
 

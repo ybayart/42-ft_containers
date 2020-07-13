@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/13 17:43:39 by YanYan            #+#    #+#             */
+/*   Updated: 2020/07/13 17:43:41 by YanYan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MAP_HPP
 # define MAP_HPP
@@ -44,16 +55,16 @@ namespace ft
 				typedef _Pair_alloc_type _Alloc_traits;
 
 			public:
-				typedef typename _Alloc_traits::pointer						pointer;
+				typedef typename _Alloc_traits::pointer					pointer;
 				typedef typename _Alloc_traits::const_pointer			const_pointer;
-				typedef typename _Alloc_traits::reference					reference;
-				typedef typename _Alloc_traits::const_reference		const_reference;
-				typedef typename _Rep_type::iterator							 iterator;
-				typedef typename _Rep_type::const_iterator				 const_iterator;
-				typedef typename _Rep_type::size_type							size_type;
+				typedef typename _Alloc_traits::reference				reference;
+				typedef typename _Alloc_traits::const_reference			const_reference;
+				typedef typename _Rep_type::iterator					iterator;
+				typedef typename _Rep_type::const_iterator				const_iterator;
+				typedef typename _Rep_type::size_type					size_type;
 				typedef typename _Rep_type::difference_type				difference_type;
-				typedef typename _Rep_type::reverse_iterator			 reverse_iterator;
-				typedef typename _Rep_type::const_reverse_iterator const_reverse_iterator;
+				typedef typename _Rep_type::reverse_iterator			reverse_iterator;
+				typedef typename _Rep_type::const_reverse_iterator		const_reverse_iterator;
 
 				map()
 				: _M_t() { }
