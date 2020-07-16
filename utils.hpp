@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/06 15:44:02 by hexa              #+#    #+#             */
-/*   Updated: 2020/07/09 16:41:30 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/16 19:57:16 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,15 @@ namespace ft
 		c = a;
 		a = b;
 		b = c;
+	}
+
+	template <typename T>
+	inline const T&
+	max(const T& a, const T& b)
+	{
+		if (a < b)
+			return (b);
+		return (a);
 	}
 
 	template <typename T>
@@ -55,6 +64,18 @@ namespace ft
 			it2++;
 		}
 		return (*it1 == *it2);
+	}
+
+	template <typename IT1, typename IT2>
+	inline bool
+	itcmp	(IT1 first1, IT1 last1, IT2 first2)
+	{
+		while (first1 != last1 && *first1 == *first2)
+		{
+			first1++;
+			first2++;
+		}
+		return (*first1 == *first2);
 	}
 
 	template <typename T>
@@ -220,6 +241,7 @@ template <class InputIterator1, class InputIterator2>
 # include "list.hpp"
 # include "vector.hpp"
 # include "map.hpp"
+# include "stack.hpp"
 
 
 #endif
