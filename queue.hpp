@@ -1,36 +1,36 @@
-#ifndef STACK_HPP
-# define STACK_HPP
+#ifndef QUEUE_HPP
+# define QUEUE_HPP
 
 # include <deque>
 
 namespace ft
 {
 	template<typename _Tp, typename _Sequence = std::deque<_Tp> >
-		class stack
+		class queue
 		{
 			typedef typename _Sequence::value_type _Sequence_value_type;
 
 			template<typename _Tp1, typename _Seq1>
 				friend bool
-				operator==(const stack<_Tp1, _Seq1>&, const stack<_Tp1, _Seq1>&);
+				operator==(const queue<_Tp1, _Seq1>&, const queue<_Tp1, _Seq1>&);
 
 			template<typename _Tp1, typename _Seq1>
 				friend bool
-				operator<(const stack<_Tp1, _Seq1>&, const stack<_Tp1, _Seq1>&);
+				operator<(const queue<_Tp1, _Seq1>&, const queue<_Tp1, _Seq1>&);
 
 			public:
 				typedef typename _Sequence::value_type			value_type;
 				typedef typename _Sequence::reference			reference;
 				typedef typename _Sequence::const_reference		const_reference;
 				typedef typename _Sequence::size_type			size_type;
-				typedef	_Sequence								container_type;
+				typedef _Sequence								container_type;
 
 			protected:
 				_Sequence c;
 
 			public:
 				explicit
-				stack(const _Sequence& c = _Sequence())
+				queue(const _Sequence& c = _Sequence())
 				: c(c)
 				{}
 
@@ -47,13 +47,25 @@ namespace ft
 				}
 
 				reference
-				top (void)
+				front (void)
+				{
+					return (c.front());
+				}
+
+				const_reference
+				front (void) const
+				{
+					return (c.front());
+				}
+
+				reference
+				back (void)
 				{
 					return (c.back());
 				}
 
 				const_reference
-				top (void) const
+				back (void) const
 				{
 					return (c.back());
 				}
@@ -67,48 +79,48 @@ namespace ft
 				void
 				pop (void)
 				{
-					c.pop_back();
+					c.pop_front();
 				}
 		};
 
 	template<typename _Tp, typename _Seq>
 		inline bool
-		operator==(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y)
+		operator==(const queue<_Tp, _Seq>& x, const queue<_Tp, _Seq>& y)
 		{
 			return (x.c == y.c);
 		}
 
 	template<typename _Tp, typename _Seq>
 		inline bool
-		operator<(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y)
+		operator<(const queue<_Tp, _Seq>& x, const queue<_Tp, _Seq>& y)
 		{
 			return (x.c < y.c);
 		}
 
 	template<typename _Tp, typename _Seq>
 		inline bool
-		operator!=(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y)
+		operator!=(const queue<_Tp, _Seq>& x, const queue<_Tp, _Seq>& y)
 		{
 			return (!(x == y));
 		}
 
 	template<typename _Tp, typename _Seq>
 		inline bool
-		operator>(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y)
+		operator>(const queue<_Tp, _Seq>& x, const queue<_Tp, _Seq>& y)
 		{
 			return (y < x);
 		}
 
 	template<typename _Tp, typename _Seq>
 		inline bool
-		operator<=(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y)
+		operator<=(const queue<_Tp, _Seq>& x, const queue<_Tp, _Seq>& y)
 		{
 			return (!(y < x));
 		}
 
 	template<typename _Tp, typename _Seq>
 		inline bool
-		operator>=(const stack<_Tp, _Seq>& x, const stack<_Tp, _Seq>& y)
+		operator>=(const queue<_Tp, _Seq>& x, const queue<_Tp, _Seq>& y)
 		{
 			return (!(x < y));
 		}

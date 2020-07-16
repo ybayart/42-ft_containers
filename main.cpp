@@ -6,17 +6,19 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 18:53:42 by hexa              #+#    #+#             */
-/*   Updated: 2020/07/16 19:50:52 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/16 22:04:37 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.hpp"
 #ifdef NAMESPACE
-#include <vector>
-#include <list>
-#include <map>
+# include <vector>
+# include <list>
+# include <map>
+# include <stack>
+# include <queue>
 #else
-#define NAMESPACE ft
+# define NAMESPACE ft
 #endif
 
 static bool
@@ -363,6 +365,69 @@ main_map(void)
 	map_print_it(tata);
 }
 
+template <typename T>
+void
+stack_print_info(T& toto)
+{
+	std::cout << "empty(): " << toto.empty() << std::endl;
+	std::cout << " size(): " << toto.size() << std::endl;
+	if (toto.size() > 0)
+		std::cout << "  top(): " << toto.top() << std::endl;
+	std::cout << std::endl << std::endl;
+}
+
+void
+main_stack(void)
+{
+	NAMESPACE::stack<int>	toto;
+
+	std::cout << "---1" << std::endl;
+	stack_print_info(toto);
+
+	std::cout << "---2" << std::endl;
+	for(size_t i = 0;i < 42;i++)
+		toto.push(i);
+	stack_print_info(toto);
+
+	std::cout << "---3" << std::endl;
+	for(size_t i = 0;i < 21;i++)
+		toto.pop();
+	stack_print_info(toto);
+}
+
+template <typename T>
+void
+queue_print_info(T& toto)
+{
+	std::cout << "empty(): " << toto.empty() << std::endl;
+	std::cout << " size(): " << toto.size() << std::endl;
+	if (toto.size() > 0)
+	{
+		std::cout << " back(): " << toto.back() << std::endl;
+		std::cout << "front(): " << toto.front() << std::endl;
+	}
+	std::cout << std::endl << std::endl;
+}
+
+void
+main_queue(void)
+{
+	NAMESPACE::queue<int>	toto;
+
+	std::cout << "---1" << std::endl;
+	queue_print_info(toto);
+
+	std::cout << "---2" << std::endl;
+	for(size_t i = 0;i < 42;i++)
+		toto.push(i);
+	queue_print_info(toto);
+
+	std::cout << "---3" << std::endl;
+	for(size_t i = 0;i < 21;i++)
+		toto.pop();
+	queue_print_info(toto);
+}
+
 int
 main(void)
 {
@@ -376,5 +441,13 @@ main(void)
 
 	std::cout << "===== MAP =====" << std::endl;
 	main_map();
+	std::cout << std::endl;
+
+	std::cout << "===== STACK =====" << std::endl;
+	main_stack();
+	std::cout << std::endl;
+
+	std::cout << "===== QUEUE =====" << std::endl;
+	main_queue();
 	std::cout << std::endl;
 }
