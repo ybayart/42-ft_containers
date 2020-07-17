@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   multimap.hpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/17 15:30:56 by YanYan            #+#    #+#             */
+/*   Updated: 2020/07/17 15:30:58 by YanYan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MULTIMAP_HPP
 # define MULTIMAP_HPP
 
@@ -59,7 +71,7 @@ namespace ft
 				typedef typename _Rep_type::reverse_iterator		reverse_iterator;
 				typedef typename _Rep_type::const_reverse_iterator	const_reverse_iterator;
 
-				multimap()
+				multimap (void)
 				: _M_t()
 				{}
 
@@ -97,7 +109,7 @@ namespace ft
 				}
 
 				allocator_type
-				get_allocator() const
+				get_allocator (void) const
 				{
 					return (allocator_type(_M_t.get_allocator()));
 				}
@@ -212,19 +224,19 @@ namespace ft
 				}
 
 				void
-				clear()
+				clear (void)
 				{
 					_M_t.clear();
 				}
 
 				key_compare
-				key_comp() const
+				key_comp (void) const
 				{
 					return (_M_t.key_comp());
 				}
 
 				value_compare
-				value_comp() const
+				value_comp (void) const
 				{
 					return (value_compare(_M_t.key_comp()));
 				}

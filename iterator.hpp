@@ -407,7 +407,7 @@ namespace	ft
 			typedef typename traits_type::reference				reference;
 			typedef typename traits_type::pointer				pointer;
 
-			normal_iterator()
+			normal_iterator (void)
 			: _M_current(_Iterator())
 			{}
 

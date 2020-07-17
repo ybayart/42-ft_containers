@@ -6,7 +6,7 @@
 /*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 17:43:39 by YanYan            #+#    #+#             */
-/*   Updated: 2020/07/13 17:43:41 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/17 15:15:07 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ namespace ft
 						Compare comp;
 
 						valueCompare(Compare c)
-						: comp(c) { }
+						: comp(c)
+						{}
 
 					public:
 						bool operator()(const value_type& x, const value_type& y) const
@@ -66,26 +67,28 @@ namespace ft
 				typedef typename _Rep_type::reverse_iterator			reverse_iterator;
 				typedef typename _Rep_type::const_reverse_iterator		const_reverse_iterator;
 
-				map()
-				: _M_t() { }
+				map (void)
+				: _M_t()
+				{}
 
 				explicit
-				map(const Compare& comp,
+				map (const Compare& comp,
 					const allocator_type& a = allocator_type())
-				: _M_t(comp, _Pair_alloc_type(a)) { }
+				: _M_t(comp, _Pair_alloc_type(a))
+				{}
 
-				map(const map& x)
+				map (const map& x)
 				: _M_t(x._M_t) { }
 
 				template<typename _InputIterator>
-					map(_InputIterator first, _InputIterator last)
+					map (_InputIterator first, _InputIterator last)
 				: _M_t()
 				{
 					_M_t._M_insert_unique(first, last);
 				}
 
 				template<typename _InputIterator>
-					map(_InputIterator first, _InputIterator last,
+					map (_InputIterator first, _InputIterator last,
 						const Compare& comp,
 						const allocator_type& a = allocator_type())
 				: _M_t(comp, _Pair_alloc_type(a))
@@ -101,73 +104,73 @@ namespace ft
 				}
 
 				allocator_type
-				get_allocator() const
+				get_allocator (void) const
 				{
 					return (allocator_type(_M_t.get_allocator()));
 				}
 
 				iterator
-				begin()
+				begin (void)
 				{
 					return (_M_t.begin());
 				}
 
 				const_iterator
-				begin() const
+				begin (void) const
 				{
 					return (_M_t.begin());
 				}
 
 				iterator
-				end()
+				end (void)
 				{
 					return (_M_t.end());
 				}
 
 				const_iterator
-				end() const
+				end (void) const
 				{
 					return (_M_t.end());
 				}
 
 				reverse_iterator
-				rbegin()
+				rbegin (void)
 				{
 					return (_M_t.rbegin());
 				}
 
 				const_reverse_iterator
-				rbegin() const
+				rbegin (void) const
 				{
 					return (_M_t.rbegin());
 				}
 
 				reverse_iterator
-				rend()
+				rend (void)
 				{
 					return (_M_t.rend());
 				}
 
 				const_reverse_iterator
-				rend() const
+				rend (void) const
 				{
 					return (_M_t.rend());
 				}
 
 				bool
-				empty() const
+				empty (void) const
 				{
 					return (_M_t.empty());
 				}
 
 				size_type
-				size() const
+				size (void) const
 				{
 					return (_M_t.size());
 				}
 
 				size_type
-				max_size() const
+				max_size (void) const
 				{
 					return (_M_t.max_size());
 				}
@@ -243,19 +246,19 @@ namespace ft
 				}
 
 				void
-				clear()
+				clear (void)
 				{
 					_M_t.clear();
 				}
 
 				keyCompare
-				key_comp() const
+				key_comp (void) const
 				{
 					return (_M_t.key_comp());
 				}
 
 				valueCompare
-				value_comp() const
+				value_comp (void) const
 				{
 					return (valueCompare(_M_t.key_comp()));
 				}

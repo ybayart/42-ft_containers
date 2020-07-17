@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   multiset.hpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/17 15:31:01 by YanYan            #+#    #+#             */
+/*   Updated: 2020/07/17 15:31:02 by YanYan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MULTISET_HPP
 # define MULTISET_HPP
 
@@ -38,7 +50,7 @@ namespace ft
 			typedef typename _Rep_type::size_type				size_type;
 			typedef typename _Rep_type::difference_type			difference_type;
 
-			multiset()
+			multiset (void)
 			: _M_t()
 			{}
 
@@ -76,59 +88,59 @@ namespace ft
 			}
 
 			key_compare
-			key_comp() const
+			key_comp (void) const
 			{
 				return (_M_t.key_comp());
 			}
 
 			value_compare
-			value_comp() const
+			value_comp (void) const
 			{
 				return (_M_t.key_comp());
 			}
 
 			allocator_type
-			get_allocator() const
+			get_allocator (void) const
 			{ return allocator_type(_M_t.get_allocator()); }
 
 			iterator
-			begin() const
+			begin (void) const
 			{
 				return (_M_t.begin());
 			}
 
 			iterator
-			end() const
+			end (void) const
 			{
 				return (_M_t.end());
 			}
 
 			reverse_iterator
-			rbegin() const
+			rbegin (void) const
 			{
 				return (_M_t.rbegin());
 			}
 
 			reverse_iterator
-			rend() const
+			rend (void) const
 			{
 				return (_M_t.rend());
 			}
 
 			bool
-			empty() const
+			empty (void) const
 			{
 				return (_M_t.empty());
 			}
 
 			size_type
-			size() const
+			size (void) const
 			{
 				return (_M_t.size());
 			}
 
 			size_type
-			max_size() const
+			max_size (void) const
 			{
 				return (_M_t.max_size());
 			}
@@ -177,7 +189,7 @@ namespace ft
 			}
 
 			void
-			clear()
+			clear (void)
 			{
 				_M_t.clear();
 			}
@@ -224,13 +236,13 @@ namespace ft
 				return (_M_t.upper_bound(x));
 			}
 
-			std::pair<iterator, iterator>
+			ft::pair<iterator, iterator>
 			equal_range(const key_type& x)
 			{
 				return (_M_t.equal_range(x));
 			}
 
-			std::pair<const_iterator, const_iterator>
+			ft::pair<const_iterator, const_iterator>
 			equal_range(const key_type& x) const
 			{
 				return (_M_t.equal_range(x));

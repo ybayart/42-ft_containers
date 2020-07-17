@@ -133,7 +133,7 @@ namespace	ft
 
 			detail::_List_node_base*	_M_node;
 
-			_List_iterator() : _M_node() {}
+			_List_iterator (void) : _M_node() {}
 
 			explicit
 			_List_iterator(detail::_List_node_base* x)
@@ -220,7 +220,7 @@ namespace	ft
 
 			const detail::_List_node_base*	_M_node;
 
-			_List_const_iterator()
+			_List_const_iterator (void)
 			: _M_node()
 			{}
 
@@ -340,7 +340,7 @@ namespace	ft
 
 				_List_impl	_M_impl;
 				
-				size_t _M_node_count() const
+				size_t _M_node_count (void) const
 				{
 					return (_S_distance(_M_impl._M_node._M_next,
 							&(_M_impl._M_node)));
@@ -371,7 +371,7 @@ namespace	ft
 				}
 
 			public:
-				_List_base()
+				_List_base (void)
 				: _M_impl()
 				{
 					_M_init();
@@ -387,7 +387,7 @@ namespace	ft
 				{}
 
 				void
-				_M_init()
+				_M_init (void)
 				{
 					this->_M_impl._M_node._M_next = &this->_M_impl._M_node;
 					this->_M_impl._M_node._M_prev = &this->_M_impl._M_node;

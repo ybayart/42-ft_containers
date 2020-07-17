@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/17 15:31:17 by YanYan            #+#    #+#             */
+/*   Updated: 2020/07/17 15:31:18 by YanYan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SET_HPP
 # define SET_HPP
 
@@ -76,19 +88,19 @@ namespace ft
 			}
 
 			key_compare
-			key_comp() const
+			key_comp (void) const
 			{
 				return (_M_t.key_comp());
 			}
 
 			value_compare
-			value_comp() const
+			value_comp (void) const
 			{
 				return (_M_t.key_comp());
 			}
 
 			allocator_type
-			get_allocator() const
+			get_allocator (void) const
 			{
 				return (allocator_type(_M_t.get_allocator()));
 			}
@@ -181,7 +193,7 @@ namespace ft
 			}
 
 			void
-			clear() _GLIBCXX_NOEXCEPT
+			clear (void)
 			{
 				_M_t.clear();
 			}

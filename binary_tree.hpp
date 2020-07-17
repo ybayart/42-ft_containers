@@ -28,7 +28,7 @@ namespace ft
 		_Base_ptr		_M_right;
 
 		static _Base_ptr
-		_S_minimum(_Base_ptr x)
+		_S_minimum (_Base_ptr x)
 		{
 			while (x->_M_left != 0)
 				x = x->_M_left;
@@ -36,7 +36,7 @@ namespace ft
 		}
 
 		static _Const_Base_ptr
-		_S_minimum(_Const_Base_ptr x)
+		_S_minimum (_Const_Base_ptr x)
 		{
 			while (x->_M_left != 0)
 				x = x->_M_left;
@@ -44,7 +44,7 @@ namespace ft
 		}
 
 		static _Base_ptr
-		_S_maximum(_Base_ptr x)
+		_S_maximum (_Base_ptr x)
 		{
 			while (x->_M_right != 0)
 				x = x->_M_right;
@@ -52,7 +52,7 @@ namespace ft
 		}
 
 		static _Const_Base_ptr
-		_S_maximum(_Const_Base_ptr x)
+		_S_maximum (_Const_Base_ptr x)
 		{
 			while (x->_M_right != 0)
 				x = x->_M_right;
@@ -68,13 +68,13 @@ namespace ft
 			_Val _M_value_field;
 
 			_Val*
-			_M_valptr()
+			_M_valptr (void)
 			{
 				return (&_M_value_field);
 			}
 
 			const _Val*
-			_M_valptr() const
+			_M_valptr (void) const
 			{
 				return (&_M_value_field);
 			}
@@ -106,34 +106,36 @@ namespace ft
 			typedef _bin_tree_node_base::_Base_ptr	_Base_ptr;
 			typedef _bin_tree_node<_Tp>*			_Link_type;
 
-			_bin_tree_iterator()
-			: _M_node() {}
+			_bin_tree_iterator (void)
+			: _M_node()
+			{}
 
 			explicit
 			_bin_tree_iterator(_Base_ptr x)
-			: _M_node(x) {}
+			: _M_node(x)
+			{}
 
 			reference
-			operator*() const
+			operator* (void) const
 			{
 				return (*static_cast<_Link_type>(_M_node)->_M_valptr());
 			}
 
 			pointer
-			operator->() const
+			operator-> (void) const
 			{
 				return (static_cast<_Link_type> (_M_node)->_M_valptr());
 			}
 
 			_Self&
-			operator++()
+			operator++ (void)
 			{
 				_M_node = _bin_tree_increment(_M_node);
 				return (*this);
 			}
 
 			_Self
-			operator++(int)
+			operator++ (int)
 			{
 				_Self tmp = *this;
 				_M_node = _bin_tree_increment(_M_node);
@@ -141,14 +143,14 @@ namespace ft
 			}
 
 			_Self&
-			operator--()
+			operator-- (void)
 			{
 				_M_node = _bin_tree_decrement(_M_node);
 				return (*this);
 			}
 
 			_Self
-			operator--(int)
+			operator-- (int)
 			{
 				_Self tmp = *this;
 				_M_node = _bin_tree_decrement(_M_node);
@@ -156,13 +158,13 @@ namespace ft
 			}
 
 			bool
-			operator==(const _Self& x) const
+			operator== (const _Self& x) const
 			{
 				return (_M_node == x._M_node);
 			}
 
 			bool
-			operator!=(const _Self& x) const
+			operator!= (const _Self& x) const
 			{
 				return (_M_node != x._M_node);
 			}
@@ -186,35 +188,38 @@ namespace ft
 			typedef _bin_tree_node_base::_Const_Base_ptr	_Base_ptr;
 			typedef const _bin_tree_node<_Tp>*				_Link_type;
 
-			_bin_tree_const_iterator()
-			: _M_node() {}
+			_bin_tree_const_iterator (void)
+			: _M_node()
+			{}
 
 			explicit
-			_bin_tree_const_iterator(_Base_ptr x)
-			: _M_node(x) {}
+			_bin_tree_const_iterator (_Base_ptr x)
+			: _M_node(x)
+			{}
 
-			_bin_tree_const_iterator(const iterator& it)
-			: _M_node(it._M_node) {}
+			_bin_tree_const_iterator (const iterator& it)
+			: _M_node(it._M_node)
+			{}
 
 			iterator
-			_M_const_cast() const
+			_M_const_cast (void) const
 			{
 				return (iterator(const_cast<typename iterator::_Base_ptr>(_M_node)));
 			}
 
 			reference
-			operator*() const
+			operator* (void) const
 			{
 				return (*static_cast<_Link_type>(_M_node)->_M_valptr());
 			}
 
 			pointer
-			operator->() const
+			operator-> (void) const
 			{
 				return (static_cast<_Link_type>(_M_node)->_M_valptr()); }
 
 			_Self&
-			operator++()
+			operator++ (void)
 			{
 				_M_node = _bin_tree_increment(_M_node);
 				return (*this);
@@ -229,7 +234,7 @@ namespace ft
 			}
 
 			_Self&
-			operator--()
+			operator-- (void)
 			{
 				_M_node = _bin_tree_decrement(_M_node);
 				return (*this);
@@ -306,7 +311,7 @@ namespace ft
 						_M_nodes = 0;
 				}
 
-				~_Reuse_or_alloc_node()
+				~_Reuse_or_alloc_node (void)
 				{
 					_M_t._M_erase(static_cast<_Link_type>(_M_root));
 				}
@@ -487,7 +492,7 @@ namespace ft
 					}
 
 					void
-					_M_reset()
+					_M_reset (void)
 					{
 						this->_M_header._M_parent = 0;
 						this->_M_header._M_left = &this->_M_header;
@@ -497,7 +502,7 @@ namespace ft
 
 				private:
 					void
-					_M_initialize()
+					_M_initialize (void)
 					{
 						this->_M_header._M_color = _S_red;
 						this->_M_header._M_parent = 0;
@@ -733,73 +738,73 @@ namespace ft
 			operator=(const _bin_tree& x);
 
 			_Compare
-			key_comp() const
+			key_comp (void) const
 			{
 				return (_M_impl._M_key_compare);
 			}
 
 			iterator
-			begin()
+			begin (void)
 			{
 				return (iterator(this->_M_impl._M_header._M_left));
 			}
 
 			const_iterator
-			begin() const
+			begin (void) const
 			{
 				return (const_iterator(this->_M_impl._M_header._M_left));
 			}
 
 			iterator
-			end()
+			end (void)
 			{
 				return (iterator(&this->_M_impl._M_header));
 			}
 
 			const_iterator
-			end() const
+			end (void) const
 			{
 				return (const_iterator(&this->_M_impl._M_header));
 			}
 
 			reverse_iterator
-			rbegin()
+			rbegin (void)
 			{
 				return (reverse_iterator(end()));
 			}
 
 			const_reverse_iterator
-			rbegin() const
+			rbegin (void) const
 			{
 				return (const_reverse_iterator(end()));
 			}
 
 			reverse_iterator
-			rend()
+			rend (void)
 			{
 				return (reverse_iterator(begin()));
 			}
 
 			const_reverse_iterator
-			rend() const
+			rend (void) const
 			{
 				return (const_reverse_iterator(begin()));
 			}
 
 			bool
-			empty() const
+			empty (void) const
 			{
 				return (_M_impl._M_node_count == 0);
 			}
 
 			size_type
-			size() const 
+			size (void) const 
 			{
 				return (_M_impl._M_node_count);
 			}
 
 			size_type
-			max_size() const
+			max_size (void) const
 			{
 				return (_M_get_Node_allocator().max_size());
 			}
@@ -884,7 +889,7 @@ namespace ft
 			erase(const key_type* first, const key_type* last);
 
 			void
-			clear()
+			clear (void)
 			{
 				_M_erase(_M_begin());
 				_M_impl._M_reset();
@@ -930,7 +935,7 @@ namespace ft
 			equal_range(const key_type& k) const;
 
 			bool
-			rb_verify() const;
+			rb_verify (void) const;
 
 		};
 
@@ -1619,7 +1624,7 @@ namespace ft
 	template<typename _Key, typename _Val, typename _KeyOfValue,
 					 typename _Compare, typename _Alloc>
 		bool
-		_bin_tree<_Key,_Val,_KeyOfValue,_Compare,_Alloc>::rb_verify() const
+		_bin_tree<_Key,_Val,_KeyOfValue,_Compare,_Alloc>::rb_verify (void) const
 		{
 			if (_M_impl._M_node_count == 0 || begin() == end())
 				return (_M_impl._M_node_count == 0 && begin() == end()
