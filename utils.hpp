@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/06 15:44:02 by hexa              #+#    #+#             */
-/*   Updated: 2020/07/16 20:06:23 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/17 21:47:28 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,5 +243,8 @@ template <class InputIterator1, class InputIterator2>
 # include "map.hpp"
 # include "stack.hpp"
 # include "queue.hpp"
+# include "set.hpp"
+# include "multiset.hpp"
+# include "multimap.hpp"
 
 #endif

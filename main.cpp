@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 18:53:42 by hexa              #+#    #+#             */
-/*   Updated: 2020/07/16 22:04:37 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/17 21:46:52 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -428,6 +428,78 @@ main_queue(void)
 	queue_print_info(toto);
 }
 
+template <typename T>
+static void
+set_print_it(T& toto)
+{
+	typename T::iterator it;
+	typename T::reverse_iterator itr;
+
+	it = toto.begin();
+	itr = toto.rbegin();
+	for (;it != toto.end();it++, itr++)
+		std::cout << "  iterator " << it->first << "|" << it->second << " - " << itr->first << "|" << itr->second << std::endl;
+
+	std::cout << std::endl;
+	std::cout << "    size() " << toto.size() << std::endl;
+	std::cout << "   empty() " << toto.empty() << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+}
+
+template <typename T>
+static void
+set_print_op(T& toto)
+{
+	std::cout << " http: " << toto["http"] << std::endl;
+	std::cout << "https: " << toto["https"] << std::endl;
+	std::cout << "  ssh: " << toto["ssh"] << std::endl;
+	std::cout << "ecole: " << toto["ecole"] << std::endl;
+	std::cout << std::endl << std::endl;
+}
+
+void
+main_set(void)
+{
+	NAMESPACE::set<std::string>		toto;
+
+	std::cout << "   empty() " << toto.empty() << std::endl;
+	std::cout << "    size() " << toto.size() << std::endl;
+	std::cout << "max_size() " << toto.max_size() << std::endl;
+	
+	std::cout << "---1" << std::endl;
+	toto.insert("ecole");
+	toto.insert("truc");
+	toto.insert("trac");
+	toto.insert("hexa");
+	toto.insert("ssh");
+	toto.insert("http");
+	toto.insert("https");
+	map_print_it(toto);
+
+	std::cout << "---2" << std::endl;
+	toto.erase("ecole");
+	map_print_op(toto);
+
+	std::cout << "---3" << std::endl;
+	NAMESPACE::map<std::string, int>	tata(toto);
+	map_print_it(tata);
+
+	std::cout << "---4" << std::endl;
+	tata.clear();
+	map_print_it(tata);
+	map_print_it(toto);
+
+	std::cout << "---5" << std::endl;
+	tata.swap(toto);
+	map_print_it(tata);
+	map_print_it(toto);
+
+	std::cout << "---6" << std::endl;
+	toto.insert(tata.begin(), tata.end());
+	map_print_it(tata);
+}
+
 int
 main(void)
 {
@@ -450,4 +522,16 @@ main(void)
 	std::cout << "===== QUEUE =====" << std::endl;
 	main_queue();
 	std::cout << std::endl;
+
+	std::cout << "===== SET =====" << std::endl;
+	main_set();
+	std::cout << std::endl;
+
+/*	std::cout << "===== MULTISET =====" << std::endl;
+	main_multiset();
+	std::cout << std::endl;
+
+	std::cout << "===== MULTIMAP =====" << std::endl;
+	main_multimap();
+	std::cout << std::endl;*/
 }

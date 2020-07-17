@@ -6,7 +6,7 @@
 /*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 15:30:56 by YanYan            #+#    #+#             */
-/*   Updated: 2020/07/17 15:30:58 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/17 21:50:48 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ namespace ft
 				typedef typename _Alloc::template
 						rebind<value_type>::other _Pair_alloc_type;
 
-				typedef _Rb_tree<key_type, value_type, _Select1st<value_type>,
+				typedef _bin_tree<key_type, value_type, _Select1st<value_type>,
 						 key_compare, _Pair_alloc_type> _Rep_type;
 				_Rep_type _M_t;
 
@@ -181,13 +181,13 @@ namespace ft
 				}
 
 				iterator
-				insert (voidconst value_type& x)
+				insert (const value_type& x)
 				{
 					return (_M_t._M_insert_equal(x));
 				}
 
 				iterator
-				insert (voiditerator position, const value_type& x)
+				insert (iterator position, const value_type& x)
 				{
 					return (_M_t._M_insert_equal_(position, x));
 				}
