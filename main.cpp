@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 18:53:42 by hexa              #+#    #+#             */
-/*   Updated: 2020/07/18 17:46:43 by hexa             ###   ########.fr       */
+/*   Updated: 2020/07/18 17:54:07 by hexa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -427,7 +427,7 @@ main_queue(void)
 		toto.pop();
 	queue_print_info(toto);
 }
-
+/*
 template <typename T>
 static void
 set_print_it(T& toto)
@@ -438,14 +438,13 @@ set_print_it(T& toto)
 	it = toto.begin();
 	itr = toto.rbegin();
 	for (;it != toto.end();it++, itr++)
-		std::cout << "  iterator " << it->first << "|" << it->second << " - " << itr->first << "|" << itr->second << std::endl;
+		std::cout << "  iterator " << *it << " - " << *itr << std::endl;
 
 	std::cout << std::endl;
 	std::cout << "    size() " << toto.size() << std::endl;
 	std::cout << "   empty() " << toto.empty() << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-}
+	std::cout << std::endl << std::endl;
+}*/
 
 void
 main_set(void)
@@ -458,35 +457,35 @@ main_set(void)
 	
 	std::cout << "---1" << std::endl;
 	toto.insert("ecole");
-	toto.insert("truc");
+/*	toto.insert("truc");
 	toto.insert("trac");
 	toto.insert("hexa");
 	toto.insert("ssh");
 	toto.insert("http");
 	toto.insert("https");
-	map_print_it(toto);
+	set_print_it(toto);
 
 	std::cout << "---2" << std::endl;
 	toto.erase("ecole");
-	map_print_it(toto);
+	set_print_it(toto);
 
 	std::cout << "---3" << std::endl;
 	NAMESPACE::set<std::string>		tata(toto);
-	map_print_it(tata);
+	set_print_it(tata);
 
 	std::cout << "---4" << std::endl;
 	tata.clear();
-	map_print_it(tata);
-	map_print_it(toto);
+	set_print_it(tata);
+	set_print_it(toto);
 
 	std::cout << "---5" << std::endl;
 	tata.swap(toto);
-	map_print_it(tata);
-	map_print_it(toto);
+	set_print_it(tata);
+	set_print_it(toto);
 
 	std::cout << "---6" << std::endl;
 	toto.insert(tata.begin(), tata.end());
-	map_print_it(tata);
+	set_print_it(tata);*/
 }
 
 int
