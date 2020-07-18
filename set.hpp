@@ -6,7 +6,7 @@
 /*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 15:31:17 by YanYan            #+#    #+#             */
-/*   Updated: 2020/07/17 21:47:55 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/18 17:41:26 by hexa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ namespace ft
 			typedef typename _Alloc::template
 				rebind<_Key>::other _Key_alloc_type;
 
-			typedef _bin_tree<key_type, value_type, _Identity<value_type>,
+			typedef _bin_tree<key_type, value_type, value_type,
 					 key_compare, _Key_alloc_type> _Rep_type;
 			_Rep_type _M_t;
 

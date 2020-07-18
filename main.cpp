@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 18:53:42 by hexa              #+#    #+#             */
-/*   Updated: 2020/07/17 21:46:52 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/18 17:46:43 by hexa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -447,17 +447,6 @@ set_print_it(T& toto)
 	std::cout << std::endl;
 }
 
-template <typename T>
-static void
-set_print_op(T& toto)
-{
-	std::cout << " http: " << toto["http"] << std::endl;
-	std::cout << "https: " << toto["https"] << std::endl;
-	std::cout << "  ssh: " << toto["ssh"] << std::endl;
-	std::cout << "ecole: " << toto["ecole"] << std::endl;
-	std::cout << std::endl << std::endl;
-}
-
 void
 main_set(void)
 {
@@ -479,10 +468,10 @@ main_set(void)
 
 	std::cout << "---2" << std::endl;
 	toto.erase("ecole");
-	map_print_op(toto);
+	map_print_it(toto);
 
 	std::cout << "---3" << std::endl;
-	NAMESPACE::map<std::string, int>	tata(toto);
+	NAMESPACE::set<std::string>		tata(toto);
 	map_print_it(tata);
 
 	std::cout << "---4" << std::endl;
