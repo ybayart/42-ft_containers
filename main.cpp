@@ -6,7 +6,7 @@
 /*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 18:53:42 by hexa              #+#    #+#             */
-/*   Updated: 2020/07/18 17:54:07 by hexa             ###   ########.fr       */
+/*   Updated: 2020/07/19 02:27:08 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <map>
 # include <stack>
 # include <queue>
+# include <set>
 #else
 # define NAMESPACE ft
 #endif
@@ -427,7 +428,7 @@ main_queue(void)
 		toto.pop();
 	queue_print_info(toto);
 }
-/*
+
 template <typename T>
 static void
 set_print_it(T& toto)
@@ -444,7 +445,7 @@ set_print_it(T& toto)
 	std::cout << "    size() " << toto.size() << std::endl;
 	std::cout << "   empty() " << toto.empty() << std::endl;
 	std::cout << std::endl << std::endl;
-}*/
+}
 
 void
 main_set(void)
@@ -457,7 +458,7 @@ main_set(void)
 	
 	std::cout << "---1" << std::endl;
 	toto.insert("ecole");
-/*	toto.insert("truc");
+	toto.insert("truc");
 	toto.insert("trac");
 	toto.insert("hexa");
 	toto.insert("ssh");
@@ -485,7 +486,95 @@ main_set(void)
 
 	std::cout << "---6" << std::endl;
 	toto.insert(tata.begin(), tata.end());
-	set_print_it(tata);*/
+	set_print_it(tata);
+}
+
+void
+main_multiset(void)
+{
+	NAMESPACE::multiset<std::string>	toto;
+
+	std::cout << "   empty() " << toto.empty() << std::endl;
+	std::cout << "    size() " << toto.size() << std::endl;
+	std::cout << "max_size() " << toto.max_size() << std::endl;
+	
+	std::cout << "---1" << std::endl;
+	toto.insert("ecole");
+	toto.insert("ecole");
+	toto.insert("ecole");
+	toto.insert("ecole");
+	toto.insert("truc");
+	toto.insert("trac");
+	toto.insert("hexa");
+	toto.insert("ssh");
+	toto.insert("http");
+	toto.insert("https");
+	set_print_it(toto);
+
+	std::cout << "---2" << std::endl;
+	toto.erase("ecole");
+	set_print_it(toto);
+
+	std::cout << "---3" << std::endl;
+	NAMESPACE::multiset<std::string>	tata(toto);
+	set_print_it(tata);
+
+	std::cout << "---4" << std::endl;
+	tata.clear();
+	set_print_it(tata);
+	set_print_it(toto);
+
+	std::cout << "---5" << std::endl;
+	tata.swap(toto);
+	set_print_it(tata);
+	set_print_it(toto);
+
+	std::cout << "---6" << std::endl;
+	toto.insert(tata.begin(), tata.end());
+	set_print_it(tata);
+}
+
+void
+main_multimap(void)
+{
+	NAMESPACE::multimap<std::string, int>	toto;
+
+	std::cout << "   empty() " << toto.empty() << std::endl;
+	std::cout << "    size() " << toto.size() << std::endl;
+	std::cout << "max_size() " << toto.max_size() << std::endl;
+	
+	std::cout << "---1" << std::endl;
+	toto.insert(NAMESPACE::pair<std::string, int>("ecole", 42));
+	toto.insert(NAMESPACE::pair<std::string, int>("truc", 1));
+	toto.insert(NAMESPACE::pair<std::string, int>("trac", 66));
+	toto.insert(NAMESPACE::pair<std::string, int>("hexa", 666));
+	toto.insert(NAMESPACE::pair<std::string, int>("ssh", 22));
+	toto.insert(NAMESPACE::pair<std::string, int>("http", 80));
+	toto.insert(NAMESPACE::pair<std::string, int>("https", 443));
+	map_print_it(toto);
+
+	std::cout << "---2" << std::endl;
+	toto.erase("ecole");
+	map_print_it(toto);
+
+	std::cout << "---3" << std::endl;
+	NAMESPACE::multimap<std::string, int>	tata(toto);
+	tata.insert(toto.rbegin(), toto.rend());
+	map_print_it(tata);
+
+	std::cout << "---4" << std::endl;
+	tata.clear();
+	map_print_it(tata);
+	map_print_it(toto);
+
+	std::cout << "---5" << std::endl;
+	tata.swap(toto);
+	map_print_it(tata);
+	map_print_it(toto);
+
+	std::cout << "---6" << std::endl;
+	toto.insert(tata.begin(), tata.end());
+	map_print_it(tata);
 }
 
 int
@@ -515,11 +604,11 @@ main(void)
 	main_set();
 	std::cout << std::endl;
 
-/*	std::cout << "===== MULTISET =====" << std::endl;
+	std::cout << "===== MULTISET =====" << std::endl;
 	main_multiset();
 	std::cout << std::endl;
 
 	std::cout << "===== MULTIMAP =====" << std::endl;
 	main_multimap();
-	std::cout << std::endl;*/
+	std::cout << std::endl;
 }

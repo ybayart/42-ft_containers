@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hexa <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/06 15:44:02 by hexa              #+#    #+#             */
-/*   Updated: 2020/07/17 21:47:28 by YanYan           ###   ########.fr       */
+/*   Created: 2020/07/19 02:18:14 by YanYan            #+#    #+#             */
+/*   Updated: 2020/07/19 02:18:38 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ namespace ft
 		return (it2 != rhs.end());
 	}
 
-template <class InputIterator1, class InputIterator2>
+	template <class InputIterator1, class InputIterator2>
 	bool itinf (InputIterator1 first1, InputIterator1 last1,
 				InputIterator2 first2, InputIterator2 last2)
 	{
@@ -116,11 +116,36 @@ template <class InputIterator1, class InputIterator2>
 		return (first2 != last2);
 	}
 
+	template<typename Arg1, typename Arg2, typename Result>
+		struct binary_function
+		{
+			typedef Arg1	first_argument_type;
+			typedef Arg2	second_argument_type;
+			typedef Result	result_type;
+		};
+
 	template <typename Arg, typename Result>
 		struct unary_function
 		{
 			typedef Arg		argument_type;
 			typedef Result	result_type;
+		};
+
+	template<typename Tp>
+		struct _Identity
+		: public unary_function<Tp, Tp>
+		{
+			Tp&
+			operator()(Tp& x) const
+			{
+				return (x);
+			}
+
+			const Tp&
+			operator()(const Tp& x) const
+			{
+				return (x);
+			}
 		};
 
 	template <typename P>

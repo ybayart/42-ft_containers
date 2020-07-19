@@ -6,7 +6,7 @@
 /*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 17:43:39 by YanYan            #+#    #+#             */
-/*   Updated: 2020/07/17 15:15:07 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/19 02:19:46 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ namespace ft
 
 			public:
 				class valueCompare
+				: public ft::binary_function<value_type, value_type, bool>
 				{
 					friend class map<Key, _Tp, Compare, _Alloc>;
 					protected:

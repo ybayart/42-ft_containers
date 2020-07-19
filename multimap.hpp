@@ -6,7 +6,7 @@
 /*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 15:30:56 by YanYan            #+#    #+#             */
-/*   Updated: 2020/07/18 17:44:29 by hexa             ###   ########.fr       */
+/*   Updated: 2020/07/19 02:19:57 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ namespace ft
 
 			public:
 				class value_compare
+				: public ft::binary_function<value_type, value_type, bool>
 				{
 					friend class multimap<_Key, _Tp, _Compare, _Alloc>;
 					protected:
