@@ -6,7 +6,7 @@
 /*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 15:31:01 by YanYan            #+#    #+#             */
-/*   Updated: 2020/07/19 02:17:17 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/19 02:35:53 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 namespace ft
 {
-	template <typename _Key, typename _Compare = std::less<_Key>,
+	template <typename _Key, typename _Compare = ft::less<_Key>,
 			typename _Alloc = std::allocator<_Key> >
 		class multiset
 		{

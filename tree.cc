@@ -6,7 +6,7 @@
 /*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 17:43:51 by YanYan            #+#    #+#             */
-/*   Updated: 2020/07/13 17:43:52 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/19 02:36:46 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,7 +267,7 @@ namespace ft
 			else
 				z->_M_parent->_M_right = y;
 			y->_M_parent = z->_M_parent;
-			std::swap(y->_M_color, z->_M_color);
+			ft::swap(y->_M_color, z->_M_color);
 			y = z;
 		}
 		else

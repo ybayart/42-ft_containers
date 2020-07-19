@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/19 02:18:14 by YanYan            #+#    #+#             */
-/*   Updated: 2020/07/19 02:18:38 by YanYan           ###   ########.fr       */
+/*   Created: 2020/07/19 02:33:41 by YanYan            #+#    #+#             */
+/*   Updated: 2020/07/19 02:34:58 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,18 +131,18 @@ namespace ft
 			typedef Result	result_type;
 		};
 
-	template<typename Tp>
+	template<typename T>
 		struct _Identity
-		: public unary_function<Tp, Tp>
+		: public unary_function<T, T>
 		{
-			Tp&
-			operator()(Tp& x) const
+			T&
+			operator() (T& x) const
 			{
 				return (x);
 			}
 
-			const Tp&
-			operator()(const Tp& x) const
+			const T&
+			operator() (const T& x) const
 			{
 				return (x);
 			}
@@ -163,6 +163,17 @@ namespace ft
 				{
 					return (x.first);
 				}
+		};
+
+	template<typename T>
+		struct less
+		: public binary_function<T, T, bool>
+		{
+			bool
+			operator() (const T& x, const T& y) const
+			{
+				return (x < y);
+			}
 		};
 
 	struct true_type {};

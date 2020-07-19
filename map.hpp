@@ -6,7 +6,7 @@
 /*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 17:43:39 by YanYan            #+#    #+#             */
-/*   Updated: 2020/07/19 02:19:46 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/19 02:35:19 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 namespace ft
 {
-	template <typename Key, typename _Tp, typename Compare = std::less<Key>,
+	template <typename Key, typename _Tp, typename Compare = ft::less<Key>,
 						typename _Alloc = std::allocator<ft::pair<const Key, _Tp> > >
 		class map
 		{

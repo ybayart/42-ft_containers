@@ -6,7 +6,7 @@
 /*   By: YanYan <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 15:30:56 by YanYan            #+#    #+#             */
-/*   Updated: 2020/07/19 02:19:57 by YanYan           ###   ########.fr       */
+/*   Updated: 2020/07/19 02:35:38 by YanYan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 namespace ft
 {
 	template <typename _Key, typename _Tp,
-			typename _Compare = std::less<_Key>,
+			typename _Compare = ft::less<_Key>,
 			typename _Alloc = std::allocator<ft::pair<const _Key, _Tp> > >
 		class multimap
 		{
